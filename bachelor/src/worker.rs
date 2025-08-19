@@ -1,7 +1,6 @@
 use std::sync::{mpsc, Arc, Mutex};
 use std::thread;
 
-// TO DO: separate file for Job structure
 type Job = Box<dyn FnOnce() + Send + 'static>;
 pub struct Worker {
     pub(crate) id: usize,
@@ -11,10 +10,20 @@ pub struct Worker {
 impl Worker {
     pub fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         let thread = thread::spawn(move || {
-            while let Ok(job) = receiver.lock().unwrap().recv() {
-                println!("Worker {id} got a job; executing.");
+            loop {
+                let message = receiver.lock().unwrap().recv();
 
-                job();
+                match message {
+                    Ok(job) => {
+                        println!("Worker {id} got a job; executing.");
+
+                        job();
+                    }
+                    Err(_) => {
+                        println!("Worker {id} disconnected; shutting down.");
+                        break;
+                    }
+                }
             }
         });
 
