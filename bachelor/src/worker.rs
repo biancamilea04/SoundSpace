@@ -4,18 +4,18 @@ use std::thread;
 // TO DO: separate file for Job structure
 type Job = Box<dyn FnOnce() + Send + 'static>;
 pub struct Worker {
-    id: usize,
-    thread: thread::JoinHandle<()>,
+    pub(crate) id: usize,
+    pub(crate) thread: thread::JoinHandle<()>,
 }
 
 impl Worker {
     pub fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         let thread = thread::spawn(move || {
-            let job = receiver.lock().unwrap().recv().unwrap();
+            while let Ok(job) = receiver.lock().unwrap().recv() {
+                println!("Worker {id} got a job; executing.");
 
-            println!("Worker {id} got a job; executing.");
-
-            job();
+                job();
+            }
         });
 
         Worker {id, thread}
