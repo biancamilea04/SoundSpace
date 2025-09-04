@@ -10,6 +10,10 @@ impl Response {
         Response { status_code, body }
     }
 
+    pub fn information() -> Response {
+        Response { status_code: 100, body: "Continue".to_string() }
+    }
+
     pub fn not_found() -> Response {
         Response { status_code: 404, body: "Not Found".to_string() }
     }
