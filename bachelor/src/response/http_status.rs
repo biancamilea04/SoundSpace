@@ -3,7 +3,7 @@ use std::fmt;
 
 //! This module defines HTTP status codes as enums and provides conversions and display implementations.
 //! It categorizes status codes into Informational, Success, Redirection, Client Error, and Server Error.
-//! Each category is represented by its own enum, and a top-level `StatusCode` enum wraps them all.
+//! Each category is represented by its own enum, and a top-level `HttpStatus` enum wraps them all.
 //! Conversions from and to `u16` are implemented, along with `Display` for prettier strings.
 //! This allows for type-safe handling of HTTP status codes in Rust applications.
 
@@ -96,7 +96,7 @@ pub enum ServerError {
 
 /// Top-level HTTP status code enum, wrapping all categories
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum StatusCode {
+pub enum HttpStatus {
     Informational(Informational),
     Success(Success),
     Redirection(Redirection),
@@ -198,15 +198,15 @@ impl From<ServerError> for u16 {
     }
 }
 
-/// Convert StatusCode to u16
-impl From<StatusCode> for u16 {
-    fn from(code: StatusCode) -> u16 {
+/// Convert HttpStatus to u16
+impl From<HttpStatus> for u16 {
+    fn from(code: HttpStatus) -> u16 {
         match code {
-            StatusCode::Informational(code) => code.into(),
-            StatusCode::Success(code) => code.into(),
-            StatusCode::Redirection(code) => code.into(),
-            StatusCode::ClientError(code) => code.into(),
-            StatusCode::ServerError(code) => code.into(),
+            HttpStatus::Informational(code) => code.into(),
+            HttpStatus::Success(code) => code.into(),
+            HttpStatus::Redirection(code) => code.into(),
+            HttpStatus::ClientError(code) => code.into(),
+            HttpStatus::ServerError(code) => code.into(),
         }
     }
 }
@@ -315,24 +315,24 @@ impl TryFrom<u16> for ServerError {
     }
 }
 
-/// Try to convert a u16 to StatusCode
-impl TryFrom<u16> for StatusCode {
+/// Try to convert a u16 to HttpStatus
+impl TryFrom<u16> for HttpStatus {
     type Error = ();
     fn try_from(value: u16) -> Result<Self, Self::Error> {
         if let Ok(code) = Informational::try_from(value) {
-            return Ok(StatusCode::Informational(code));
+            return Ok(HttpStatus::Informational(code));
         }
         if let Ok(code) = Success::try_from(value) {
-            return Ok(StatusCode::Success(code));
+            return Ok(HttpStatus::Success(code));
         }
         if let Ok(code) = Redirection::try_from(value) {
-            return Ok(StatusCode::Redirection(code));
+            return Ok(HttpStatus::Redirection(code));
         }
         if let Ok(code) = ClientError::try_from(value) {
-            return Ok(StatusCode::ClientError(code));
+            return Ok(HttpStatus::ClientError(code));
         }
         if let Ok(code) = ServerError::try_from(value) {
-            return Ok(StatusCode::ServerError(code));
+            return Ok(HttpStatus::ServerError(code));
         }
         Err(())
     }
@@ -437,15 +437,15 @@ impl fmt::Display for ServerError {
     }
 }
 
-/// Display implementation for StatusCode
-impl fmt::Display for StatusCode {
+/// Display implementation for HttpStatus
+impl fmt::Display for HttpStatus {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            StatusCode::Informational(code) => code.fmt(f),
-            StatusCode::Success(code) => code.fmt(f),
-            StatusCode::Redirection(code) => code.fmt(f),
-            StatusCode::ClientError(code) => code.fmt(f),
-            StatusCode::ServerError(code) => code.fmt(f),
+            HttpStatus::Informational(code) => code.fmt(f),
+            HttpStatus::Success(code) => code.fmt(f),
+            HttpStatus::Redirection(code) => code.fmt(f),
+            HttpStatus::ClientError(code) => code.fmt(f),
+            HttpStatus::ServerError(code) => code.fmt(f),
         }
     }
 }
