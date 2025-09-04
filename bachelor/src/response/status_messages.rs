@@ -1,7 +1,12 @@
 use std::convert::TryFrom;
 use std::fmt;
 
+//! This module defines the `StatusCode` enum representing HTTP status codes,
+//! along with conversions to and from `u16` and a `Display` implementation
+//! for easy formatting.
 
+/// Represents HTTP status codes as an enum
+/// Includes informational, success, redirection, client error, and server error codes
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum StatusCode {
     // 1xx Informational
@@ -77,6 +82,7 @@ pub enum StatusCode {
     NetworkAuthenticationRequired,  // 511
 }
 
+/// Convert 'StatusCode' to 'u16' for easy numeric representation
 impl From<StatusCode> for u16 {
     fn from(code: StatusCode) -> u16 {
         match code {
@@ -155,6 +161,7 @@ impl From<StatusCode> for u16 {
     }
 }
 
+/// Convert 'u16' to 'StatusCode', returning an error for unknown codes
 impl TryFrom<u16> for StatusCode {
     type Error = ();
 
@@ -237,6 +244,7 @@ impl TryFrom<u16> for StatusCode {
     }
 }
 
+/// Implement 'Display' trait for 'StatusCode' for prettier output
 impl fmt::Display for StatusCode {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (code, text) = match self {
