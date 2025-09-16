@@ -1,25 +1,32 @@
+use mime::Mime;
 
-use http::HeaderMap;
+use crate::http::header::HeaderTrait;
 
+
+// the accept header will have its name and the value witch will be a hashmap of mime types and their quality values
+//every media type can have an quality number from 0 to 1, whtich means that the value variabile from Accept struct will be a hashmap of mime types and their quality values
 pub struct Accept {
     pub name: String,
-    pub values: HeaderMap,
+    pub values: Vec<Mime>,
+}
+
+impl HeaderTrait for Accept {
+    fn new() -> Accept {
+        Accept {
+            name: "Accept".to_string(),
+            values: Vec::new(),
+        }
+    }
 }
 
 impl Accept {
-    pub fn new() -> Accept {
-        Accept {
-            name: "Accept".to_string(),
-            values: HeaderMap::new(),
-        }
-    }
     pub fn set_values(){
 
     }
     pub fn get_name(&self) -> &String {
         &self.name
     }
-    pub fn get_values(&self) -> &HeaderMap {
+    pub fn get_values(&self) -> &Vec<Mime> {
         &self.values
     }
 }

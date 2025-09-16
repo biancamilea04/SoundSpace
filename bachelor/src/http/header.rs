@@ -3,6 +3,8 @@
 //! allowing for code reuse and extensibility through trait-based inheritance.
 
 
-pub trait HeaderTrait {}
+pub trait HeaderTrait {
+    fn new() -> Self;
+}
 
 pub struct HttpHeader {}
