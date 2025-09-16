@@ -4,7 +4,7 @@ use crate::http::header::HeaderTrait;
 
 
 // the accept header will have its name and the value witch will be a hashmap of mime types and their quality values
-//every media type can have an quality number from 0 to 1, whtich means that the value variabile from Accept struct will be a hashmap of mime types and their quality values
+//every media type can have a quality number from 0 to 1, whtich means that the value variabile from Accept struct will be a hashmap of mime types and their quality values
 pub struct Accept {
     pub name: String,
     pub values: Vec<Mime>,

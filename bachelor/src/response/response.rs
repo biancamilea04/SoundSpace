@@ -14,6 +14,8 @@ impl<T> Response<T> {
     }
 }
 
+// TO DO:
+// I SHOULD SEE HOW TO MODIFY THE STATUS CODE SO THE RETURN IT COULD BE CLEANER
 impl Response<String> {
     pub fn information() -> Response<String> {
         Response { status_code: HttpStatus::Informational(Informational::Continue), body: "Continue".to_string() }
