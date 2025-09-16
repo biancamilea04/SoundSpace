@@ -7,6 +7,30 @@
 
 use mime::Mime;
 
+/// TO DO:
+/// - isCompatibleWith function
+/// - copyQyalityValue and removeQualityValue function
+///  - add tests
+///
+/// In Spring there are specific types for the MediaType like APPLICATION_JSON, TEXT_HTML, WILDCARD etc.
+/// I could add them as associated constants.
+///
+/// Other spring function that can be implemented:
+/// - parseMediaType
+/// - parseMediaTypes
+/// - equals
+/// - compareTo
+///
+///  Maybe creating a more specific way of constructing the media type
+/// - add a function to create a media type from type, subtype and parameters
+/// - add a function to create a media type from type and subtype
+/// - add a function to create a media type from type, subtype and quality value
+/// - add a function to create a media type from type, subtype, parameters and quality value
+/// - add a function to create a media type from type, subtype and parameters and quality value
+///
+/// Maybe find a way to not depend on the mime crate to much
+
+
 pub struct MediaType{
     // The MIME type as a string, e.g., "text/html"
     // The quality factor (q-value) for the media type, ranging from 0.0 to 1.0
@@ -25,7 +49,7 @@ impl MediaType {
         MediaType { mime, quality: None }
     }
 
-    //clipy message:
+    // cargo clippy message:
     // warning: implementation of inherent method `to_string(&self) -> String` for type `http::media_type::MediaType`
     // help: implement trait `Display` for type `http::media_type::MediaType` instead
     pub fn to_string(&self) -> String {
