@@ -116,14 +116,43 @@ impl MediaType {
         false
     }
 
+    pub fn is_compatible_with(&self, other: &MediaType) -> bool {
+       if self.mime.type_() != mime::STAR && other.mime.type_() != mime::STAR {
+           if self.mime.type_() == other.mime.type_() {
+               if self.mime.subtype() == other.mime.subtype() { return true }
+
+               if self.mime.subtype() == mime::STAR || other.mime.subtype() == mime::STAR {
+                   let self_suffix = self.mime.suffix().unwrap();
+                   let other_suffix = other.mime.suffix().unwrap();
+
+                   if self_suffix == mime::STAR || other_suffix == mime::STAR { return true }
+
+                   if self.mime.subtype() == mime::STAR && self_suffix != None {
+                       return self_suffix == other.mime.subtype() || self_suffix == other_suffix
+                   }
+
+                   if other.mime.subtype() == mime::STAR && other_suffix != None {
+                       return other_suffix == self.mime.subtype() || other_suffix == self_suffix
+                   }
+               }
+           }
+
+           false
+       } else {
+           true
+       }
+    }
+
+    /// Copies the quality value from this media type to another if the other does not already have a quality value set.
     pub fn copy_quality_value(&self, other: &mut MediaType) -> MediaType {
         if other.quality.is_none() {
-            return MediaType { mime: other.mime.clone(), quality: None };
+            MediaType { mime: other.mime.clone(), quality: None }
         } else {
-            return MediaType { mime: other.mime.clone(), quality: self.quality };
+            MediaType { mime: other.mime.clone(), quality: self.quality }
         }
     }
 
+    /// Removes the quality value from the media type, setting it to None.
     pub fn remove_quality_value(&mut self) {
         self.quality = None;
     }
