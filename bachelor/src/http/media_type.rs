@@ -8,7 +8,6 @@
 use mime::Mime;
 
 /// TO DO:
-/// - isCompatibleWith function
 ///  - add tests
 ///
 /// In Spring there are specific types for the MediaType like APPLICATION_JSON, TEXT_HTML, WILDCARD etc.
