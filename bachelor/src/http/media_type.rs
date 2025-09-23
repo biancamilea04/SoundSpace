@@ -9,7 +9,6 @@ use mime::Mime;
 
 /// TO DO:
 /// - isCompatibleWith function
-/// - copyQyalityValue and removeQualityValue function
 ///  - add tests
 ///
 /// In Spring there are specific types for the MediaType like APPLICATION_JSON, TEXT_HTML, WILDCARD etc.
@@ -115,6 +114,18 @@ impl MediaType {
         }
 
         false
+    }
+
+    pub fn copy_quality_value(&self, other: &mut MediaType) -> MediaType {
+        if other.quality.is_none() {
+            return MediaType { mime: other.mime.clone(), quality: None };
+        } else {
+            return MediaType { mime: other.mime.clone(), quality: self.quality };
+        }
+    }
+
+    pub fn remove_quality_value(&mut self) {
+        self.quality = None;
     }
 
     /// Compares the specificity of this media type with another.
