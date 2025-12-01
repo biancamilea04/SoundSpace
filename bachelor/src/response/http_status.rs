@@ -1,11 +1,11 @@
-use std::convert::TryFrom;
-use std::fmt;
-
 //! This module defines HTTP status codes as enums and provides conversions and display implementations.
 //! It categorizes status codes into Informational, Success, Redirection, Client Error, and Server Error.
 //! Each category is represented by its own enum, and a top-level `HttpStatus` enum wraps them all.
 //! Conversions from and to `u16` are implemented, along with `Display` for prettier strings.
 //! This allows for type-safe handling of HTTP status codes in Rust applications.
+
+use std::convert::TryFrom;
+use std::fmt;
 
 /// 1xx Informational HTTP status codes
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
