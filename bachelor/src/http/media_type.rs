@@ -121,17 +121,19 @@ impl MediaType {
                if self.mime.subtype() == other.mime.subtype() { return true }
 
                if self.mime.subtype() == mime::STAR || other.mime.subtype() == mime::STAR {
-                   let self_suffix = self.mime.suffix().unwrap();
-                   let other_suffix = other.mime.suffix().unwrap();
+                   let self_suffix = self.mime.suffix();
+                   let other_suffix = other.mime.suffix();
 
-                   if self_suffix == mime::STAR || other_suffix == mime::STAR { return true }
+                   if self_suffix == Some(mime::STAR) || other_suffix == Some(mime::STAR) { return true }
 
-                   if self.mime.subtype() == mime::STAR && self_suffix != None {
-                       return self_suffix == other.mime.subtype() || self_suffix == other_suffix
+                   if self.mime.subtype() == mime::STAR && self_suffix.is_some() {
+                       let suffix = self_suffix.unwrap();
+                       return suffix == other.mime.subtype() || Some(suffix) == other_suffix
                    }
 
-                   if other.mime.subtype() == mime::STAR && other_suffix != None {
-                       return other_suffix == self.mime.subtype() || other_suffix == self_suffix
+                   if other.mime.subtype() == mime::STAR && other_suffix.is_some() {
+                       let suffix = other_suffix.unwrap();
+                       return suffix == self.mime.subtype() || Some(suffix) == self_suffix
                    }
                }
            }
