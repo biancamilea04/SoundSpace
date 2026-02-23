@@ -1,4 +1,4 @@
-﻿using SoundSpaceBackend.Features.Authentication;
+﻿using SoundSpaceBackend.Models.DTOs;
 
 namespace SoundSpaceBackend.Services.Abstractions;
 

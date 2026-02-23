@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Headers;
-using SoundSpaceBackend.Features.Authentication;
+using SoundSpaceBackend.Models.DTOs;
 using SoundSpaceBackend.Services.Abstractions;
 
 namespace SoundSpaceBackend.Services.Auth;

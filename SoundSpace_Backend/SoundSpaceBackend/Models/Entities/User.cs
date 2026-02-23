@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
-namespace SoundSpaceBackend.Data;
+namespace SoundSpaceBackend.Models.Entities;
 
 public class User : IdentityUser<Guid>
 {

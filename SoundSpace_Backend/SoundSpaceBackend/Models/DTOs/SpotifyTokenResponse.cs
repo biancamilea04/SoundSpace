@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SoundSpaceBackend.Features.Authentication;
+namespace SoundSpaceBackend.Models.DTOs;
 
 public class SpotifyTokenResponse
 {

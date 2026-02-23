@@ -1,7 +1,6 @@
 using Microsoft.OpenApi;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
-using SoundSpaceBackend.Features.Authentication;
 using SoundSpaceBackend.Persistence;
 using SoundSpaceBackend.Services.Abstractions;
 using SoundSpaceBackend.Services.Auth;
@@ -33,9 +32,27 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationContext>();
+        
+        context.Database.Migrate();
+        
+        Console.WriteLine("Migration succeed");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Migration errors: {ex.Message}");
+    }
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi", "SoundSpace API"));
 }
 
 app.UseHttpsRedirection();
