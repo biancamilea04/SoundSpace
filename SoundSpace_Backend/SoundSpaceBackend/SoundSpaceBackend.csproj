@@ -16,4 +16,8 @@
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.1.4" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Controllers\Auth\Requests\" />
+    </ItemGroup>
+
 </Project>

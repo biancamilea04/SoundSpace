@@ -1,4 +1,6 @@
 ﻿using System.Net.Http.Headers;
+using System.Text.Json;
+using SoundSpaceBackend.Controllers.Auth.Responses;
 using SoundSpaceBackend.Models.DTOs;
 using SoundSpaceBackend.Services.Abstractions;
 
@@ -6,6 +8,16 @@ namespace SoundSpaceBackend.Services.Auth;
 
 public class AuthService(IHttpClientFactory httpClientFactory) :  IAuthService
 {
+    private static readonly string SpotifyApiBaseUrl = Environment.GetEnvironmentVariable("SPOTIFY_API_BASE_URL") ?? "";
+    private static readonly string SpotifyApiTokenUrl = Environment.GetEnvironmentVariable("SPOTIFY_API_TOKEN_URL") ?? "";
+    public async Task<UserDto> SyncSpotifyUserAsync(string accessToken)
+    {
+        // This method would contain logic to fetch the user's Spotify profile using the access token,
+        // and then create or update a corresponding User record in your database.
+        // For now, we'll return an empty UserDto as a placeholder.
+        return new UserDto();
+    }
+    
     public string GenerateSpotifyLoginUrl()
     {
         var clientId = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_ID");
@@ -37,7 +49,7 @@ public class AuthService(IHttpClientFactory httpClientFactory) :  IAuthService
         var authHeader = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}"));
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authHeader);
 
-        var tokenResponse = await client.PostAsync("https://accounts.spotify.com/api/token", tokenRequest);
+        var tokenResponse = await client.PostAsync(SpotifyApiTokenUrl, tokenRequest);
         
         if (!tokenResponse.IsSuccessStatusCode) 
             return null;
@@ -45,16 +57,24 @@ public class AuthService(IHttpClientFactory httpClientFactory) :  IAuthService
         return await tokenResponse.Content.ReadFromJsonAsync<SpotifyTokenResponse>();
     }
 
-    public async Task<string?> GetSpotifyUserProfileAsync(string accessToken)
+    public async Task<SpotifyProfileDto> GetSpotifyUserProfileAsync(string accessToken)
     {
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         
-        var profileResponse = await client.GetAsync("https://api.spotify.com/v1/me");
+        var profileResponse = await client.GetAsync(SpotifyApiBaseUrl);
         
         if (!profileResponse.IsSuccessStatusCode) 
-            return null;
+            throw new HttpRequestException($"Spotify API error: {profileResponse.StatusCode}");
+        
+        var profileJson = await profileResponse.Content.ReadAsStringAsync();
+        if (profileJson == null)
+            throw new HttpRequestException($"The Spotify API returned an empty response for the user profile");
+        
+        var spotifyProfile = JsonSerializer.Deserialize<SpotifyProfileDto>(profileJson);
+        if (spotifyProfile == null)
+            throw new JsonException("Failed to deserialize Spotify user profile");
 
-        return await profileResponse.Content.ReadAsStringAsync();
+        return spotifyProfile;
     }
 }

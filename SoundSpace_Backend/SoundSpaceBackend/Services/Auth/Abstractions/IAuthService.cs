@@ -1,4 +1,5 @@
-﻿using SoundSpaceBackend.Models.DTOs;
+﻿using SoundSpaceBackend.Controllers.Auth.Responses;
+using SoundSpaceBackend.Models.DTOs;
 
 namespace SoundSpaceBackend.Services.Abstractions;
 
@@ -6,5 +7,5 @@ public interface IAuthService
 {
     string GenerateSpotifyLoginUrl();
     Task<SpotifyTokenResponse?> ExchangeCodeForTokensAsync(string code);
-    Task<string?> GetSpotifyUserProfileAsync(string accessToken);
+    Task<SpotifyProfileDto> GetSpotifyUserProfileAsync(string accessToken);
 }

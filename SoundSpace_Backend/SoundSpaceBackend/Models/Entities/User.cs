@@ -15,8 +15,12 @@ public class User : IdentityUser<Guid>
     
     [MaxLength(500)]
     public string? ProfileImageUrl { get; set; } 
+    
+    public string SpotifyAccessToken { get; set; } 
 
     public string? SpotifyRefreshToken { get; set; }
+    
+    public string? SpotifyTokenExpiresAt { get; set; }
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

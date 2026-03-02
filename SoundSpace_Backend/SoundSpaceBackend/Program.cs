@@ -6,8 +6,9 @@ using SoundSpaceBackend.Services.Abstractions;
 using SoundSpaceBackend.Services.Auth;
 
 Env.Load();
-
 var builder = WebApplication.CreateBuilder(args);
+
+var allowedOrigins = builder.Configuration["FRONTEND_URL"]?.Split(",") ?? [];
 
 var connectionString = Environment.GetEnvironmentVariable("SOUNDSPACE_DB");
 builder.Services.AddDbContext<ApplicationContext>(options =>
@@ -30,6 +31,16 @@ builder.Services.AddSwaggerGen(c =>
     }
 );
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -39,7 +50,7 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<ApplicationContext>();
         
-        context.Database.Migrate();
+        await context.Database.MigrateAsync();
         
         Console.WriteLine("Migration succeed");
     }
@@ -56,6 +67,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.MapControllers();
 

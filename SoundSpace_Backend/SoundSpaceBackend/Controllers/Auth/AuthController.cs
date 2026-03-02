@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SoundSpaceBackend.Controllers.Auth.Responses;
 using SoundSpaceBackend.Services.Abstractions;
 
 namespace SoundSpaceBackend.Controllers.Auth;
@@ -10,8 +10,8 @@ public class AuthController(IAuthService authService) : ControllerBase
 {
     private readonly IAuthService _authService = authService;
     
-    [HttpGet("login")]
-    public IActionResult Login()
+    [HttpGet("/auth")]
+    public IActionResult Auth()
     {
         var spotifyAuthUrl = _authService.GenerateSpotifyLoginUrl();
         return Redirect(spotifyAuthUrl);
@@ -32,16 +32,22 @@ public class AuthController(IAuthService authService) : ControllerBase
         }
         
         var profileJson = await _authService.GetSpotifyUserProfileAsync(tokenData.AccessToken);
-        if (profileJson == null)
-        {
-            return BadRequest("Error fetching Spotify user profile.");
-        }
         
-        return Ok(new
+        var spotifyTokensDto = new SpotifyTokensDto
+        {
+            AccessToken = tokenData.AccessToken,
+            TokenType = tokenData.TokenType,
+            ExpiresIn = tokenData.ExpiresIn,
+            RefreshToken = tokenData.RefreshToken,
+            Scope = tokenData.Scope
+        };
+        
+        var spotifyResponseDto = new SpotifyAuthResponseDto
         {
             Message = "Successfully authenticated with Spotify",
-            Tokens = tokenData,
-            UserProfile = JsonSerializer.Deserialize<object>(profileJson)
-        });
+            Tokens = spotifyTokensDto,
+            UserProfile = profileJson
+        };
+        return Ok(spotifyResponseDto);
     }
 }
