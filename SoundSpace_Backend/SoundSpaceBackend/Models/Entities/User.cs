@@ -13,6 +13,10 @@ public class User : IdentityUser<Guid>
     [MaxLength(100)] 
     public string DisplayName { get; set; } = string.Empty;
     
+    public string Country { get; set; } = string.Empty;
+
+    public int Followers { get; set; } = 0;
+    
     [MaxLength(500)]
     public string? ProfileImageUrl { get; set; } 
     
@@ -20,7 +24,7 @@ public class User : IdentityUser<Guid>
 
     public string? SpotifyRefreshToken { get; set; }
     
-    public string? SpotifyTokenExpiresAt { get; set; }
+    public string? SpotifyTokenExpiresIn { get; set; }
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

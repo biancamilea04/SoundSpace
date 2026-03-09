@@ -5,20 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c4ccd9b1-444b-485c-ad59-e2010d6d501d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/public/icons/SoundSpaceIcon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/public/icons/spotify.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/landing/hero.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/button.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/icons/Spotify.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/lib/utils.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Auth/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Auth/AuthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Models/DTOs/SpotifyTokenResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Auth/Responses/SpotifyTokenResponse.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Models/Entities/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Models/Entities/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Persistence/ApplicationContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Persistence/ApplicationContext.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Auth/Abstractions/IAuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Auth/Abstractions/IAuthService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Auth/AuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Auth/AuthService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/SoundSpaceBackend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/SoundSpaceBackend.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpace_Backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpace_Backend.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/SpotifyButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/SpotifyButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/auth/spotifyAuth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/auth/spotifyAuth.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,24 +55,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ReactCreateComponentLastSelected": "classBasedComponent",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "routing",
-    "last_opened_file_path": "C:/Users/Bianca Milea/Desktop/uni/Licenta/Bachelor_Thesis/SoundSpace_Frontend/sound_space/public/icons",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Users\\Bianca Milea\\Desktop\\uni\\Licenta\\Bachelor_Thesis\\SoundSpace_Frontend\\sound_space\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ReactCreateComponentLastSelected&quot;: &quot;classBasedComponent&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;routing&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Bianca Milea/Desktop/uni/Licenta/Bachelor_Thesis/SoundSpace_Frontend/sound_space/public/icons&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Bianca Milea\\Desktop\\uni\\Licenta\\Bachelor_Thesis\\SoundSpace_Frontend\\sound_space\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -110,6 +110,9 @@
       <workItem from="1772359852544" duration="1103000" />
       <workItem from="1772382391346" duration="2124000" />
       <workItem from="1772466923593" duration="8533000" />
+      <workItem from="1772625854367" duration="2923000" />
+      <workItem from="1772629816138" duration="883000" />
+      <workItem from="1772642834386" duration="3917000" />
     </task>
     <servers />
   </component>

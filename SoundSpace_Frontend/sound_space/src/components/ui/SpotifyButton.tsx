@@ -14,7 +14,6 @@ export const SpotifyButton = ({ onClick }: { onClick?: () => void }) => {
         if (onClick) onClick();
         try {
             await initializeSpotifyAuth();
-            // The service naturally redirects, no need for data return
         } catch (error) {
             console.error("Error during Spotify authentication:", error);
             setIsLoading(false);
@@ -25,7 +24,7 @@ export const SpotifyButton = ({ onClick }: { onClick?: () => void }) => {
         <Button
             size="xl"
             onClick={handleLogin}
-            className="gap-3 rounded-full font-bold bg-[#1ed760] hover:bg-[#1db954] text-black text-[1.1rem] px-8 py-7 shadow-[0_0_20px_rgba(30,215,96,0.3)] hover:shadow-[0_0_25px_rgba(30,215,96,0.5)] transition-all"
+            className="gap-3 rounded-full font-bold bg-[#1ed760] hover:bg-[#1db954] text-black text-[1.1rem] px-8 py-7 transition-transform duration-200"
         >
             <Image
                 src="/icons/spotify.png"

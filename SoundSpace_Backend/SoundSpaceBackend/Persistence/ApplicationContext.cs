@@ -13,13 +13,10 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options) : 
     {
         base.OnModelCreating(modelBuilder);
         
-        modelBuilder.Entity<User>(entity => {
+        modelBuilder.Entity<User>(entity =>
+            {
                 entity.HasIndex(u => u.SpotifyId)
                     .IsUnique();
-                
-                entity.Property(u => u.DisplayName)
-                    .IsRequired()
-                    .HasMaxLength(100);
                 
                 entity.Property(u => u.DisplayName)
                     .IsRequired()

@@ -2,8 +2,10 @@ using Microsoft.OpenApi;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using SoundSpaceBackend.Persistence;
-using SoundSpaceBackend.Services.Abstractions;
 using SoundSpaceBackend.Services.Auth;
+using SoundSpaceBackend.Services.Auth.Abstractions;
+using SoundSpaceBackend.Services.User;
+using SoundSpaceBackend.Services.User.Abstractions;
 
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +21,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddSwaggerGen(c =>
     {

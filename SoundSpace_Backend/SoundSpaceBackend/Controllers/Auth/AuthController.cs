@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SoundSpaceBackend.Controllers.Auth.Responses;
-using SoundSpaceBackend.Services.Abstractions;
+using SoundSpaceBackend.Services.Auth.Abstractions;
+using SoundSpaceBackend.Services.User.Abstractions;
 
 namespace SoundSpaceBackend.Controllers.Auth;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IAuthService authService) : ControllerBase
+public class AuthController(IAuthService authService, IUserService userService) : ControllerBase
 {
     private readonly IAuthService _authService = authService;
+    private readonly IUserService _userService = userService;
     
     [HttpGet("/auth")]
     public IActionResult Auth()
@@ -48,6 +50,9 @@ public class AuthController(IAuthService authService) : ControllerBase
             Tokens = spotifyTokensDto,
             UserProfile = profileJson
         };
+        
+        await _userService.CreateOrUpdateUserAsync(spotifyResponseDto);
+        
         return Ok(spotifyResponseDto);
     }
 }

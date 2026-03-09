@@ -2,7 +2,7 @@
 using System.Text.Json;
 using SoundSpaceBackend.Controllers.Auth.Responses;
 using SoundSpaceBackend.Models.DTOs;
-using SoundSpaceBackend.Services.Abstractions;
+using SoundSpaceBackend.Services.Auth.Abstractions;
 
 namespace SoundSpaceBackend.Services.Auth;
 

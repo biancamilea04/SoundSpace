@@ -1,7 +1,7 @@
 ﻿using SoundSpaceBackend.Controllers.Auth.Responses;
 using SoundSpaceBackend.Models.DTOs;
 
-namespace SoundSpaceBackend.Services.Abstractions;
+namespace SoundSpaceBackend.Services.Auth.Abstractions;
 
 public interface IAuthService
 {
