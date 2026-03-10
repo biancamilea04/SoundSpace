@@ -1,5 +1,4 @@
 ﻿using SoundSpaceBackend.Controllers.Auth.Responses;
-using SoundSpaceBackend.Models.DTOs;
 using SoundSpaceBackend.Persistence;
 using SoundSpaceBackend.Services.User.Abstractions;
 using SoundSpaceBackend.Services.User.DTOs;
@@ -18,7 +17,7 @@ public class UserService(ApplicationContext dbContext) : IUserService
             throw new Exception("User not found");
         }
 
-        var getUserDto = new GetUserDto(user.DisplayName, user.ProfileImageUrl);
+        var getUserDto = new GetUserDto(user.DisplayName, user.ProfileImageUrl, user.Email, user.Country, user.Followers);
         
         return Task.FromResult(getUserDto);
     }
@@ -53,6 +52,6 @@ public class UserService(ApplicationContext dbContext) : IUserService
 
         _dbContext.SaveChanges();
         
-        return Task.CompletedTask;
+        return Task.CompletedTask ;
     }
 }
