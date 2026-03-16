@@ -2,6 +2,7 @@
 
 import { Headphones, Music, Send } from "lucide-react";
 import { useState } from "react";
+import "./SharePost.css";
 
 interface SharePostProps {
     onPost?: (text: string, song?: string) => void;
@@ -24,33 +25,33 @@ export const SharePost = ({ onPost }: SharePostProps) => {
 
     return (
         <section>
-            <h2 className="text-xs font-bold tracking-[0.2em] text-zinc-400 uppercase mb-4">
+            <h2 className="share-post__section-title">
                 Share Your Thoughts
             </h2>
-            <div className="rounded-xl bg-[#181818] border border-zinc-800/60 p-5 md:p-6 shadow-lg">
+            <div className="share-post__card">
                 {/* Input Area */}
-                <div className="flex items-center gap-3 mb-4">
-                    <div className="w-9 h-9 rounded-full bg-zinc-800 flex items-center justify-center shrink-0">
-                        <Headphones className="w-4.5 h-4.5 text-zinc-400" />
+                <div className="share-post__input-row">
+                    <div className="share-post__avatar">
+                        <Headphones className="share-post__avatar-icon" />
                     </div>
                     <input
                         type="text"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                         placeholder="What are you listening to?"
-                        className="flex-1 bg-transparent text-white placeholder-zinc-500 text-sm md:text-base outline-none border-none"
+                        className="share-post__input"
                         onKeyDown={(e) => e.key === "Enter" && handlePost()}
                     />
                 </div>
 
                 {/* Attached Song Chip */}
                 {attachedSong && (
-                    <div className="mb-4 flex items-center gap-2 bg-zinc-800/80 rounded-lg px-3 py-2 w-fit">
-                        <Music className="w-3.5 h-3.5 text-[#1ed760]" />
-                        <span className="text-sm text-zinc-300">{attachedSong}</span>
+                    <div className="share-post__song-chip">
+                        <Music className="share-post__song-chip-icon" />
+                        <span className="share-post__song-chip-name">{attachedSong}</span>
                         <button
                             onClick={() => setAttachedSong(null)}
-                            className="ml-1 text-zinc-500 hover:text-white text-xs"
+                            className="share-post__song-chip-remove"
                             aria-label="Remove attached song"
                         >
                             ✕
@@ -59,21 +60,21 @@ export const SharePost = ({ onPost }: SharePostProps) => {
                 )}
 
                 {/* Actions */}
-                <div className="flex items-center justify-between">
+                <div className="share-post__actions">
                     <button
                         onClick={handleAttachSong}
-                        className="flex items-center gap-2 text-zinc-400 hover:text-white text-sm transition-colors group"
+                        className="share-post__attach-btn"
                     >
-                        <Music className="w-4 h-4 group-hover:text-[#1ed760] transition-colors" />
+                        <Music className="share-post__attach-icon" />
                         Attach Song
                     </button>
 
                     <button
                         onClick={handlePost}
                         disabled={!text.trim()}
-                        className="flex items-center gap-2 px-5 py-2 rounded-full bg-[#1ed760] hover:bg-[#1db954] text-black font-semibold text-sm transition-all hover:scale-105 disabled:opacity-40 disabled:hover:scale-100 disabled:cursor-not-allowed shadow-[0_0_12px_rgba(30,215,96,0.2)]"
+                        className="share-post__post-btn"
                     >
-                        <Send className="w-3.5 h-3.5" />
+                        <Send className="share-post__post-icon" />
                         Post
                     </button>
                 </div>

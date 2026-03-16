@@ -5,19 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c4ccd9b1-444b-485c-ad59-e2010d6d501d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/SpotifyButton/SpotifyButton.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/button/button.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Auth/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Auth/AuthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Models/Entities/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Models/Entities/User.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Persistence/ApplicationContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Persistence/ApplicationContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Auth/Abstractions/IAuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Auth/Abstractions/IAuthService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Auth/AuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Auth/AuthService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/SoundSpaceBackend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/SoundSpaceBackend.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpace_Backend.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpace_Backend.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/SpotifyButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/SpotifyButton.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/profile/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/profile/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/landing/hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/landing/hero.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/ProfileHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/ProfileHeader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/SpotifyButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/SpotifyButton/SpotifyButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/ui/button/button.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/auth/spotifyAuth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/auth/spotifyAuth.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -87,6 +84,8 @@
       <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\public\icons" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\components\ui\SpotifyButton" />
+      <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\components\ui\button" />
       <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space" />
       <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src" />
     </key>
@@ -113,6 +112,9 @@
       <workItem from="1772625854367" duration="2923000" />
       <workItem from="1772629816138" duration="883000" />
       <workItem from="1772642834386" duration="3917000" />
+      <workItem from="1773076824986" duration="2316000" />
+      <workItem from="1773170676659" duration="463000" />
+      <workItem from="1773659187092" duration="3060000" />
     </task>
     <servers />
   </component>

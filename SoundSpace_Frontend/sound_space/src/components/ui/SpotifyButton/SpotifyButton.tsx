@@ -1,10 +1,10 @@
-// components/SpotifyButton.tsx
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button/button";
 import { initializeSpotifyAuth } from "@/services/auth/spotifyAuth";
 import Image from "next/image";
+import "./SpotifyButton.css";
 
 export const SpotifyButton = ({ onClick }: { onClick?: () => void }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -20,11 +20,14 @@ export const SpotifyButton = ({ onClick }: { onClick?: () => void }) => {
         }
     };
 
+    const classes = `spotify-button${isLoading ? " loading" : ""}`;
+
     return (
         <Button
             size="xl"
             onClick={handleLogin}
-            className="gap-3 rounded-full font-bold bg-[#1ed760] hover:bg-[#1db954] text-black text-[1.1rem] px-8 py-7 transition-transform duration-200"
+            className={classes}
+            disabled={isLoading}
         >
             <Image
                 src="/icons/spotify.png"

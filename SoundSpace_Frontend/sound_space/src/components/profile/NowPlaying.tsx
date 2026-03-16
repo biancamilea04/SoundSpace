@@ -3,6 +3,7 @@
 import { Heart, Pause, Play } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
+import "./NowPlaying.css";
 
 interface NowPlayingProps {
     songTitle: string;
@@ -30,40 +31,40 @@ export const NowPlaying = ({
 
     return (
         <section>
-            <h2 className="text-xs font-bold tracking-[0.2em] text-zinc-400 uppercase mb-4">
+            <h2 className="now-playing__section-title">
                 Now Playing
             </h2>
-            <div className="rounded-xl bg-[#181818] border border-zinc-800/60 p-5 md:p-6 shadow-lg">
-                <div className="flex gap-4 md:gap-5">
+            <div className="now-playing__card">
+                <div className="now-playing__content">
                     {/* Album Art */}
-                    <div className="shrink-0 w-[80px] h-[80px] md:w-[100px] md:h-[100px] rounded-lg overflow-hidden shadow-md bg-zinc-800">
+                    <div className="now-playing__album-art">
                         <Image
                             src={albumArtUrl}
                             alt={`${album} album art`}
                             width={100}
                             height={100}
-                            className="w-full h-full object-cover"
+                            className="now-playing__album-img"
                         />
                     </div>
 
                     {/* Song Info */}
-                    <div className="flex-1 min-w-0">
-                        <h3 className="text-lg md:text-xl font-bold text-white truncate">
+                    <div className="now-playing__song-info">
+                        <h3 className="now-playing__song-title">
                             {songTitle}
                         </h3>
-                        <p className="text-sm text-zinc-400 mt-0.5 truncate">
+                        <p className="now-playing__song-artist">
                             {artist} · {album}
                         </p>
 
                         {/* Progress Bar */}
-                        <div className="mt-4">
-                            <div className="relative w-full h-1 bg-zinc-700 rounded-full overflow-hidden">
+                        <div className="now-playing__progress-wrapper">
+                            <div className="now-playing__progress-bar">
                                 <div
-                                    className="absolute left-0 top-0 h-full bg-[#1ed760] rounded-full transition-all duration-300"
+                                    className="now-playing__progress-fill"
                                     style={{ width: `${progress}%` }}
                                 />
                             </div>
-                            <div className="flex justify-between mt-1.5 text-[11px] text-zinc-500 font-medium">
+                            <div className="now-playing__progress-times">
                                 <span>{currentTime}</span>
                                 <span>{totalTime}</span>
                             </div>
@@ -72,18 +73,18 @@ export const NowPlaying = ({
                 </div>
 
                 {/* Controls */}
-                <div className="flex items-center gap-3 mt-3">
+                <div className="now-playing__controls">
 
                     {/* Play/Pause Button */}
                     <button
                         onClick={() => setIsPlaying(!isPlaying)}
-                        className="w-8 h-8 rounded-full bg-[#1ed760] hover:bg-[#1db954] text-black flex items-center justify-center transition-all hover:scale-105 shadow-[0_0_12px_rgba(30,215,96,0.3)]"
+                        className="now-playing__play-btn"
                         aria-label={isPlaying ? "Pause" : "Play"}
                     >
                         {isPlaying ? (
-                            <Pause className="w-4 h-4 fill-black" />
+                            <Pause className="now-playing__play-icon" />
                         ) : (
-                            <Play className="w-4 h-4 fill-black ml-0.5" />
+                            <Play className="now-playing__play-icon now-playing__play-icon--play" />
                         )}
                     </button>
                 </div>
