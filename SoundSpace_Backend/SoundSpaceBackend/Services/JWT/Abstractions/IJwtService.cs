@@ -1,4 +1,5 @@
-﻿using SoundSpaceBackend.Services.JWT.DTOs;
+﻿using SoundSpaceBackend.Models.DTOs;
+using SoundSpaceBackend.Services.JWT.DTOs;
 
 
 namespace SoundSpaceBackend.Services.JWT.Abstractions;

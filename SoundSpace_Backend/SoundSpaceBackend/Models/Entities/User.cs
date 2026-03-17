@@ -25,6 +25,9 @@ public class User : IdentityUser<Guid>
     public string? SpotifyRefreshToken { get; set; }
     
     public string? SpotifyTokenExpiresIn { get; set; }
+
+    /// <summary>UTC time at which the current Spotify access token expires.</summary>
+    public DateTime SpotifyTokenExpiresAt { get; set; } = DateTime.UtcNow;
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

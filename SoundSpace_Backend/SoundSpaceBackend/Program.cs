@@ -9,6 +9,10 @@ using SoundSpaceBackend.Services.Auth;
 using SoundSpaceBackend.Services.Auth.Abstractions;
 using SoundSpaceBackend.Services.JWT;
 using SoundSpaceBackend.Services.JWT.Abstractions;
+using SoundSpaceBackend.Services.SpotifyPlayer;
+using SoundSpaceBackend.Services.SpotifyPlayer.Abstractions;
+using SoundSpaceBackend.Services.SpotifyToken;
+using SoundSpaceBackend.Services.SpotifyToken.Abstractions;
 using SoundSpaceBackend.Services.User;
 using SoundSpaceBackend.Services.User.Abstractions;
 
@@ -31,7 +35,13 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddOpenApi();
+builder.Services.AddAutoMapper(cfg => { }, typeof(SoundSpaceBackend.Mapping.Profiles.UserProfile));
 
+builder.Services.AddSignalR();
+builder.Services.AddHostedService<SoundSpaceBackend.Services.Workers.SpotifyWorker>();
+
+builder.Services.AddScoped<ISpotifyTokenService, SpotifyTokenService>();
+builder.Services.AddScoped<ISpotifyPlayerService, SpotifyPlayerService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
@@ -53,7 +63,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(allowedOrigins)
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
@@ -77,6 +88,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
         options.Events = new JwtBearerEvents
         {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                
+                // If connecting to the hub, read the token from the query string
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/spotify"))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            },
             OnAuthenticationFailed = context =>
             {
                 Console.WriteLine($"[JWT] Authentication failed: {context.Exception.Message}");
@@ -120,9 +143,9 @@ app.UseHttpsRedirection();
 app.UseCors();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<SoundSpaceBackend.Services.Hubs.SpotifyHub>("/hubs/spotify");
 
 app.Run();

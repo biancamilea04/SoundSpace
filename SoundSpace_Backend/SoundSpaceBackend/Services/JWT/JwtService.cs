@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using SoundSpaceBackend.Models.DTOs;
 using SoundSpaceBackend.Services.JWT.Abstractions;
 using SoundSpaceBackend.Services.JWT.DTOs;
 

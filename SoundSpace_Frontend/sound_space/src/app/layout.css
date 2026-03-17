@@ -1,0 +1,9 @@
+.layout-body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.spotify-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+}

@@ -2,9 +2,9 @@
 
 import { Suspense } from "react";
 import Image from "next/image";
-import { ProfileHeader } from "@/components/profile/ProfileHeader";
-import { NowPlaying } from "@/components/profile/NowPlaying";
-import { SharePost } from "@/components/profile/SharePost";
+import { ProfileHeader } from "@/components/profile/ProfileHeader/ProfileHeader";
+import { NowPlaying } from "@/components/profile/NowPlaying/NowPlaying";
+import { SharePost } from "@/components/profile/SharePost/SharePost";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import "./page.css";
 
@@ -63,16 +63,7 @@ function ProfileContent() {
                         <div className="profile-divider" />
 
                         {/* Now Playing */}
-                        <NowPlaying
-                            songTitle="[TEST TITLE]"
-                            artist="[TEST ARTIST]"
-                            album="[TEST ALBUM]"
-                            albumArtUrl="/icons/SoundSpaceIcon.png"
-                            currentTime="00:00"
-                            totalTime="99:99"
-                            progress={53}
-                            isPlaying={true}
-                        />
+                        <NowPlaying />
 
                         {/* Share Post */}
                         <SharePost

@@ -1,46 +1,57 @@
 "use client";
 
-import { Heart, Pause, Play } from "lucide-react";
-import { useState } from "react";
+import { Pause, Play } from "lucide-react";
 import Image from "next/image";
+import { useSpotifyStatus } from "@/hooks/useNowPlaying";
 import "./NowPlaying.css";
 
-interface NowPlayingProps {
-    songTitle: string;
-    artist: string;
-    album: string;
-    albumArtUrl: string;
-    currentTime: string;
-    totalTime: string;
-    progress: number;
-    isPlaying?: boolean;
-}
+/** Convert milliseconds → "m:ss" */
+const formatTime = (ms: number): string => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+};
 
-export const NowPlaying = ({
-    songTitle,
-    artist,
-    album,
-    albumArtUrl,
-    currentTime,
-    totalTime,
-    progress,
-    isPlaying: initialPlaying = true,
-}: NowPlayingProps) => {
-    const [isPlaying, setIsPlaying] = useState(initialPlaying);
-    const [isLiked, setIsLiked] = useState(false);
+export const NowPlaying = () => {
+    const { nowPlaying, isLoading } = useSpotifyStatus();
+
+    if (isLoading) {
+        return (
+            <section>
+                <h2 className="now-playing__section-title">Now Playing</h2>
+                <div className="now-playing__card">
+                    <p className="now-playing__empty">Loading...</p>
+                </div>
+            </section>
+        );
+    }
+
+    if (!nowPlaying) {
+        return (
+            <section>
+                <h2 className="now-playing__section-title">Now Playing</h2>
+                <div className="now-playing__card">
+                    <p className="now-playing__empty">Nothing playing right now</p>
+                </div>
+            </section>
+        );
+    }
+
+    const progress = nowPlaying.durationMs > 0
+        ? (nowPlaying.progressMs / nowPlaying.durationMs) * 100
+        : 0;
 
     return (
         <section>
-            <h2 className="now-playing__section-title">
-                Now Playing
-            </h2>
+            <h2 className="now-playing__section-title">Now Playing</h2>
             <div className="now-playing__card">
                 <div className="now-playing__content">
                     {/* Album Art */}
                     <div className="now-playing__album-art">
                         <Image
-                            src={albumArtUrl}
-                            alt={`${album} album art`}
+                            src={nowPlaying.albumImageUrl || "/icons/SoundSpaceIcon.png"}
+                            alt={`${nowPlaying.albumName} album art`}
                             width={100}
                             height={100}
                             className="now-playing__album-img"
@@ -50,10 +61,10 @@ export const NowPlaying = ({
                     {/* Song Info */}
                     <div className="now-playing__song-info">
                         <h3 className="now-playing__song-title">
-                            {songTitle}
+                            {nowPlaying.songTitle}
                         </h3>
                         <p className="now-playing__song-artist">
-                            {artist} · {album}
+                            {nowPlaying.artistNames} · {nowPlaying.albumName}
                         </p>
 
                         {/* Progress Bar */}
@@ -65,8 +76,8 @@ export const NowPlaying = ({
                                 />
                             </div>
                             <div className="now-playing__progress-times">
-                                <span>{currentTime}</span>
-                                <span>{totalTime}</span>
+                                <span>{formatTime(nowPlaying.progressMs)}</span>
+                                <span>{formatTime(nowPlaying.durationMs)}</span>
                             </div>
                         </div>
                     </div>
@@ -74,14 +85,12 @@ export const NowPlaying = ({
 
                 {/* Controls */}
                 <div className="now-playing__controls">
-
-                    {/* Play/Pause Button */}
                     <button
-                        onClick={() => setIsPlaying(!isPlaying)}
                         className="now-playing__play-btn"
-                        aria-label={isPlaying ? "Pause" : "Play"}
+                        aria-label={nowPlaying.isPlaying ? "Pause" : "Play"}
+                        disabled
                     >
-                        {isPlaying ? (
+                        {nowPlaying.isPlaying ? (
                             <Pause className="now-playing__play-icon" />
                         ) : (
                             <Play className="now-playing__play-icon now-playing__play-icon--play" />

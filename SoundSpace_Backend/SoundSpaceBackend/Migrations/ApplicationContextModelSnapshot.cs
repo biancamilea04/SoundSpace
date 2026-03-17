@@ -231,6 +231,9 @@ namespace SoundSpaceBackend.Migrations
                     b.Property<string>("SpotifyRefreshToken")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("SpotifyTokenExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("SpotifyTokenExpiresIn")
                         .HasColumnType("text");
 

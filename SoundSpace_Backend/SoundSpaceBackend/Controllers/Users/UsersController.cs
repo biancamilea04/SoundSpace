@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SoundSpaceBackend.Controllers.Users.Responses;
+using SoundSpaceBackend.Services.SpotifyPlayer.Abstractions;
 using SoundSpaceBackend.Services.User.Abstractions;
 
 namespace SoundSpaceBackend.Controllers.Users;
@@ -10,10 +11,14 @@ namespace SoundSpaceBackend.Controllers.Users;
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class UsersController(IUserService userService, ILogger<UsersController> logger) : ControllerBase
+public class UsersController(
+    IUserService userService,
+    ISpotifyPlayerService spotifyPlayerService,
+    ILogger<UsersController> logger) : ControllerBase
 {
     ILogger<UsersController> _logger = logger;
     IUserService _userService = userService;
+    ISpotifyPlayerService _spotifyPlayerService = spotifyPlayerService;
     
     [HttpGet("profile")]
     public async Task<IActionResult> GetUserProfile()
@@ -29,5 +34,22 @@ public class UsersController(IUserService userService, ILogger<UsersController> 
         var userProfileResponse = new UserProfileResponse(user.DisplayName, user.ProfileImageUrl, user.Email, user.Country, user.Followers);
         
         return Ok(userProfileResponse);
+    }
+
+    [HttpGet("now-playing")]
+    public async Task<IActionResult> GetNowPlaying()
+    {
+        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (spotifyId == null)
+        {
+            _logger.LogWarning("Spotify ID claim is missing in the token");
+            return Unauthorized();
+        }
+
+        var result = await _spotifyPlayerService.GetCurrentlyPlayingTrackAsync(spotifyId);
+        if (result == null)
+            return NoContent(); // 204 — nothing is currently playing
+
+        return Ok(result);
     }
 }
