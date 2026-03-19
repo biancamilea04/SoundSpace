@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ProfileHeader } from "@/components/profile/ProfileHeader/ProfileHeader";
 import { NowPlaying } from "@/components/profile/NowPlaying/NowPlaying";
 import { SharePost } from "@/components/profile/SharePost/SharePost";
-import { useUserProfile } from "@/hooks/useUserProfile";
+import { useUserProfile } from "@/hooks/UserProfile/useUserProfile";
 import "./page.css";
 
 function ProfileContent() {

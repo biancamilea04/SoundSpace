@@ -1,7 +1,4 @@
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
 using SoundSpaceBackend.Services.Hubs;
 using SoundSpaceBackend.Services.SpotifyPlayer.Abstractions;
 
@@ -12,7 +9,6 @@ public class SpotifyWorker(
     IHubContext<SpotifyHub> hubContext,
     ILogger<SpotifyWorker> logger) : BackgroundService
 {
-    // Key: SpotifyId, Value: Track ID + IsPlaying combination to avoid redundant broadcasts when stopped
     private readonly Dictionary<string, string> _lastTrackStatus = new();
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -36,22 +32,16 @@ public class SpotifyWorker(
                         var currentStatus = $"{nowPlaying?.SongUri}_{nowPlaying?.IsPlaying}";
                         _lastTrackStatus.TryGetValue(spotifyId, out var lastStatus);
 
-                        bool hasStatusChanged = currentStatus != lastStatus;
+                        var hasStatusChanged = currentStatus != lastStatus;
 
-                        // To avoid redundant broadcasts when paused/stopped indefinitely, 
-                        // we ONLY send if the song/playing state changed, OR if a song is currently playing 
-                        // (we send every tick to fix frontend timing drift).
-                        if (hasStatusChanged || nowPlaying?.IsPlaying == true)
+                        if (hasStatusChanged)
                         {
-                            if (hasStatusChanged) 
-                            {
-                                logger.LogInformation("[SpotifyWorker] Status changed for {SpotifyId}. New track: {Track}", 
-                                    spotifyId, nowPlaying?.SongTitle ?? "None");
-                            }
-
-                            _lastTrackStatus[spotifyId] = currentStatus;
-                            await hubContext.Clients.User(spotifyId).SendAsync("ReceiveNowPlaying", nowPlaying, stoppingToken);
+                            logger.LogInformation("[SpotifyWorker] Status changed for {SpotifyId}. New track: {Track}", 
+                                spotifyId, nowPlaying?.SongTitle ?? "None");
                         }
+
+                        _lastTrackStatus[spotifyId] = currentStatus;
+                        await hubContext.Clients.User(spotifyId).SendAsync("ReceiveNowPlaying", nowPlaying, stoppingToken);
                     }
                 }
             }
@@ -59,8 +49,7 @@ public class SpotifyWorker(
             {
                 logger.LogError(ex, "[SpotifyWorker] Error during Spotify status check.");
             }
-
-            // Poll every 5 seconds (sufficient for drift correction without hitting Spotify rate limits)
+            
             await Task.Delay(5000, stoppingToken);
         }
     }

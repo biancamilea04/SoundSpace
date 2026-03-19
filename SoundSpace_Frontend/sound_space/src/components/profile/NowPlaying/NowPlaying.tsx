@@ -1,8 +1,8 @@
 "use client";
 
-import { Pause, Play } from "lucide-react";
+import {Pause, Play} from "lucide-react";
 import Image from "next/image";
-import { useSpotifyStatus } from "@/hooks/useNowPlaying";
+import {useSpotifyStatus} from "@/hooks/NowPlaying/useNowPlaying";
 import "./NowPlaying.css";
 
 /** Convert milliseconds → "m:ss" */
@@ -14,7 +14,7 @@ const formatTime = (ms: number): string => {
 };
 
 export const NowPlaying = () => {
-    const { nowPlaying, isLoading } = useSpotifyStatus();
+    const {nowPlaying, isLoading} = useSpotifyStatus();
 
     if (isLoading) {
         return (
@@ -44,7 +44,9 @@ export const NowPlaying = () => {
 
     return (
         <section>
-            <h2 className="now-playing__section-title">Now Playing</h2>
+            <h2 className="now-playing__section-title">
+                {nowPlaying.isPlaying ? "Now Playing" : "Last Played"}
+            </h2>
             <div className="now-playing__card">
                 <div className="now-playing__content">
                     {/* Album Art */}
@@ -68,34 +70,21 @@ export const NowPlaying = () => {
                         </p>
 
                         {/* Progress Bar */}
-                        <div className="now-playing__progress-wrapper">
-                            <div className="now-playing__progress-bar">
-                                <div
-                                    className="now-playing__progress-fill"
-                                    style={{ width: `${progress}%` }}
-                                />
+                        {nowPlaying.isPlaying && (
+                            <div className="now-playing__progress-wrapper">
+                                <div className="now-playing__progress-bar">
+                                    <div
+                                        className="now-playing__progress-fill"
+                                        style={{width: `${progress}%`}}
+                                    />
+                                </div>
+                                <div className="now-playing__progress-times">
+                                    <span>{formatTime(nowPlaying.progressMs)}</span>
+                                    <span>{formatTime(nowPlaying.durationMs)}</span>
+                                </div>
                             </div>
-                            <div className="now-playing__progress-times">
-                                <span>{formatTime(nowPlaying.progressMs)}</span>
-                                <span>{formatTime(nowPlaying.durationMs)}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Controls */}
-                <div className="now-playing__controls">
-                    <button
-                        className="now-playing__play-btn"
-                        aria-label={nowPlaying.isPlaying ? "Pause" : "Play"}
-                        disabled
-                    >
-                        {nowPlaying.isPlaying ? (
-                            <Pause className="now-playing__play-icon" />
-                        ) : (
-                            <Play className="now-playing__play-icon now-playing__play-icon--play" />
                         )}
-                    </button>
+                    </div>
                 </div>
             </div>
         </section>
