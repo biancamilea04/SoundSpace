@@ -24,7 +24,7 @@ export const SharePost = ({ onPost }: SharePostProps) => {
     };
 
     return (
-        <section>
+        <section className="share-post">
             <h2 className="share-post__section-title">
                 Share Your Thoughts
             </h2>
