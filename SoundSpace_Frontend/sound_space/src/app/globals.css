@@ -5,6 +5,7 @@
   --foreground: #ffffff;
   --primary-green: #1ed760;
   --primary-green-glow: rgba(30, 215, 96, 0.4);
+  --black: #0d0d0d;
 }
 
 body {

@@ -1,14 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SoundSpaceBackend.Controllers.Auth.Responses;
-using SoundSpaceBackend.Services.Abstractions;
+using SoundSpaceBackend.Services.Auth.Abstractions;
+using SoundSpaceBackend.Services.JWT.Abstractions;
+using SoundSpaceBackend.Services.JWT.DTOs;
+using SoundSpaceBackend.Services.User.Abstractions;
 
 namespace SoundSpaceBackend.Controllers.Auth;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IAuthService authService) : ControllerBase
+public class AuthController(IAuthService authService, IUserService userService, IJwtService jwtService) : ControllerBase
 {
     private readonly IAuthService _authService = authService;
+    private readonly IUserService _userService = userService;
+    private readonly IJwtService _jwtService = jwtService;
     
     [HttpGet("/auth")]
     public IActionResult Auth()
@@ -48,6 +53,18 @@ public class AuthController(IAuthService authService) : ControllerBase
             Tokens = spotifyTokensDto,
             UserProfile = profileJson
         };
-        return Ok(spotifyResponseDto);
+        
+        await _userService.CreateOrUpdateUserAsync(spotifyResponseDto);
+        
+        var userJwtDto = new UserJwtDto(
+            profileJson.Id, 
+            profileJson.DisplayName, 
+            profileJson.Email);
+        var jwtToken = _jwtService.GenerateToken(userJwtDto);
+        
+        var frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "";
+        var redirectUrl = $"{frontendUrl}/profile/?token={jwtToken}";
+        
+        return Redirect(redirectUrl);
     }
 }

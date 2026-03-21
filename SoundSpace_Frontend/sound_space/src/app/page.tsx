@@ -1,41 +1,42 @@
 import Image from "next/image";
-import { SpotifyButton } from "@/components/ui/SpotifyButton";
+import { SpotifyButton } from "@/components/ui/SpotifyButton/SpotifyButton";
+import "./page.css";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen text-white/90 font-sans selection:bg-[#1ed760] selection:text-black">
+    <div className="home-container">
       {/* Navigation */}
-      <nav className="flex items-center justify-between p-6 md:px-12 select-none w-full max-w-[1400px] mx-auto">
-        <div className="flex items-center gap-3">
+      <nav className="home-nav">
+        <div className="home-nav__brand">
           <Image
             src="/icons/SoundSpaceIcon.png"
             alt="SoundSpace Logo"
             width={36}
             height={36}
-            className="brightness-0 invert"
+            className="home-nav__logo"
           />
-          <span className="font-extrabold text-xl tracking-tight text-white">SoundSpace</span>
+          <span className="home-nav__title">SoundSpace</span>
         </div>
       </nav>
 
       {/* Main Content */}
-      <main className="flex-grow flex flex-col items-center justify-center px-4 text-center mt-[-4rem]">
+      <main className="home-main">
         {/* Typography */}
-        <h1 className="text-6xl md:text-[5.5rem] font-black tracking-tighter leading-[1.1] mb-6">
-          <span className="text-white block">Your music.</span>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-[#1ed760] block">
+        <h1 className="home-heading">
+          <span className="home-heading__line1">Your music.</span>
+          <span className="home-heading__line2">
             Your vibe.
           </span>
         </h1>
 
-        <p className="max-w-[600px] text-lg md:text-xl text-zinc-300 mb-10 leading-relaxed font-normal">
+        <p className="home-subtitle">
           Connect with friends through music. Share playlists, discover new tracks, and see what everyone's listening to.
         </p>
 
         {/* CTA Button Wrapper with Glow */}
-        <div className="relative group mt-2">
-          <div className="absolute inset-0 bg-[#1ed760] blur-2xl opacity-40 rounded-full group-hover:opacity-60 transition-opacity duration-500"></div>
-          <div className="relative">
+        <div className="home-cta-wrapper">
+          <div className="home-cta-glow"></div>
+          <div className="home-cta-button">
             <SpotifyButton />
           </div>
         </div>
