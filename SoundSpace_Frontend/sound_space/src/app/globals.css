@@ -3,9 +3,27 @@
 :root {
   --background: radial-gradient(circle at top left, #0e2a1b 0%, #0d0d0d 40%, #0d0d0d 100%);
   --foreground: #ffffff;
-  --primary-green: #1ed760;
-  --primary-green-glow: rgba(30, 215, 96, 0.4);
+  --white: #ffffff;
   --black: #0d0d0d;
+
+  --bg-base: #121212;
+  --bg-surface: #181818;
+  --bg-elevated: #27272a;
+  --bg-highlight: #3f3f46;
+  
+  --text-primary: #ffffff;
+  --text-secondary: #e4e4e7;
+  --text-muted: #a1a1aa;
+  --text-tertiary: #71717a;
+  
+  --border-subtle: #27272a;
+  --border-strong: #3f3f46;
+  
+  --primary-green: #1ed760;
+  --primary-green-hover: #1db954;
+  --primary-green-glow: rgba(30, 215, 96, 0.4);
+  
+  --destructive: #ef4444;
 }
 
 body {

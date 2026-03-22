@@ -36,7 +36,6 @@ export const Post = ({ user, timeAgo, content, song, stats }: PostProps) => {
                             height={40}
                             className="post__avatar"
                         />
-                        {user.isOnline && <span className="post__online-indicator"></span>}
                     </div>
                     <div className="post__meta">
                         <h3 className="post__user-name">{user.name}</h3>

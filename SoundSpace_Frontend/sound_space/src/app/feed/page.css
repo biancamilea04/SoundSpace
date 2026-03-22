@@ -1,16 +1,30 @@
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--black);
+}
+
 .feed-container {
     display: flex;
-    min-height: 100vh;
-    background-color: #121212; /* Matches the dark theme */
+    flex: 1;
     color: white;
+    overflow: hidden;
 }
 
 .feed-main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;       /* Centers the SharePost horizontally */
-    padding: 40px 20px;        /* Spacing round the component */
-    overflow-y: auto;          /* Allow scrolling if content grows */
+    align-items: center;
+    padding: 40px 20px 40px 100px;
+    overflow-y: auto;          
     width: 100%;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.feed-main::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
 }
