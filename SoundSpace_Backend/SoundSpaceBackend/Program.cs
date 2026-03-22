@@ -38,7 +38,6 @@ builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(cfg => { }, typeof(SoundSpaceBackend.Mapping.Profiles.UserProfile));
 
 builder.Services.AddSignalR();
-builder.Services.AddHostedService<SoundSpaceBackend.Services.Workers.SpotifyWorker>();
 
 builder.Services.AddScoped<ISpotifyTokenService, SpotifyTokenService>();
 builder.Services.AddScoped<ISpotifyPlayerService, SpotifyPlayerService>();
@@ -92,8 +91,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             {
                 var accessToken = context.Request.Query["access_token"];
                 var path = context.HttpContext.Request.Path;
-                
-                // If connecting to the hub, read the token from the query string
+     
                 if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/spotify"))
                 {
                     context.Token = accessToken;
@@ -146,6 +144,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<SoundSpaceBackend.Services.Hubs.SpotifyHub>("/hubs/spotify");
 
 app.Run();

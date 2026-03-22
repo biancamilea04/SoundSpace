@@ -1,11 +1,10 @@
 "use client";
 
-import {Pause, Play} from "lucide-react";
+import { Pause, Play } from "lucide-react";
 import Image from "next/image";
-import {useSpotifyStatus} from "@/hooks/NowPlaying/useNowPlaying";
+import { useSpotifyStatus } from "@/hooks/NowPlaying/useNowPlaying";
 import "./NowPlaying.css";
 
-/** Convert milliseconds → "m:ss" */
 const formatTime = (ms: number): string => {
     const totalSeconds = Math.floor(ms / 1000);
     const minutes = Math.floor(totalSeconds / 60);
@@ -14,7 +13,7 @@ const formatTime = (ms: number): string => {
 };
 
 export const NowPlaying = () => {
-    const {nowPlaying, isLoading} = useSpotifyStatus();
+    const { nowPlaying, isLoading } = useSpotifyStatus();
 
     if (isLoading) {
         return (
@@ -75,7 +74,7 @@ export const NowPlaying = () => {
                                 <div className="now-playing__progress-bar">
                                     <div
                                         className="now-playing__progress-fill"
-                                        style={{width: `${progress}%`}}
+                                        style={{ width: `${progress}%` }}
                                     />
                                 </div>
                                 <div className="now-playing__progress-times">

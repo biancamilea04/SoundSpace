@@ -17,11 +17,6 @@ public class AuthService(
     private static string SpotifyApiBaseUrl =>
         Environment.GetEnvironmentVariable("SPOTIFY_API_BASE_URL") ?? "";
 
-    public async Task<UserDto> SyncSpotifyUserAsync(string accessToken)
-    {
-        return new UserDto();
-    }
-
     public string GenerateSpotifyLoginUrl()
     {
         var clientId    = Environment.GetEnvironmentVariable("SPOTIFY_CLIENT_ID");
@@ -41,7 +36,6 @@ public class AuthService(
         return url;
     }
 
-    // Delegates to SpotifyTokenService — AuthService no longer owns token exchange
     public Task<SpotifyTokenResponse?> ExchangeCodeForTokensAsync(string code)
         => spotifyTokenService.ExchangeCodeForTokensAsync(code);
 
@@ -60,6 +54,15 @@ public class AuthService(
             var body = await profileResponse.Content.ReadAsStringAsync();
             logger.LogError("[Auth] Failed to fetch Spotify profile. Status={Status} Body={Body}",
                 profileResponse.StatusCode, body);
+            
+            if ((int)profileResponse.StatusCode == 429) 
+            {
+                if (profileResponse.Headers.TryGetValues("Retry-After", out var values))
+                {
+                    var retryAfter = values.First();
+                    Console.WriteLine($"[RATE LIMIT] Spotify says wait {retryAfter} seconds.");
+                }
+            }
             throw new HttpRequestException($"Spotify API error: {profileResponse.StatusCode}");
         }
 

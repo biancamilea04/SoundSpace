@@ -4,15 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c4ccd9b1-444b-485c-ad59-e2010d6d501d" name="Changes" comment="">
+    <list default="true" id="c4ccd9b1-444b-485c-ad59-e2010d6d501d" name="Changes" comment="add the feed page">
+      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Sidebar/Sidebar.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Mapping/Profiles/NowPlayingProfile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Mapping/Profiles/NowPlayingProfile.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/SpotifyPlayer/SpotifyPlayerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/SpotifyPlayer/SpotifyPlayerService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Workers/SpotifyWorker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Workers/SpotifyWorker.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Auth/AuthService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Auth/AuthService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Hubs/SpotifyConnectionTracker.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Hubs/SpotifyHub.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/Workers/SpotifyWorker.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/next.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/profile/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/profile/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/NowPlaying/NowPlaying.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/NowPlaying/NowPlaying.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/useNowPlaying.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/NowPlaying/useNowPlaying.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/useUserProfile.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/UserProfile/useUserProfile.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/SharePost/SharePost.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/SharePost/SharePost.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/SharePost/SharePost.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/SharePost/SharePost.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/NowPlaying/useNowPlaying.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/NowPlaying/useNowPlaying.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/no-hover-glow.css" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +31,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="TypeScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -49,24 +58,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ReactCreateComponentLastSelected&quot;: &quot;classBasedComponent&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;routing&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Bianca Milea/Desktop/uni/Licenta/Bachelor_Thesis/SoundSpace_Frontend/sound_space/public/icons&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Bianca Milea\\Desktop\\uni\\Licenta\\Bachelor_Thesis\\SoundSpace_Frontend\\sound_space\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ReactCreateComponentLastSelected": "classBasedComponent",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "routing",
+    "last_opened_file_path": "C:/Users/Bianca Milea/Desktop/uni/Licenta/Bachelor_Thesis/SoundSpace_Frontend/sound_space/public/icons",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "C:\\Users\\Bianca Milea\\Desktop\\uni\\Licenta\\Bachelor_Thesis\\SoundSpace_Frontend\\sound_space\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -81,11 +91,11 @@
       <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\public\icons" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\components\global" />
       <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\hooks\UserProfile" />
       <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\hooks\NowPlaying" />
       <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\components\profile\SharePost" />
       <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\components\profile\ProfileHeader" />
-      <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\components\ui\SpotifyButton" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -116,6 +126,7 @@
       <workItem from="1773774162738" duration="5761000" />
       <workItem from="1773859959863" duration="4964000" />
       <workItem from="1773945572467" duration="1203000" />
+      <workItem from="1774127947298" duration="2852000" />
     </task>
     <task id="LOCAL-00001" summary="modify the frontend">
       <option name="closed" value="true" />
@@ -133,6 +144,18 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="modify the frontend" />
-    <option name="LAST_COMMIT_MESSAGE" value="modify the frontend" />
+    <MESSAGE value="add the feed page" />
+    <option name="LAST_COMMIT_MESSAGE" value="add the feed page" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/NowPlaying/useNowPlaying.ts</url>
+          <line>2</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

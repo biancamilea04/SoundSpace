@@ -1,0 +1,16 @@
+.feed-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #121212; /* Matches the dark theme */
+    color: white;
+}
+
+.feed-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;       /* Centers the SharePost horizontally */
+    padding: 40px 20px;        /* Spacing round the component */
+    overflow-y: auto;          /* Allow scrolling if content grows */
+    width: 100%;
+}
