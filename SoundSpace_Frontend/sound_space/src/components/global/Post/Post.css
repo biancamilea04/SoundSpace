@@ -137,3 +137,17 @@
     padding: 8px;
     border-radius: 50%;
 }
+
+@media (max-width: 768px) {
+    .post {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    .post__action-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    .post__actions-left {
+        gap: 8px;
+    }
+}

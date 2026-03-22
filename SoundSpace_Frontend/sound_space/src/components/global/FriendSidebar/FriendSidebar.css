@@ -16,8 +16,6 @@
     margin-bottom: 1.25rem;
     margin-top: 1.25rem;
     padding-left: 0.5rem;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--border-subtle);
 }
 
 .friend-sidebar__list {
@@ -157,4 +155,80 @@
 .sidebar__friend-headphones svg {
     width: 16px;
     height: 16px;
+}
+
+@media (max-width: 1024px) {
+    .friend-sidebar {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .friend-sidebar {
+        display: flex; /* Override 1024px none */
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        border-left: none;
+        border-bottom: 1px solid var(--border-subtle);
+        background-color: var(--bg-surface);
+        padding: 12px 0;
+        order: 1;
+    }
+    .friend-sidebar__header {
+        display: none;
+    }
+    .friend-sidebar__list {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+        padding: 0 16px;
+        margin: 0;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .friend-sidebar__list::-webkit-scrollbar {
+        display: none;
+    }
+    .sidebar__friends {
+        flex-shrink: 0;
+    }
+    .sidebar__friend-item {
+        flex-direction: column;
+        padding: 0;
+        gap: 6px;
+        width: 64px;
+        background-color: transparent !important;
+    }
+    .sidebar__friend-info {
+        align-items: center;
+        width: 100%;
+        overflow: visible;
+    }
+    .sidebar__friend-name {
+        font-size: 11px;
+        text-align: center;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .sidebar__friend-song-wrapper {
+        margin-top: 2px;
+    }
+    .sidebar__friend-song-icon {
+        display: none;
+    }
+    .sidebar__friend-song {
+        font-size: 10px;
+        text-align: center;
+        color: var(--primary-green);
+        max-width: 64px;
+        padding-top: 0;
+    }
+    .sidebar__friend-headphones, .sidebar__friend-last-online {
+        display: none;
+    }
 }

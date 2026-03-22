@@ -6,7 +6,7 @@
     width: 100%;
     padding: 1rem 1.5rem 1rem 1.5rem;
     border-bottom: 1px solid var(--border-subtle);
-    background-color: var(--bg-surface); 
+    background-color: var(--bg-base); 
 }
 
 .main-header__left {
@@ -75,4 +75,19 @@
 
 .main-header__search-input::placeholder {
     color: var(--text-tertiary);
+}
+
+@media (max-width: 768px) {
+    .main-header {
+        grid-template-columns: auto 1fr auto;
+        padding: 0.75rem 1rem;
+        gap: 1rem;
+    }
+    .main-header__title {
+        display: none; /* Hide 'SoundSpace' text, leave the logo icon */
+    }
+    .main-header__search {
+        width: 100%;
+        max-width: none;
+    }
 }

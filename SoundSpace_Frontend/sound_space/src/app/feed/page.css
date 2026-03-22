@@ -28,3 +28,20 @@
 .feed-main::-webkit-scrollbar {
     display: none; /* Chrome, Safari and Opera */
 }
+
+@media (max-width: 1024px) {
+    .feed-main {
+        padding: 40px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .feed-container {
+        flex-direction: column;
+    }
+    .feed-main {
+        padding: 16px 12px 80px 12px; /* 80px bottom padding to prevent overlap with fixed footer */
+        width: 100%;
+        order: 2;
+    }
+}
