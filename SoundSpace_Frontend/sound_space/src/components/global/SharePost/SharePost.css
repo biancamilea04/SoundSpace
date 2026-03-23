@@ -8,14 +8,14 @@
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.2em;
-    color: #a1a1aa;
+    color: var(--text-muted);
     text-transform: uppercase;
     margin-bottom: 1rem;
 }
 
 .share-post__card {
     border-radius: 0.75rem;
-    background-color: #181818;
+    background-color: var(--bg-surface);
     border: 1px solid rgba(39, 39, 42, 0.6);
     padding: 1.25rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
@@ -39,7 +39,7 @@
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 9999px;
-    background-color: #27272a;
+    background-color: var(--bg-elevated);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,13 +49,13 @@
 .share-post__avatar-icon {
     width: 1.125rem;
     height: 1.125rem;
-    color: #a1a1aa;
+    color: var(--text-muted);
 }
 
 .share-post__input {
     flex: 1;
     background: transparent;
-    color: #ffffff;
+    color: var(--text-primary);
     font-size: 0.875rem;
     outline: none;
     border: none;
@@ -68,7 +68,7 @@
 }
 
 .share-post__input::placeholder {
-    color: #71717a;
+    color: var(--text-tertiary);
 }
 
 /* Attached Song Chip */
@@ -86,17 +86,17 @@
 .share-post__song-chip-icon {
     width: 0.875rem;
     height: 0.875rem;
-    color: #1ed760;
+    color: var(--primary-green);
 }
 
 .share-post__song-chip-name {
     font-size: 0.875rem;
-    color: #d4d4d8;
+    color: var(--text-secondary);
 }
 
 .share-post__song-chip-remove {
     margin-left: 0.25rem;
-    color: #71717a;
+    color: var(--text-tertiary);
     font-size: 0.75rem;
     background: none;
     border: none;
@@ -104,7 +104,7 @@
 }
 
 .share-post__song-chip-remove:hover {
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 /* Actions */
@@ -118,7 +118,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #a1a1aa;
+    color: var(--text-muted);
     font-size: 0.875rem;
     transition: color 200ms;
     background: none;
@@ -127,7 +127,7 @@
 }
 
 .share-post__attach-btn:hover {
-    color: #ffffff;
+    color: var(--text-primary);
 }
 
 .share-post__attach-icon {
@@ -137,7 +137,7 @@
 }
 
 .share-post__attach-btn:hover .share-post__attach-icon {
-    color: #1ed760;
+    color: var(--primary-green);
 }
 
 .share-post__post-btn {
@@ -146,19 +146,17 @@
     gap: 0.5rem;
     padding: 0.5rem 1.25rem;
     border-radius: 9999px;
-    background-color: #1ed760;
+    background-color: var(--primary-green);
     color: black;
     font-weight: 600;
     font-size: 0.875rem;
     transition: all 200ms;
-    box-shadow: 0 0 12px rgba(30, 215, 96, 0.2);
     border: none;
     cursor: pointer;
 }
 
 .share-post__post-btn:hover {
-    background-color: #1db954;
-    transform: scale(1.05);
+    background-color: var(--primary-green-hover);
 }
 
 .share-post__post-btn:disabled {

@@ -26,20 +26,20 @@
 
 .ss-button--default {
   color: var(--black);
-  background: var(--primary-green, #1ed760);
+  background: var(--primary-green);
 }
 
 .ss-button--destructive {
-  background: var(--destructive, #ef4444);
-  color: var(--destructive-foreground, #fff);
+  background: var(--destructive);
+  color: var(--text-primary);
 }
 .ss-button--destructive:hover {
-  background: color-mix(in srgb, var(--destructive, #ef4444) 90%, transparent);
+  background: color-mix(in srgb, var(--destructive) 90%, transparent);
 }
 
 .ss-button--outline {
   background: transparent;
-  color: var(--foreground, #ffffff);
+  color: var(--text-primary);
   border: 1px solid rgba(255,255,255,0.3);
 }
 .ss-button--outline:hover {
@@ -48,7 +48,7 @@
 
 .ss-button--secondary {
   background: var(--secondary, rgba(255,255,255,0.06));
-  color: var(--secondary-foreground, var(--foreground, #ffffff));
+  color: var(--text-primary);
 }
 .ss-button--secondary:hover {
   background: color-mix(in srgb, var(--secondary, rgba(255,255,255,0.06)) 80%, transparent);
@@ -60,12 +60,12 @@
 }
 .ss-button--ghost:hover {
   background: var(--secondary, rgba(255,255,255,0.06));
-  color: var(--foreground, #ffffff);
+  color: var(--text-primary);
 }
 
 .ss-button--link {
   background: transparent;
-  color: var(--primary-green, #1ed760);
+  color: var(--primary-green);
   text-decoration: none;
   text-underline-offset: 4px;
 }

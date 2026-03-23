@@ -1,0 +1,112 @@
+.conversation-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.conversation-item:hover {
+    background-color: var(--bg-surface);
+}
+
+.conversation-item--active {
+    background-color: rgba(30, 215, 96, 0.1);
+}
+
+/* Avatar */
+.conversation-item__avatar {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+}
+
+.conversation-item__avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--bg-elevated);
+}
+
+.conversation-item__online {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--primary-green);
+    border: 3px solid var(--bg-base);
+}
+
+.conversation-item--active .conversation-item__online {
+    border-color: rgba(30, 215, 96, 0.1);
+}
+
+/* Info */
+.conversation-item__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.conversation-item__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.conversation-item__name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.conversation-item__time {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+}
+
+.conversation-item__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.conversation-item__preview {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.conversation-item__badge {
+    background-color: var(--primary-green-hover);
+    color: var(--black);
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+}

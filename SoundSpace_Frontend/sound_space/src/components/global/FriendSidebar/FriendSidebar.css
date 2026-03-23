@@ -1,0 +1,234 @@
+.friend-sidebar {
+    background-color: var(--bg-base);
+    height: 100%;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--border-subtle);
+}
+
+.friend-sidebar__header {
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    margin-top: 1.25rem;
+    padding-left: 0.5rem;
+}
+
+.friend-sidebar__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow-y: auto;
+}
+
+/* Friend Item */
+.sidebar__friends a {
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar__friend-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+
+.sidebar__friend-item:hover {
+    background-color: var(--bg-surface); 
+}
+
+.sidebar__friend-avatar {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+}
+
+.sidebar__friend-avatar-img {
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--bg-elevated);
+    transition: filter 0.3s ease;
+}
+
+.sidebar__friend-avatar-img.offline {
+    filter: grayscale(100%) brightness(60%);
+}
+
+.sidebar__friend-status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 3px solid var(--black); 
+}
+
+.sidebar__friend-item:hover .sidebar__friend-status {
+    border-color: var(--bg-surface); 
+}
+
+.sidebar__friend-status.online {
+    background-color: var(--primary-green); 
+}
+
+.sidebar__friend-status.offline {
+    display: none;
+}
+
+/* Info */
+.sidebar__friend-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    flex: 1;
+}
+
+.sidebar__friend-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.3s ease;
+}
+
+.sidebar__friend-name.offline {
+    color: var(--text-muted);
+}
+
+.sidebar__friend-song-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-top: 0.125rem;
+}
+
+.sidebar__friend-song-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+    color: var(--primary-green);
+    flex-shrink: 0;
+}
+
+.sidebar__friend-song {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-top: 1px;
+}
+
+.sidebar__friend-last-online {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    margin-top: 0.25rem;
+}
+
+/* Headphones Icon */
+.sidebar__friend-headphones {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: var(--bg-elevated);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--text-muted);
+    margin-left: 0.5rem;
+}
+
+.sidebar__friend-headphones svg {
+    width: 16px;
+    height: 16px;
+}
+
+@media (max-width: 1024px) {
+    .friend-sidebar {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .friend-sidebar {
+        display: flex; /* Override 1024px none */
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        border-left: none;
+        border-bottom: 1px solid var(--border-subtle);
+        background-color: var(--bg-surface);
+        padding: 12px 0;
+        order: 1;
+    }
+    .friend-sidebar__header {
+        display: none;
+    }
+    .friend-sidebar__list {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+        padding: 0 16px;
+        margin: 0;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .friend-sidebar__list::-webkit-scrollbar {
+        display: none;
+    }
+    .sidebar__friends {
+        flex-shrink: 0;
+    }
+    .sidebar__friend-item {
+        flex-direction: column;
+        padding: 0;
+        gap: 6px;
+        width: 64px;
+        background-color: transparent !important;
+    }
+    .sidebar__friend-info {
+        align-items: center;
+        width: 100%;
+        overflow: visible;
+    }
+    .sidebar__friend-name {
+        font-size: 11px;
+        text-align: center;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .sidebar__friend-song-wrapper {
+        margin-top: 2px;
+    }
+    .sidebar__friend-song-icon {
+        display: none;
+    }
+    .sidebar__friend-song {
+        font-size: 10px;
+        text-align: center;
+        color: var(--primary-green);
+        max-width: 64px;
+        padding-top: 0;
+    }
+    .sidebar__friend-headphones, .sidebar__friend-last-online {
+        display: none;
+    }
+}
