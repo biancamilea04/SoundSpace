@@ -1,0 +1,15 @@
+.post__content {
+    margin-bottom: 16px;
+}
+
+.post__text {
+    font-size: 14.5px;
+    line-height: 1.5;
+    margin: 0 0 16px 0;
+    color: var(--text-secondary);
+    word-break: break-word;
+}
+
+.post__song-wrapper .song-component {
+    margin-bottom: 0;
+}
