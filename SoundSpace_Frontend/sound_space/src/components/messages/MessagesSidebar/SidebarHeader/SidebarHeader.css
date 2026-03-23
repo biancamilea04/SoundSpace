@@ -1,0 +1,34 @@
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar-header__title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.025em;
+}
+
+.sidebar-header__new-chat-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background-color: var(--primary-green);
+    color: var(--black);
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: none;
+    cursor: pointer;
+    transition: all 200ms;
+}
+
+.sidebar-header__new-chat-btn:hover {
+    background-color: var(--primary-green-hover);
+}
