@@ -1,0 +1,81 @@
+/* ─── Comment Input Bar ─── */
+.comment-input {
+    background: var(--bg-surface);
+    padding: 12px 20px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+.comment-input__inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.comment-input__avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.comment-input__field {
+    flex: 1;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 10px 16px;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-family: inherit;
+    line-height: 1.4;
+    resize: none;
+    outline: none;
+    min-height: 20px;
+    max-height: 100px;
+    transition: border-color 0.2s ease;
+}
+
+.comment-input__field::placeholder {
+    color: var(--text-tertiary);
+}
+
+.comment-input__field:focus {
+    border-color: var(--primary-green);
+}
+
+.comment-input__send-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: var(--primary-green);
+    color: var(--black);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s ease, opacity 0.2s ease, transform 0.15s ease;
+}
+
+.comment-input__send-btn:hover:not(:disabled) {
+    background: var(--primary-green-hover);
+    transform: scale(1.05);
+}
+
+.comment-input__send-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+    .comment-input {
+        padding: 10px 12px;
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+    }
+
+    .comment-input__inner {
+        max-width: 100%;
+    }
+}
