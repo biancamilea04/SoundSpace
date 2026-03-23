@@ -10,9 +10,13 @@ export const Post = ({ user, timeAgo, content, song, stats }: PostProps) => {
     const {
         liked,
         showShareMenu,
+        showOptionsMenu,
         shareMenuRef,
+        optionsMenuRef,
         toggleLiked,
         toggleShareMenu,
+        toggleOptionsMenu,
+        handleReportPost,
         handleShare,
     } = usePostInteractions({
         userName: user.name,
@@ -21,7 +25,14 @@ export const Post = ({ user, timeAgo, content, song, stats }: PostProps) => {
 
     return (
         <article className="post">
-            <PostHeader user={user} timeAgo={timeAgo} />
+            <PostHeader
+                user={user}
+                timeAgo={timeAgo}
+                showOptionsMenu={showOptionsMenu}
+                optionsMenuRef={optionsMenuRef}
+                onToggleOptionsMenu={toggleOptionsMenu}
+                onReportPost={handleReportPost}
+            />
             <PostContent content={content} song={song} />
             <PostFooter
                 stats={stats}

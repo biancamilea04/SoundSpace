@@ -60,3 +60,41 @@
     color: var(--text-primary);
     background-color: rgba(255, 255, 255, 0.1);
 }
+
+.post__options-wrapper {
+    position: relative;
+}
+
+.post__options-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 150px;
+    padding: 6px;
+    border-radius: 12px;
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    z-index: 10;
+}
+
+.post__options-menu-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #f87171;
+    font-size: 13px;
+    font-weight: 300;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.post__options-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
