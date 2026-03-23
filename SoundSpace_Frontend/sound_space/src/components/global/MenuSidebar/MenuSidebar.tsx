@@ -49,7 +49,7 @@ const MenuSidebar = () => {
                 <div className="sidebar-items">
                     <MenuSidebarItem icon={Home} label="Feed" path="/" badge={""} isActive={true} />
                     <MenuSidebarItem icon={Search} label="Discover" path="/" badge={""} />
-                    <MenuSidebarItem icon={MessageSquare} label="Messages" path="/" badge={3} />
+                    <MenuSidebarItem icon={MessageSquare} label="Messages" path="/messages" badge={3} />
                 </div>
             </div>
 
