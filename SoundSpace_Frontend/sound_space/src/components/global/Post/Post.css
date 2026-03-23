@@ -133,6 +133,14 @@
     color: var(--text-primary);
 }
 
+.post__action-btn--liked {
+    color: #ef4444;
+}
+
+.post__action-btn--liked svg {
+    fill: currentColor;
+}
+
 .post__action-btn--share {
     padding: 8px;
     border-radius: 50%;

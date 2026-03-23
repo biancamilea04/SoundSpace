@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { MoreHorizontal, Heart, MessageCircle, Share2 } from 'lucide-react';
 import Song, { SongProps } from '../Song/Song';
@@ -24,6 +24,8 @@ export interface PostProps {
 }
 
 export const Post = ({ user, timeAgo, content, song, stats }: PostProps) => {
+    const [liked, setLiked] = useState(false);
+
     return (
         <article className="post">
             <header className="post__header">
@@ -58,7 +60,11 @@ export const Post = ({ user, timeAgo, content, song, stats }: PostProps) => {
 
             <footer className="post__footer">
                 <div className="post__actions-left">
-                    <button className="post__action-btn post__action-btn--like">
+                    <button
+                        className={`post__action-btn post__action-btn--like${liked ? ' post__action-btn--liked' : ''}`}
+                        onClick={() => setLiked((prev) => !prev)}
+                        aria-pressed={liked}
+                    >
                         <Heart size={16} />
                         <span>{stats.likes}</span>
                     </button>
