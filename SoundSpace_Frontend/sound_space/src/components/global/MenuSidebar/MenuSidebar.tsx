@@ -23,7 +23,7 @@ const MenuSidebar = () => {
                 <h3 className="sidebar-header">MENU</h3>
                 <div className="sidebar-items">
                     <MenuSidebarItem icon={Home} label="Feed" path="/feed" badge={""} isActive={true} />
-                    <MenuSidebarItem icon={Search} label="Discover" path="/" badge={""} />
+                    <MenuSidebarItem icon={Search} label="Discover" path="/discovery" badge={""} />
                     <MenuSidebarItem icon={MessageSquare} label="Messages" path="/messages" badge={3} />
                 </div>
             </div>

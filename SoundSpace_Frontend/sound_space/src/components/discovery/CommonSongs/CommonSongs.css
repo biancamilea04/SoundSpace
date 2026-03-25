@@ -1,0 +1,59 @@
+/* Common Songs Component */
+.common-songs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.common-songs__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.common-songs__icon {
+    color: var(--primary-green);
+}
+
+.common-songs__count {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.common-songs__list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.common-songs__album-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.common-songs__album-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.common-songs__album-more {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background-color: var(--bg-elevated);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}

@@ -1,0 +1,109 @@
+/* Discovery Feed - TikTok-style vertical scroll container */
+.discovery-feed {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.discovery-feed__scroll-container {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    gap: 20px;
+}
+
+.discovery-feed__scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+.discovery-feed__card-wrapper {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* Loading State */
+.discovery-feed__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    height: 100%;
+    color: var(--text-muted);
+}
+
+.discovery-feed__loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--bg-elevated);
+    border-top-color: var(--primary-green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Empty State */
+.discovery-feed__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    height: 100%;
+    text-align: center;
+    padding: 24px;
+}
+
+.discovery-feed__empty-icon {
+    font-size: 3rem;
+    margin-bottom: 8px;
+}
+
+.discovery-feed__empty h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.discovery-feed__empty p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .discovery-feed__scroll-container {
+        padding: 16px 0;
+        gap: 16px;
+    }
+
+    .discovery-feed__card-wrapper {
+        padding: 0 16px;
+    }
+}

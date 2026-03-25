@@ -1,0 +1,76 @@
+/* Recently Bumping Component */
+.recently-bumping {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+}
+
+.recently-bumping__album {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.recently-bumping__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.recently-bumping__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.recently-bumping__label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.recently-bumping__track {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recently-bumping__status {
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+}
+
+.recently-bumping__status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--primary-green);
+    box-shadow: 0 0 8px var(--primary-green-glow);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(0.9);
+    }
+}

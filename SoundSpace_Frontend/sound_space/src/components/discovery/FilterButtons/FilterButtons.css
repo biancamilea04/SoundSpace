@@ -1,0 +1,49 @@
+/* Filter Buttons Component */
+.filter-buttons {
+    display: flex;
+    gap: 12px;
+    padding: 0 0 20px 0;
+    flex-shrink: 0;
+}
+
+.filter-buttons__btn {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 1px solid var(--border-subtle);
+    background-color: transparent;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-buttons__btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+    background-color: var(--bg-surface);
+}
+
+.filter-buttons__btn.active {
+    background-color: var(--primary-green);
+    color: var(--black);
+    border-color: var(--primary-green);
+}
+
+.filter-buttons__btn.active:hover {
+    background-color: var(--primary-green-hover);
+    border-color: var(--primary-green-hover);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .filter-buttons {
+        justify-content: center;
+        padding: 0 0 16px 0;
+    }
+
+    .filter-buttons__btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+}

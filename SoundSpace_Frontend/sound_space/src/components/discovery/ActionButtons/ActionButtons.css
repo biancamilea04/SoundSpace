@@ -1,0 +1,53 @@
+/* Action Buttons Component */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding-top: 8px;
+}
+
+.action-buttons__btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-buttons__btn--skip {
+    background-color: var(--bg-elevated);
+    color: var(--text-muted);
+}
+
+.action-buttons__btn--skip:hover {
+    background-color: var(--bg-highlight);
+    color: var(--destructive);
+    transform: scale(1.05);
+}
+
+.action-buttons__btn--connect {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+    color: var(--black);
+    box-shadow: 0 4px 16px var(--primary-green-glow);
+}
+
+.action-buttons__btn--connect:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 24px var(--primary-green-glow);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .action-buttons {
+        gap: 20px;
+    }
+
+    .action-buttons__btn {
+        width: 50px;
+        height: 50px;
+    }
+}
