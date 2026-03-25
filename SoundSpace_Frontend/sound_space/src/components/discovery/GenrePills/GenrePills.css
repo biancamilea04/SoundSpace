@@ -3,6 +3,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    justify-content: flex-start;
 }
 
 .genre-pills__pill {
@@ -18,9 +19,86 @@
     backdrop-filter: blur(8px);
     transition: all 0.2s ease;
     cursor: default;
+    white-space: nowrap;
 }
 
 .genre-pills__pill:hover {
     background-color: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive Design */
+
+/* Large tablets */
+@media (max-width: 1024px) {
+    .genre-pills {
+        gap: 7px;
+    }
+
+    .genre-pills__pill {
+        padding: 5px 12px;
+        font-size: 0.75rem;
+        border-radius: 18px;
+    }
+}
+
+/* Small tablets */
+@media (max-width: 768px) {
+    .genre-pills {
+        gap: 6px;
+        justify-content: flex-start;
+    }
+
+    .genre-pills__pill {
+        padding: 4px 10px;
+        font-size: 0.7rem;
+        border-radius: 16px;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    .genre-pills {
+        gap: 5px;
+    }
+
+    .genre-pills__pill {
+        padding: 3px 8px;
+        font-size: 0.65rem;
+        border-radius: 14px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 375px) {
+    .genre-pills {
+        gap: 4px;
+    }
+
+    .genre-pills__pill {
+        padding: 2px 6px;
+        font-size: 0.6rem;
+        border-radius: 12px;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .genre-pills {
+        gap: 4px;
+    }
+
+    .genre-pills__pill {
+        padding: 2px 8px;
+        font-size: 0.6rem;
+        border-radius: 12px;
+    }
+}
+
+/* Very short screens */
+@media (max-height: 600px) {
+    .genre-pills__pill {
+        padding: 2px 6px;
+        font-size: 0.6rem;
+    }
 }

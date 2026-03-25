@@ -62,11 +62,6 @@ export const DiscoveryCard = ({ profile, onConnect, onSkip }: DiscoveryCardProps
                 {recentlyBumping && (
                     <RecentlyBumping recentlyBumping={recentlyBumping} />
                 )}
-
-                <ActionButtons
-                    onConnect={handleConnect}
-                    onSkip={handleSkip}
-                />
             </div>
         </article>
     );

@@ -76,6 +76,7 @@
     height: 100%;
     text-align: center;
     padding: 24px;
+    max-width: 400px;
 }
 
 .discovery-feed__empty-icon {
@@ -94,9 +95,24 @@
     font-size: 0.9rem;
     color: var(--text-muted);
     margin: 0;
+    line-height: 1.4;
 }
 
-/* Responsive */
+/* Responsive Design */
+
+/* Large tablets */
+@media (max-width: 1024px) {
+    .discovery-feed__scroll-container {
+        padding: 18px 0;
+        gap: 18px;
+    }
+
+    .discovery-feed__card-wrapper {
+        padding: 0 18px;
+    }
+}
+
+/* Small tablets */
 @media (max-width: 768px) {
     .discovery-feed__scroll-container {
         padding: 16px 0;
@@ -105,5 +121,99 @@
 
     .discovery-feed__card-wrapper {
         padding: 0 16px;
+    }
+
+    .discovery-feed__empty {
+        padding: 20px;
+    }
+
+    .discovery-feed__empty-icon {
+        font-size: 2.5rem;
+    }
+
+    .discovery-feed__empty h3 {
+        font-size: 1.1rem;
+    }
+
+    .discovery-feed__empty p {
+        font-size: 0.85rem;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    .discovery-feed__scroll-container {
+        padding: 12px 0;
+        gap: 12px;
+    }
+
+    .discovery-feed__card-wrapper {
+        padding: 0 12px;
+    }
+
+    .discovery-feed__loading-spinner {
+        width: 35px;
+        height: 35px;
+        border-width: 2px;
+    }
+
+    .discovery-feed__empty {
+        padding: 16px;
+        gap: 10px;
+    }
+
+    .discovery-feed__empty-icon {
+        font-size: 2rem;
+        margin-bottom: 6px;
+    }
+
+    .discovery-feed__empty h3 {
+        font-size: 1rem;
+    }
+
+    .discovery-feed__empty p {
+        font-size: 0.8rem;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 375px) {
+    .discovery-feed__scroll-container {
+        padding: 10px 0;
+        gap: 10px;
+    }
+
+    .discovery-feed__card-wrapper {
+        padding: 0 8px;
+    }
+
+    .discovery-feed__empty {
+        padding: 12px;
+    }
+
+    .discovery-feed__empty-icon {
+        font-size: 1.8rem;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .discovery-feed__scroll-container {
+        padding: 8px 0;
+        gap: 8px;
+    }
+
+    .discovery-feed__card-wrapper {
+        padding: 0 8px;
+    }
+
+    .discovery-feed__empty {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .discovery-feed__empty-icon {
+        font-size: 1.5rem;
+        margin-bottom: 4px;
     }
 }

@@ -64,7 +64,7 @@
 }
 
 .comment-input__field:focus {
-    border-color: var(--primary-green);
+    border-color: var(--white);
 }
 
 .comment-input__send-btn {

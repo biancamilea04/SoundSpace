@@ -21,11 +21,6 @@ export const RecentlyBumping = ({ recentlyBumping }: RecentlyBumpingProps) => {
                     {recentlyBumping.title} / {recentlyBumping.artist}
                 </span>
             </div>
-            {recentlyBumping.isPlaying && (
-                <div className="recently-bumping__status">
-                    <span className="recently-bumping__status-dot" />
-                </div>
-            )}
         </div>
     );
 };

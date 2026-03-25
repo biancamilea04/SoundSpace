@@ -10,7 +10,7 @@ const MOCK_PROFILES: DiscoveryUserProfile[] = [
         handle: 'test_username_1',
         imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1200&fit=crop',
         tagline: 'test_description_1',
-        genres: ['Lo-Fi', 'Post-Punk', 'Jazz'],
+        genres: ['genre_1', 'genre_2', 'genre_3'],
         matchPercentage: 94,
         commonSongsCount: 34,
         commonSongs: [
@@ -34,7 +34,7 @@ const MOCK_PROFILES: DiscoveryUserProfile[] = [
         handle: 'test_username_2',
         imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1200&fit=crop',
         tagline: 'test_description_2',
-        genres: ['Electronic', 'House', 'Funk'],
+        genres: ['genre_1', 'genre_2', 'genre_3'],
         matchPercentage: 87,
         commonSongsCount: 28,
         commonSongs: [
@@ -56,7 +56,7 @@ const MOCK_PROFILES: DiscoveryUserProfile[] = [
         handle: 'test_username_3',
         imageUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&h=1200&fit=crop',
         tagline: 'test_description_3',
-        genres: ['Indie', 'Dream Pop', 'Shoegaze'],
+        genres: ['genre_1', 'genre_2', 'genre_3'],
         matchPercentage: 91,
         commonSongsCount: 42,
         commonSongs: [
