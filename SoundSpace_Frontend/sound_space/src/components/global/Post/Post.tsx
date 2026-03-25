@@ -36,6 +36,13 @@ export const Post = ({ user, timeAgo, content, song, stats }: PostProps) => {
             <PostContent content={content} song={song} />
             <PostFooter
                 stats={stats}
+                postData={{
+                    user,
+                    timeAgo,
+                    content,
+                    song,
+                    stats,
+                }}
                 liked={liked}
                 showShareMenu={showShareMenu}
                 shareMenuRef={shareMenuRef}

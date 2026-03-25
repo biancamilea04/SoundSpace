@@ -13,7 +13,7 @@ import { useSinglePostPage } from '@/hooks/Post/useSinglePostPage';
 import './page.css';
 
 export default function PostPage() {
-    const { liked, likeCount, comments, currentUserAvatar, handleToggleLike, handleAddComment } = useSinglePostPage();
+    const { selectedPost, liked, likeCount, comments, currentUserAvatar, handleToggleLike, handleAddComment } = useSinglePostPage();
 
     return (
         <div className="page-wrapper">
@@ -33,6 +33,7 @@ export default function PostPage() {
 
                         <main className="post-page__content">
                             <SinglePost
+                                post={selectedPost}
                                 liked={liked}
                                 likeCount={likeCount}
                                 commentCount={comments.length}

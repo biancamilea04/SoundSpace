@@ -1,7 +1,9 @@
 import { useCallback, useState } from 'react';
-import type { Comment } from '@/types/comment';
+import type { Comment } from '../../types/comment';
+import type { SelectedPostPayload } from '../../components/global/Post/Post.types';
 
 interface UseSinglePostPageResult {
+    selectedPost: SelectedPostPayload;
     liked: boolean;
     likeCount: number;
     comments: Comment[];
@@ -46,9 +48,46 @@ const initialComments: Comment[] = [
 const initialLikeCount = 245;
 const currentUserAvatar = 'https://i.pravatar.cc/150?img=7';
 
+const fallbackPost: SelectedPostPayload = {
+    user: { name: 'Alex R.', avatarUrl: 'https://i.pravatar.cc/150?img=11' },
+    timeAgo: '3h ago',
+    content: "Vibing to this new single! The production on this is absolutely insane. Can't stop listening to it on repeat. Drop your thoughts below!",
+    stats: { likes: initialLikeCount, comments: initialComments.length },
+    song: {
+        title: 'Midnight Echoes',
+        artist: 'The Synthwave Collective',
+        albumImageUrl: '/icons/SoundSpaceIcon.png',
+        durationFormatted: '1:24',
+    },
+};
+
+const getStoredPost = (): SelectedPostPayload => {
+    if (typeof window === 'undefined') {
+        return fallbackPost;
+    }
+
+    const storedPost = window.sessionStorage.getItem('selectedPost');
+    if (!storedPost) {
+        return fallbackPost;
+    }
+
+    try {
+        const parsedPost = JSON.parse(storedPost) as SelectedPostPayload;
+        if (!parsedPost?.user?.name || !parsedPost?.content || !parsedPost?.stats) {
+            return fallbackPost;
+        }
+
+        return parsedPost;
+    } catch {
+        window.sessionStorage.removeItem('selectedPost');
+        return fallbackPost;
+    }
+};
+
 export const useSinglePostPage = (): UseSinglePostPageResult => {
+    const [selectedPost] = useState<SelectedPostPayload>(getStoredPost);
     const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(initialLikeCount);
+    const [likeCount, setLikeCount] = useState<number>(selectedPost.stats.likes);
     const [comments, setComments] = useState<Comment[]>(initialComments);
 
     const handleToggleLike = useCallback(() => {
@@ -71,6 +110,7 @@ export const useSinglePostPage = (): UseSinglePostPageResult => {
     }, []);
 
     return {
+        selectedPost,
         liked,
         likeCount,
         comments,

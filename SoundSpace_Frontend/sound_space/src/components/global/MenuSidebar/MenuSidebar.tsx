@@ -47,17 +47,9 @@ const MenuSidebar = () => {
             <div className="sidebar-section">
                 <h3 className="sidebar-header">MENU</h3>
                 <div className="sidebar-items">
-                    <MenuSidebarItem icon={Home} label="Feed" path="/" badge={""} isActive={true} />
+                    <MenuSidebarItem icon={Home} label="Feed" path="/feed" badge={""} isActive={true} />
                     <MenuSidebarItem icon={Search} label="Discover" path="/" badge={""} />
                     <MenuSidebarItem icon={MessageSquare} label="Messages" path="/messages" badge={3} />
-                </div>
-            </div>
-
-            <div className="sidebar-section">
-                <h3 className="sidebar-header">LIBRARY</h3>
-                <div className="sidebar-items">
-                    <MenuSidebarItem icon={Heart} label="Liked Tracks" path="/" badge={""} />
-                    <MenuSidebarItem icon={ListMusic} label="Playlists" path="/" badge={""} />
                 </div>
             </div>
 
