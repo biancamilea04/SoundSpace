@@ -1,0 +1,120 @@
+/* ─── Comment Item ─── */
+.comment-item-thread {
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    transition: background 0.15s ease;
+}
+
+.comment-item--nested {
+    padding-left: 0;
+}
+
+.comment-item:hover {
+    background: var(--bg-surface);
+}
+
+.comment-item__avatar-wrapper {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.comment-item__avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--bg-elevated);
+}
+
+.comment-item__body {
+    flex: 1;
+    min-width: 0;
+}
+
+.comment-item__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.comment-item__username {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.comment-item__time {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+}
+
+.comment-item__text {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 0 0 6px 0;
+    word-break: break-word;
+}
+
+.comment-item__reply-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border: none;
+    background: none;
+    color: var(--text-tertiary);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.comment-item__reply-btn:hover {
+    background: var(--bg-elevated);
+    color: var(--primary-green);
+}
+
+.comment-item__replies {
+    --reply-indent: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-left: var(--reply-indent);
+    border-left: 1px solid var(--border-subtle);
+    padding-left: 10px;
+}
+
+/* Keep all nested reply levels aligned on the same column. */
+.comment-item__replies .comment-item__replies {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+    .comment-item {
+        padding: 10px 4px;
+    }
+
+    .comment-item__replies {
+        --reply-indent: 12px;
+        padding-left: 8px;
+    }
+
+    .comment-item__replies .comment-item__replies {
+        margin-left: 0;
+        padding-left: 0;
+    }
+}

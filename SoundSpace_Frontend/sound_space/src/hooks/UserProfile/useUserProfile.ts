@@ -46,7 +46,7 @@ export const useUserProfile = (): UseUserProfileResult => {
                         console.log("[Auth] Skipping — token was just processed");
                         return;
                     }
-                    setError("No authentication token found. Please log in.");
+                    setError("Please log in");
                     setIsLoading(false);
                     return;
                 }

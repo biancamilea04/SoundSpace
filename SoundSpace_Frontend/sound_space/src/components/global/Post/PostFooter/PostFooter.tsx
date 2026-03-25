@@ -1,11 +1,13 @@
 import React from 'react';
+import Link from 'next/link';
 import { Heart, MessageCircle, Share2 } from 'lucide-react';
-import type { PostStats } from '../Post.types';
+import type { PostStats, SelectedPostPayload } from '../Post.types';
 import PostShareMenu from '../PostShareMenu/PostShareMenu';
 import './PostFooter.css';
 
 interface PostFooterProps {
     stats: PostStats;
+    postData: SelectedPostPayload;
     liked: boolean;
     showShareMenu: boolean;
     shareMenuRef: React.RefObject<HTMLDivElement | null>;
@@ -16,6 +18,7 @@ interface PostFooterProps {
 
 const PostFooter = ({
     stats,
+    postData,
     liked,
     showShareMenu,
     shareMenuRef,
@@ -23,6 +26,14 @@ const PostFooter = ({
     onToggleShareMenu,
     onShare,
 }: PostFooterProps) => {
+    const handleOpenPost = () => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        window.sessionStorage.setItem('selectedPost', JSON.stringify(postData));
+    };
+
     return (
         <footer className="post__footer">
             <div className="post__actions-left">
@@ -34,10 +45,15 @@ const PostFooter = ({
                     <Heart size={16} />
                     <span>{stats.likes}</span>
                 </button>
-                <button className="post__action-btn post__action-btn--comment">
+                <Link
+                    href="/post"
+                    className="post__action-btn post__action-btn--comment"
+                    aria-label="Open post details"
+                    onClick={handleOpenPost}
+                >
                     <MessageCircle size={16} />
                     <span>{stats.comments}</span>
-                </button>
+                </Link>
             </div>
             <div className="post__share-wrapper" ref={shareMenuRef}>
                 <button
