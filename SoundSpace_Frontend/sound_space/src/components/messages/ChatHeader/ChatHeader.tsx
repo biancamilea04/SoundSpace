@@ -64,7 +64,6 @@ const ChatHeader = ({ user, onBack }: ChatHeaderProps) => {
                         </span>
                         <button className="chat-header__listen-along-btn">
                             <Headphones size={14} />
-                            <span>Listen Along</span>
                         </button>
                     </div>
                 )}
