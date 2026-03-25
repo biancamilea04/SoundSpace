@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Send } from 'lucide-react';
 import './CommentInput.css';
 
 interface CommentInputProps {
@@ -11,9 +10,16 @@ interface CommentInputProps {
 const CommentInput = ({ currentUserAvatar, onSubmit }: CommentInputProps) => {
     const [text, setText] = useState('');
 
-    const handleSubmit = () => {
+    const handleSubmit = (event?: React.FormEvent) => {
+        if (event) {
+            event.preventDefault();
+        }
+
         const trimmed = text.trim();
-        if (!trimmed) return;
+        if (!trimmed) {
+            return;
+        }
+
         onSubmit(trimmed);
         setText('');
     };
@@ -26,7 +32,7 @@ const CommentInput = ({ currentUserAvatar, onSubmit }: CommentInputProps) => {
     };
 
     return (
-        <div className="comment-input">
+        <form className="comment-input" onSubmit={handleSubmit}>
             <div className="comment-input__inner">
                 <Image
                     src={currentUserAvatar || '/icons/SoundSpaceIcon.png'}
@@ -46,14 +52,14 @@ const CommentInput = ({ currentUserAvatar, onSubmit }: CommentInputProps) => {
                 />
                 <button
                     className="comment-input__send-btn"
-                    onClick={handleSubmit}
                     disabled={!text.trim()}
                     aria-label="Post comment"
+                    type="submit"
                 >
-                    <Send size={18} />
+                    Post
                 </button>
             </div>
-        </div>
+        </form>
     );
 };
 

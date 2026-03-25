@@ -47,12 +47,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
+    min-width: 64px;
     height: 36px;
     border: none;
-    border-radius: 50%;
+    border-radius: 9999px;
     background: var(--primary-green);
     color: var(--black);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    padding: 0 14px;
     cursor: pointer;
     flex-shrink: 0;
     transition: background 0.2s ease, opacity 0.2s ease, transform 0.15s ease;

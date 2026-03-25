@@ -7,6 +7,8 @@ import type { PostProps } from './Post.types';
 import './Post.css';
 
 export const Post = ({ user, timeAgo, content, song, stats }: PostProps) => {
+    const postKey = `${user.name}|${timeAgo}|${content}`;
+
     const {
         liked,
         showShareMenu,
@@ -37,6 +39,7 @@ export const Post = ({ user, timeAgo, content, song, stats }: PostProps) => {
             <PostFooter
                 stats={stats}
                 postData={{
+                    postKey,
                     user,
                     timeAgo,
                     content,

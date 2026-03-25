@@ -20,6 +20,7 @@ export interface PostProps {
 }
 
 export interface SelectedPostPayload {
+    postKey: string;
     user: PostUser;
     timeAgo: string;
     content: string;

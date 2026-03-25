@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Comment } from '../../types/comment';
 import type { SelectedPostPayload } from '../../components/global/Post/Post.types';
 
@@ -49,6 +49,7 @@ const initialLikeCount = 245;
 const currentUserAvatar = 'https://i.pravatar.cc/150?img=7';
 
 const fallbackPost: SelectedPostPayload = {
+    postKey: 'fallback-post',
     user: { name: 'Alex R.', avatarUrl: 'https://i.pravatar.cc/150?img=11' },
     timeAgo: '3h ago',
     content: "Vibing to this new single! The production on this is absolutely insane. Can't stop listening to it on repeat. Drop your thoughts below!",
@@ -59,6 +60,27 @@ const fallbackPost: SelectedPostPayload = {
         albumImageUrl: '/icons/SoundSpaceIcon.png',
         durationFormatted: '1:24',
     },
+};
+
+const commentsStoragePrefix = 'postComments:';
+
+const getCommentsStorageKey = (postKey: string): string => {
+    return `${commentsStoragePrefix}${encodeURIComponent(postKey)}`;
+};
+
+const isComment = (value: unknown): value is Comment => {
+    if (!value || typeof value !== 'object') {
+        return false;
+    }
+
+    const maybeComment = value as Partial<Comment>;
+    return (
+        typeof maybeComment.id === 'string'
+        && typeof maybeComment.text === 'string'
+        && typeof maybeComment.timeAgo === 'string'
+        && typeof maybeComment.user?.name === 'string'
+        && typeof maybeComment.user?.avatarUrl === 'string'
+    );
 };
 
 const getStoredPost = (): SelectedPostPayload => {
@@ -73,7 +95,7 @@ const getStoredPost = (): SelectedPostPayload => {
 
     try {
         const parsedPost = JSON.parse(storedPost) as SelectedPostPayload;
-        if (!parsedPost?.user?.name || !parsedPost?.content || !parsedPost?.stats) {
+        if (!parsedPost?.user?.name || !parsedPost?.content || !parsedPost?.stats || !parsedPost?.postKey) {
             return fallbackPost;
         }
 
@@ -84,11 +106,42 @@ const getStoredPost = (): SelectedPostPayload => {
     }
 };
 
+const getStoredComments = (postKey: string): Comment[] => {
+    if (typeof window === 'undefined') {
+        return initialComments;
+    }
+
+    const storedComments = window.sessionStorage.getItem(getCommentsStorageKey(postKey));
+    if (!storedComments) {
+        return initialComments;
+    }
+
+    try {
+        const parsedComments = JSON.parse(storedComments) as unknown;
+        if (!Array.isArray(parsedComments)) {
+            return initialComments;
+        }
+
+        const validComments = parsedComments.filter(isComment);
+        return validComments.length > 0 ? validComments : initialComments;
+    } catch {
+        return initialComments;
+    }
+};
+
 export const useSinglePostPage = (): UseSinglePostPageResult => {
     const [selectedPost] = useState<SelectedPostPayload>(getStoredPost);
     const [liked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState<number>(selectedPost.stats.likes);
-    const [comments, setComments] = useState<Comment[]>(initialComments);
+    const [comments, setComments] = useState<Comment[]>(() => getStoredComments(selectedPost.postKey));
+
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        window.sessionStorage.setItem(getCommentsStorageKey(selectedPost.postKey), JSON.stringify(comments));
+    }, [comments, selectedPost.postKey]);
 
     const handleToggleLike = useCallback(() => {
         setLiked((prevLiked) => {
@@ -106,7 +159,7 @@ export const useSinglePostPage = (): UseSinglePostPageResult => {
             timeAgo: 'Just now',
         };
 
-        setComments((prevComments) => [...prevComments, newComment]);
+        setComments((prevComments) => [newComment, ...prevComments]);
     }, []);
 
     return {
