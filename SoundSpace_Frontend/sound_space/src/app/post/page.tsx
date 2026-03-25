@@ -13,7 +13,18 @@ import { useSinglePostPage } from '@/hooks/Post/useSinglePostPage';
 import './page.css';
 
 export default function PostPage() {
-    const { selectedPost, liked, likeCount, comments, currentUserAvatar, handleToggleLike, handleAddComment } = useSinglePostPage();
+    const {
+        selectedPost,
+        liked,
+        likeCount,
+        comments,
+        replyToName,
+        currentUserAvatar,
+        handleToggleLike,
+        handleStartReply,
+        handleCancelReply,
+        handleAddComment,
+    } = useSinglePostPage();
 
     return (
         <div className="page-wrapper">
@@ -42,11 +53,13 @@ export default function PostPage() {
 
                             <div className="post-page__divider" />
 
-                            <PostComments comments={comments} />
+                            <PostComments comments={comments} onReply={handleStartReply} />
 
                             <footer className="post-page__content-footer">
                                 <CommentInput
                                     currentUserAvatar={currentUserAvatar}
+                                    replyToName={replyToName}
+                                    onCancelReply={handleCancelReply}
                                     onSubmit={handleAddComment}
                                 />
                             </footer>

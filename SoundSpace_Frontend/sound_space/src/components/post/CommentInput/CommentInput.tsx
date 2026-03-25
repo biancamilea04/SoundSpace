@@ -5,9 +5,11 @@ import './CommentInput.css';
 interface CommentInputProps {
     currentUserAvatar: string;
     onSubmit: (text: string) => void;
+    replyToName?: string | null;
+    onCancelReply?: () => void;
 }
 
-const CommentInput = ({ currentUserAvatar, onSubmit }: CommentInputProps) => {
+const CommentInput = ({ currentUserAvatar, onSubmit, replyToName = null, onCancelReply }: CommentInputProps) => {
     const [text, setText] = useState('');
 
     const handleSubmit = (event?: React.FormEvent) => {
@@ -33,6 +35,19 @@ const CommentInput = ({ currentUserAvatar, onSubmit }: CommentInputProps) => {
 
     return (
         <form className="comment-input" onSubmit={handleSubmit}>
+            {replyToName && (
+                <div className="comment-input__replying-to" role="status" aria-live="polite">
+                    <span>Replying to {replyToName}</span>
+                    <button
+                        type="button"
+                        className="comment-input__cancel-reply-btn"
+                        onClick={onCancelReply}
+                        aria-label="Cancel reply"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            )}
             <div className="comment-input__inner">
                 <Image
                     src={currentUserAvatar || '/icons/SoundSpaceIcon.png'}
@@ -43,7 +58,7 @@ const CommentInput = ({ currentUserAvatar, onSubmit }: CommentInputProps) => {
                 />
                 <textarea
                     className="comment-input__field"
-                    placeholder="Add a comment..."
+                    placeholder={replyToName ? `Reply to ${replyToName}...` : 'Add a comment...'}
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     onKeyDown={handleKeyDown}

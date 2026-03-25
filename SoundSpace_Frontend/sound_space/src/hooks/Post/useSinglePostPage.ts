@@ -7,8 +7,11 @@ interface UseSinglePostPageResult {
     liked: boolean;
     likeCount: number;
     comments: Comment[];
+    replyToName: string | null;
     currentUserAvatar: string;
     handleToggleLike: () => void;
+    handleStartReply: (comment: Comment) => void;
+    handleCancelReply: () => void;
     handleAddComment: (text: string) => void;
 }
 
@@ -16,31 +19,31 @@ const initialComments: Comment[] = [
     {
         id: '1',
         user: { name: 'Emily W.', avatarUrl: 'https://i.pravatar.cc/150?img=1' },
-        text: 'This is such a vibe! Been listening on repeat all day 🎶',
+        text: 'test',
         timeAgo: '2h ago',
     },
     {
         id: '2',
         user: { name: 'Marcus J.', avatarUrl: 'https://i.pravatar.cc/150?img=3' },
-        text: 'The bridge in this song is unreal. Definitely adding to my playlist.',
+        text: 'test',
         timeAgo: '1h ago',
     },
     {
         id: '3',
         user: { name: 'Olivia T.', avatarUrl: 'https://i.pravatar.cc/150?img=9' },
-        text: "Anyone know if they're touring soon? Would love to see this live!",
+        text: 'test',
         timeAgo: '45m ago',
     },
     {
         id: '4',
         user: { name: 'Jake P.', avatarUrl: 'https://i.pravatar.cc/150?img=8' },
-        text: 'Production quality is insane on this one.',
+        text: 'test',
         timeAgo: '30m ago',
     },
     {
         id: '5',
         user: { name: 'Nina S.', avatarUrl: 'https://i.pravatar.cc/150?img=16' },
-        text: 'Shared this with all my friends. Pure fire 🔥',
+        text: 'test',
         timeAgo: '15m ago',
     },
 ];
@@ -52,7 +55,7 @@ const fallbackPost: SelectedPostPayload = {
     postKey: 'fallback-post',
     user: { name: 'Alex R.', avatarUrl: 'https://i.pravatar.cc/150?img=11' },
     timeAgo: '3h ago',
-    content: "Vibing to this new single! The production on this is absolutely insane. Can't stop listening to it on repeat. Drop your thoughts below!",
+    content: 'test',
     stats: { likes: initialLikeCount, comments: initialComments.length },
     song: {
         title: 'Midnight Echoes',
@@ -129,11 +132,32 @@ const getStoredComments = (postKey: string): Comment[] => {
     }
 };
 
+const addReplyToThread = (comments: Comment[], parentCommentId: string, reply: Comment): Comment[] => {
+    return comments.map((comment) => {
+        if (comment.id === parentCommentId) {
+            return {
+                ...comment,
+                replies: [...(comment.replies || []), reply],
+            };
+        }
+
+        if (!comment.replies || comment.replies.length === 0) {
+            return comment;
+        }
+
+        return {
+            ...comment,
+            replies: addReplyToThread(comment.replies, parentCommentId, reply),
+        };
+    });
+};
+
 export const useSinglePostPage = (): UseSinglePostPageResult => {
     const [selectedPost] = useState<SelectedPostPayload>(getStoredPost);
     const [liked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState<number>(selectedPost.stats.likes);
     const [comments, setComments] = useState<Comment[]>(() => getStoredComments(selectedPost.postKey));
+    const [replyTo, setReplyTo] = useState<{ commentId: string; userName: string } | null>(null);
 
     useEffect(() => {
         if (typeof window === 'undefined') {
@@ -151,24 +175,43 @@ export const useSinglePostPage = (): UseSinglePostPageResult => {
         });
     }, []);
 
+    const handleStartReply = useCallback((comment: Comment) => {
+        setReplyTo({ commentId: comment.id, userName: comment.user.name });
+    }, []);
+
+    const handleCancelReply = useCallback(() => {
+        setReplyTo(null);
+    }, []);
+
     const handleAddComment = useCallback((text: string) => {
         const newComment: Comment = {
-            id: String(Date.now()),
+            id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
             user: { name: 'You', avatarUrl: currentUserAvatar },
             text,
             timeAgo: 'Just now',
         };
 
-        setComments((prevComments) => [newComment, ...prevComments]);
-    }, []);
+        setComments((prevComments) => {
+            if (!replyTo) {
+                return [newComment, ...prevComments];
+            }
+
+            return addReplyToThread(prevComments, replyTo.commentId, newComment);
+        });
+
+        setReplyTo(null);
+    }, [replyTo]);
 
     return {
         selectedPost,
         liked,
         likeCount,
         comments,
+        replyToName: replyTo?.userName || null,
         currentUserAvatar,
         handleToggleLike,
+        handleStartReply,
+        handleCancelReply,
         handleAddComment,
     };
 };

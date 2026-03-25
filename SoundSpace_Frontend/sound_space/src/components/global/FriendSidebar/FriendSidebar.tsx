@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import './FriendSidebar.css';
 
+const DEFAULT_AVATAR = '/icons/SoundSpaceIcon.png';
+
 interface FriendSidebarItemProps {
     name: string;
     song?: string;
@@ -19,7 +21,7 @@ const FriendSidebarItem = ({ name, song, isListening, isOnline, lastOnline }: Fr
                 <div className={`sidebar__friend-item ${isOnline ? 'online' : 'offline'}`}>
                     <div className="sidebar__friend-avatar">
                         <Image
-                            src={`https://i.pravatar.cc/150?u=${name}`}
+                            src={DEFAULT_AVATAR}
                             alt={`${name} avatar`}
                             width={48}
                             height={48}
@@ -60,10 +62,10 @@ const FriendSidebarItem = ({ name, song, isListening, isOnline, lastOnline }: Fr
 
 const FriendSidebar = () => {
     const friends = [
-        { name: "Alice", song: "Shape of You - Ed Sheeran", isListening: true, isOnline: true, lastOnline: "5 mins ago" },
-        { name: "Bob", song: "", isListening: false, isOnline: false, lastOnline: "2 hours ago" },
-        { name: "Charlie", song: "Blinding Lights - The Weeknd", isListening: true, isOnline: true, lastOnline: "1 min ago" },
-        { name: "Diana", song: "", isListening: false, isOnline: false, lastOnline: "30 mins ago" },
+        { name: "test", song: "test", isListening: true, isOnline: true, lastOnline: "5 mins ago" },
+        { name: "test", song: "", isListening: false, isOnline: false, lastOnline: "2 hours ago" },
+        { name: "test", song: "test", isListening: true, isOnline: true, lastOnline: "1 min ago" },
+        { name: "test", song: "", isListening: false, isOnline: false, lastOnline: "30 mins ago" },
     ];
 
     return (
@@ -71,7 +73,7 @@ const FriendSidebar = () => {
             <h3 className="friend-sidebar__header">Friends</h3>
             <div className="friend-sidebar__list">
                 {friends.map((friend) => (
-                    <FriendSidebarItem key={friend.name} {...friend} />
+                    <FriendSidebarItem key={`${friend.name}-${friend.lastOnline}`} {...friend} />
                 ))}
             </div>
         </div>

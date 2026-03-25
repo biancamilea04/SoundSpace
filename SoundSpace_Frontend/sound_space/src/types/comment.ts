@@ -8,4 +8,5 @@ export interface Comment {
     user: CommentUser;
     text: string;
     timeAgo: string;
+    replies?: Comment[];
 }

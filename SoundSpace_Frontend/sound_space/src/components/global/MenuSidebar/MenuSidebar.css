@@ -43,11 +43,12 @@
 
 .sidebaritem-link:hover {
     color: var(--text-primary);
+    background-color: var(--bg-surface); 
 }
 
 .sidebaritem-link.active {
-    background-color: rgba(30, 215, 96, 0.1);
-    color: var(--primary-green);
+    color: var(--text-primary);
+    background-color: var(--bg-surface); 
 }
 
 .icon-wrapper {

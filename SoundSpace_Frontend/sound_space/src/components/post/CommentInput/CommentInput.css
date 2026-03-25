@@ -5,6 +5,30 @@
     padding-bottom: max(12px, env(safe-area-inset-bottom));
 }
 
+.comment-input__replying-to {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.comment-input__cancel-reply-btn {
+    border: none;
+    background: transparent;
+    color: var(--primary-green);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.comment-input__cancel-reply-btn:hover {
+    text-decoration: underline;
+}
+
 .comment-input__inner {
     display: flex;
     align-items: center;
