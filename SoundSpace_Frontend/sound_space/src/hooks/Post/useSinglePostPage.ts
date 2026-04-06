@@ -18,42 +18,42 @@ interface UseSinglePostPageResult {
 const initialComments: Comment[] = [
     {
         id: '1',
-        user: { name: 'Emily W.', avatarUrl: 'https://i.pravatar.cc/150?img=1' },
+        user: { name: 'test_user_1', avatarUrl: '/icons/SoundSpaceIcon.png' },
         text: 'test',
         timeAgo: '2h ago',
     },
     {
         id: '2',
-        user: { name: 'Marcus J.', avatarUrl: 'https://i.pravatar.cc/150?img=3' },
+        user: { name: 'test_user_2', avatarUrl: '/icons/SoundSpaceIcon.png' },
         text: 'test',
         timeAgo: '1h ago',
     },
     {
         id: '3',
-        user: { name: 'Olivia T.', avatarUrl: 'https://i.pravatar.cc/150?img=9' },
+        user: { name: 'test_user_3', avatarUrl: '/icons/SoundSpaceIcon.png' },
         text: 'test',
         timeAgo: '45m ago',
     },
     {
         id: '4',
-        user: { name: 'Jake P.', avatarUrl: 'https://i.pravatar.cc/150?img=8' },
+        user: { name: 'test_user_4', avatarUrl: '/icons/SoundSpaceIcon.png' },
         text: 'test',
         timeAgo: '30m ago',
     },
     {
         id: '5',
-        user: { name: 'Nina S.', avatarUrl: 'https://i.pravatar.cc/150?img=16' },
+        user: { name: 'test_user_5', avatarUrl: '/icons/SoundSpaceIcon.png' },
         text: 'test',
         timeAgo: '15m ago',
     },
 ];
 
 const initialLikeCount = 245;
-const currentUserAvatar = 'https://i.pravatar.cc/150?img=7';
+const currentUserAvatar = '/icons/SoundSpaceIcon.png';
 
 const fallbackPost: SelectedPostPayload = {
     postKey: 'fallback-post',
-    user: { name: 'Alex R.', avatarUrl: 'https://i.pravatar.cc/150?img=11' },
+    user: { name: 'test_user', avatarUrl: currentUserAvatar },
     timeAgo: '3h ago',
     content: 'test',
     stats: { likes: initialLikeCount, comments: initialComments.length },

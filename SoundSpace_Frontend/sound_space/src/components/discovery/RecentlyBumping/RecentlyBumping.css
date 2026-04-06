@@ -1,0 +1,271 @@
+/* Recently Bumping Component */
+.recently-bumping {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+}
+
+.recently-bumping__album {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.recently-bumping__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.recently-bumping__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.recently-bumping__label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.recently-bumping__track {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recently-bumping__status {
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    flex-shrink: 0;
+}
+
+.recently-bumping__status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--primary-green);
+    box-shadow: 0 0 8px var(--primary-green-glow);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(0.9);
+    }
+}
+
+/* Responsive Design */
+
+/* Large tablets */
+@media (max-width: 1024px) {
+    .recently-bumping {
+        gap: 10px;
+        padding: 11px;
+        border-radius: 11px;
+    }
+
+    .recently-bumping__album {
+        width: 45px;
+        height: 45px;
+        border-radius: 7px;
+    }
+
+    .recently-bumping__label {
+        font-size: 0.65rem;
+    }
+
+    .recently-bumping__track {
+        font-size: 0.8rem;
+    }
+
+    .recently-bumping__status {
+        padding-left: 7px;
+    }
+
+    .recently-bumping__status-dot {
+        width: 9px;
+        height: 9px;
+    }
+}
+
+/* Small tablets */
+@media (max-width: 768px) {
+    .recently-bumping {
+        gap: 9px;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .recently-bumping__album {
+        width: 42px;
+        height: 42px;
+        border-radius: 6px;
+    }
+
+    .recently-bumping__label {
+        font-size: 0.6rem;
+        letter-spacing: 0.3px;
+    }
+
+    .recently-bumping__track {
+        font-size: 0.75rem;
+    }
+
+    .recently-bumping__status {
+        padding-left: 6px;
+    }
+
+    .recently-bumping__status-dot {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    .recently-bumping {
+        gap: 8px;
+        padding: 9px;
+        border-radius: 9px;
+    }
+
+    .recently-bumping__album {
+        width: 38px;
+        height: 38px;
+        border-radius: 5px;
+    }
+
+    .recently-bumping__info {
+        gap: 1px;
+    }
+
+    .recently-bumping__label {
+        font-size: 0.55rem;
+        letter-spacing: 0.2px;
+    }
+
+    .recently-bumping__track {
+        font-size: 0.7rem;
+    }
+
+    .recently-bumping__status {
+        padding-left: 5px;
+    }
+
+    .recently-bumping__status-dot {
+        width: 7px;
+        height: 7px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 375px) {
+    .recently-bumping {
+        gap: 7px;
+        padding: 8px;
+        border-radius: 8px;
+    }
+
+    .recently-bumping__album {
+        width: 35px;
+        height: 35px;
+        border-radius: 4px;
+    }
+
+    .recently-bumping__label {
+        font-size: 0.5rem;
+    }
+
+    .recently-bumping__track {
+        font-size: 0.65rem;
+    }
+
+    .recently-bumping__status {
+        padding-left: 4px;
+    }
+
+    .recently-bumping__status-dot {
+        width: 6px;
+        height: 6px;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .recently-bumping {
+        gap: 6px;
+        padding: 6px;
+        border-radius: 6px;
+    }
+
+    .recently-bumping__album {
+        width: 32px;
+        height: 32px;
+        border-radius: 3px;
+    }
+
+    .recently-bumping__info {
+        gap: 0;
+    }
+
+    .recently-bumping__label {
+        font-size: 0.45rem;
+        letter-spacing: 0.1px;
+    }
+
+    .recently-bumping__track {
+        font-size: 0.6rem;
+    }
+
+    .recently-bumping__status {
+        padding-left: 3px;
+    }
+
+    .recently-bumping__status-dot {
+        width: 5px;
+        height: 5px;
+    }
+}
+
+/* Very short screens */
+@media (max-height: 600px) {
+    .recently-bumping {
+        padding: 6px;
+        gap: 6px;
+    }
+
+    .recently-bumping__album {
+        width: 36px;
+        height: 36px;
+    }
+
+    .recently-bumping__label {
+        font-size: 0.5rem;
+    }
+
+    .recently-bumping__track {
+        font-size: 0.65rem;
+    }
+}

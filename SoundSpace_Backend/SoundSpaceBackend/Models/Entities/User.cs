@@ -20,13 +20,15 @@ public class User : IdentityUser<Guid>
     [MaxLength(500)]
     public string? ProfileImageUrl { get; set; } 
     
-    public string SpotifyAccessToken { get; set; } 
+    [Required] 
+    public required string SpotifyAccessToken { get; set; } 
 
+    [Required] 
     public string? SpotifyRefreshToken { get; set; }
     
+    [Required] 
     public string? SpotifyTokenExpiresIn { get; set; }
-
-    /// <summary>UTC time at which the current Spotify access token expires.</summary>
+    
     public DateTime SpotifyTokenExpiresAt { get; set; } = DateTime.UtcNow;
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

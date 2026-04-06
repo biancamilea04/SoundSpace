@@ -6,17 +6,34 @@
   <component name="ChangeListManager">
     <list default="true" id="c4ccd9b1-444b-485c-ad59-e2010d6d501d" name="Changes" comment="add the feed page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/feed/page.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/feed/page.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/FriendSidebar/FriendSidebar.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/FriendSidebar/FriendSidebar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Header/Header.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Header/Header.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/MenuSidebar/MenuSidebar.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/MenuSidebar/MenuSidebar.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Auth/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Auth/AuthController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Models/Entities/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Models/Entities/User.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/next.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/api/auth/callback/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/api/auth/callback/route.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/profile/page.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/profile/page.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/profile/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/profile/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/MenuSidebar/MenuSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/MenuSidebar/MenuSidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/Post.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/Post.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostHeader/PostHeader.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostHeader/PostHeader.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/NowPlaying/useNowPlaying.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/NowPlaying/useNowPlaying.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/UserProfile/useUserProfile.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/UserProfile/useUserProfile.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/auth/spotifyAuth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/auth/spotifyAuth.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/Bianca Milea/Desktop/uni/Licenta/Bachelor_Thesis" value="3A4k9v5MULY788uiMERtlVVOu8G" />
+    </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedModel">
+    <selectedModels>
+      <entry key="chat-panel" value="GPT-5.2-Codex" />
+      <entry key="agent-panel" value="GPT-5.2-Codex" />
+    </selectedModels>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -54,7 +71,7 @@
     &quot;ReactCreateComponentLastSelected&quot;: &quot;classBasedComponent&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;frontend__feed__page&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;discovery__page&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Bianca Milea/Desktop/uni/Licenta/Bachelor_Thesis/SoundSpace_Frontend/sound_space/public/icons&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -120,6 +137,9 @@
       <workItem from="1774127947298" duration="2852000" />
       <workItem from="1774173160439" duration="609000" />
       <workItem from="1774174027382" duration="11227000" />
+      <workItem from="1775207896362" duration="2044000" />
+      <workItem from="1775393854174" duration="6787000" />
+      <workItem from="1775480294154" duration="4192000" />
     </task>
     <task id="LOCAL-00001" summary="modify the frontend">
       <option name="closed" value="true" />
@@ -135,6 +155,27 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="5fd555ec-0238-466a-81f7-0282af47bd6a" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="5fd555ec-0238-466a-81f7-0282af47bd6a">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="modify the frontend" />
     <MESSAGE value="add the feed page" />
@@ -148,7 +189,26 @@
           <line>2</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/page.tsx</url>
+          <line>2</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/RecentStreams/RecentStreams.tsx</url>
+          <line>30</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>

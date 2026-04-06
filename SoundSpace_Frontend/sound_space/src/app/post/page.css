@@ -75,7 +75,6 @@
 
 .post-page__back-btn:hover {
     background: var(--bg-elevated);
-    color: var(--primary-green);
 }
 
 .post-page__title {

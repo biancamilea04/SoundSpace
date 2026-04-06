@@ -1,0 +1,156 @@
+/* Action Buttons Component */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding-top: 8px;
+}
+
+.action-buttons__btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-buttons__btn--skip {
+    background-color: var(--bg-elevated);
+    color: var(--text-muted);
+}
+
+.action-buttons__btn--skip:hover {
+    background-color: var(--bg-highlight);
+    color: var(--destructive);
+    transform: scale(1.05);
+}
+
+.action-buttons__btn--connect {
+    background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-hover) 100%);
+    color: var(--black);
+    box-shadow: 0 4px 16px var(--primary-green-glow);
+}
+
+.action-buttons__btn--connect:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 24px var(--primary-green-glow);
+}
+
+/* Responsive Design */
+
+/* Large tablets */
+@media (max-width: 1024px) {
+    .action-buttons {
+        gap: 22px;
+        padding-top: 6px;
+    }
+
+    .action-buttons__btn {
+        width: 54px;
+        height: 54px;
+    }
+}
+
+/* Small tablets */
+@media (max-width: 768px) {
+    .action-buttons {
+        gap: 20px;
+        padding-top: 4px;
+    }
+
+    .action-buttons__btn {
+        width: 50px;
+        height: 50px;
+    }
+
+    .action-buttons__btn--skip:hover {
+        transform: scale(1.03);
+    }
+
+    .action-buttons__btn--connect:hover {
+        transform: scale(1.05);
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    .action-buttons {
+        gap: 18px;
+        padding-top: 2px;
+    }
+
+    .action-buttons__btn {
+        width: 46px;
+        height: 46px;
+    }
+
+    .action-buttons__btn svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 375px) {
+    .action-buttons {
+        gap: 16px;
+        padding-top: 0;
+    }
+
+    .action-buttons__btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .action-buttons__btn svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .action-buttons {
+        gap: 16px;
+        padding-top: 0;
+    }
+
+    .action-buttons__btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .action-buttons__btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .action-buttons__btn--skip:hover,
+    .action-buttons__btn--connect:hover {
+        transform: scale(1.02);
+    }
+}
+
+/* Very short screens */
+@media (max-height: 600px) {
+    .action-buttons {
+        padding-top: 0;
+    }
+
+    .action-buttons__btn {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* Touch devices optimization */
+@media (pointer: coarse) {
+    .action-buttons__btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+}

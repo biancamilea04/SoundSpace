@@ -1,0 +1,116 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+.home-container ::selection {
+    background-color: #1ed760;
+    color: black;
+}
+
+/* Navigation */
+.home-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    user-select: none;
+    width: 100%;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 768px) {
+    .home-nav {
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+}
+
+.home-nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.home-nav__logo {
+    filter: brightness(0) invert(1);
+}
+
+.home-nav__title {
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.025em;
+    color: #ffffff;
+}
+
+/* Main Content */
+.home-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-align: center;
+    margin-top: -4rem;
+}
+
+/* Heading */
+.home-heading {
+    font-size: 3.75rem;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .home-heading {
+        font-size: 5.5rem;
+    }
+}
+
+.home-heading__line1 {
+    color: #ffffff;
+    display: block;
+}
+
+.home-heading__line2 {
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-image: linear-gradient(to right, #4ade80, #1ed760);
+    display: block;
+}
+
+/* Subtitle */
+.home-subtitle {
+    max-width: 600px;
+    font-size: 1.125rem;
+    color: #a1a1aa;
+    margin-bottom: 2.5rem;
+    line-height: 1.625;
+    font-weight: 400;
+}
+
+@media (min-width: 768px) {
+    .home-subtitle {
+        font-size: 1.25rem;
+    }
+}
+
+/* CTA Button Wrapper */
+.home-cta-wrapper {
+    position: relative;
+    margin-top: 0.5rem;
+}
+
+.home-cta-button {
+    position: relative;
+}

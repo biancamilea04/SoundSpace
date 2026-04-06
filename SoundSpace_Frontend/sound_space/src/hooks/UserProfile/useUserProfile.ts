@@ -5,12 +5,22 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { UserProfile } from "@/types/user";
 import { fetchUserProfile } from "@/services/user/userService";
 
-const TOKEN_KEY = "auth_token";
+const TOKEN_KEY = "access_token";
 
 interface UseUserProfileResult {
     user: UserProfile | null;
     isLoading: boolean;
     error: string | null;
+}
+
+const setCookie = ( name: string, value: string, days = 7 ) => {
+    const maxAge = days * 60 * 60 * 1000;
+    document.cookie = `${name}=${value}`;
+}
+
+const getCookie = (name: string) => {
+    const cookie = document.cookie.split(';');
+    return cookie.find((cookie) => cookie.trim().startsWith(`${name}=`))?.split('=')[1] || null;
 }
 
 export const useUserProfile = (): UseUserProfileResult => {
@@ -26,19 +36,17 @@ export const useUserProfile = (): UseUserProfileResult => {
         const init = async () => {
             try {
                 const urlToken = searchParams.get("token");
-                console.log("[Auth] URL token present:", !!urlToken);
 
                 let token: string | null = null;
 
                 if (urlToken) {
                     token = urlToken;
-                    localStorage.setItem(TOKEN_KEY, token);
+                    setCookie(TOKEN_KEY, urlToken);
                     hasProcessedToken.current = true;
-                    console.log("[Auth] Token saved to localStorage");
                     router.replace("/profile", { scroll: false });
+                    return;
                 } else {
-                    token = localStorage.getItem(TOKEN_KEY);
-                    console.log("[Auth] Token from localStorage:", !!token);
+                    token = getCookie(TOKEN_KEY);
                 }
 
                 if (!token) {

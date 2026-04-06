@@ -1,8 +1,11 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Home, Search, MessageSquare } from 'lucide-react';
 
 import SidebarItemProps from "@/types/sidebar/sidebarItemProps";
+import { useActiveSidebar } from "@/hooks/useActiveSidebar";
 import './MenuSidebar.css';
 
 const MenuSidebarItem = ({ icon: Icon, label, path, badge, isActive }: SidebarItemProps & { isActive?: boolean }) => (
@@ -16,15 +19,34 @@ const MenuSidebarItem = ({ icon: Icon, label, path, badge, isActive }: SidebarIt
 );
 
 const MenuSidebar = () => {
+    const { isActive } = useActiveSidebar();
+
     return (
         <div className="sidebar">
-
             <div className="sidebar-section">
                 <h3 className="sidebar-header">MENU</h3>
                 <div className="sidebar-items">
-                    <MenuSidebarItem icon={Home} label="Feed" path="/feed" badge={""} isActive={true} />
-                    <MenuSidebarItem icon={Search} label="Discover" path="/" badge={""} />
-                    <MenuSidebarItem icon={MessageSquare} label="Messages" path="/messages" badge={3} />
+                    <MenuSidebarItem
+                        icon={Home}
+                        label="Feed"
+                        path="/feed"
+                        badge={""}
+                        isActive={isActive("/")}
+                    />
+                    <MenuSidebarItem
+                        icon={Search}
+                        label="Discover"
+                        path="/discovery"
+                        badge={""}
+                        isActive={isActive("/discovery")}
+                    />
+                    <MenuSidebarItem
+                        icon={MessageSquare}
+                        label="Messages"
+                        path="/messages"
+                        badge={3}
+                        isActive={isActive("/messages")}
+                    />
                 </div>
             </div>
         </div>

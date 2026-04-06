@@ -1,0 +1,50 @@
+.top-artists {
+    background: var(--bg-surface);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.top-artists__title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.top-artists__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.top-artists__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.top-artists__item:hover {
+    text-decoration: underline;
+}
+
+.top-artists__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.top-artists__name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}

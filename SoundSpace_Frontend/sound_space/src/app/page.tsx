@@ -1,47 +1,107 @@
-import Image from "next/image";
-import { SpotifyButton } from "@/components/ui/SpotifyButton/SpotifyButton";
-import "./page.css";
+"use client";
 
-export default function Home() {
-  return (
-    <div className="home-container">
-      {/* Navigation */}
-      <nav className="home-nav">
-        <div className="home-nav__brand">
-          <Image
-            src="/icons/SoundSpaceIcon.png"
-            alt="SoundSpace Logo"
-            width={36}
-            height={36}
-            className="home-nav__logo"
-          />
-          <span className="home-nav__title">SoundSpace</span>
-        </div>
-      </nav>
+import { Suspense } from "react";
 
-      {/* Main Content */}
-      <main className="home-main">
-        {/* Typography */}
-        <h1 className="home-heading">
-          <span className="home-heading__line1">Your music.</span>
-          <span className="home-heading__line2">
-            Your vibe.
-          </span>
-        </h1>
+import MenuSidebar from "@/components/global/MenuSidebar/MenuSidebar";
+import SharePost from "@/components/global/SharePost/SharePost";
+import Post from "@/components/global/Post/Post";
+import './page.css';
+import FriendSidebar from "@/components/global/FriendSidebar/FriendSidebar";
+import Header from "@/components/global/Header/Header";
 
-        <p className="home-subtitle">
-          Connect with friends through music. Share playlists, discover new tracks, and see what everyone's listening to.
-        </p>
+function PageContent() {
+	return (
+		<div className="page-wrapper">
+			<Header title="Home" />
+			<div className="feed-container">
+				<MenuSidebar />
+				<div className="feed-main">
+					<SharePost />
 
-        {/* CTA Button Wrapper with Glow */}
-        <div className="home-cta-wrapper">
-          <div className="home-cta-glow"></div>
-          <div className="home-cta-button">
-            <SpotifyButton />
-          </div>
-        </div>
-      </main>
+					{/* Mock Data Posts */}
+					<Post
+						user={{
+							name: "test",
+							avatarUrl: "https://eu.ui-avatars.com/api/?name=T+T&size=250",
+							isOnline: true
+						}}
+						timeAgo="[test]"
+						content="test"
+						stats={{ likes: 999, comments: 999 }}
+						song={{
+							title: "[Test]",
+							artist: "[Test]",
+							albumImageUrl: "/icons/SoundSpaceIcon.png",
+							durationFormatted: "[Test]"
+						}}
+					/>
 
-    </div>
-  );
+					<Post
+						user={{
+							name: "test",
+							avatarUrl: "https://eu.ui-avatars.com/api/?name=T+T&size=250",
+							isOnline: true
+						}}
+						timeAgo="[test]"
+						content="test"
+						stats={{ likes: 999, comments: 999 }}
+					/>
+
+					<Post
+						user={{
+							name: "test",
+							avatarUrl: "https://eu.ui-avatars.com/api/?name=T+T&size=250",
+							isOnline: true
+						}}
+						timeAgo="[test]"
+						content="test"
+						stats={{ likes: 999, comments: 999 }}
+						song={{
+							title: "[Test]",
+							artist: "[Test]",
+							albumImageUrl: "/icons/SoundSpaceIcon.png",
+							durationFormatted: "[Test]"
+						}}
+					/>
+
+					<Post
+						user={{
+							name: "test",
+							avatarUrl: "https://eu.ui-avatars.com/api/?name=T+T&size=250",
+							isOnline: true
+						}}
+						timeAgo="[test]"
+						content="test"
+						stats={{ likes: 999, comments: 999 }}
+					/>
+
+					<Post
+						user={{
+							name: "test",
+							avatarUrl: "https://eu.ui-avatars.com/api/?name=T+T&size=250",
+							isOnline: true
+						}}
+						timeAgo="[test]"
+						content="test"
+						stats={{ likes: 999, comments: 999 }}
+						song={{
+							title: "[Test]",
+							artist: "[Test]",
+							albumImageUrl: "/icons/SoundSpaceIcon.png",
+							durationFormatted: "[Test]"
+						}}
+					/>
+				</div>
+				<FriendSidebar />
+			</div>
+		</div>
+	);
+}
+
+export default function Page() {
+	return (
+		<Suspense fallback={<div>Loading Feed...</div>}>
+			<PageContent />
+		</Suspense>
+	);
 }

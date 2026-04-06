@@ -1,0 +1,123 @@
+/* Filter Buttons Component */
+.filter-buttons {
+    display: flex;
+    gap: 12px;
+    padding: 0 0 20px 0;
+    flex-shrink: 0;
+    justify-content: flex-start;
+}
+
+.filter-buttons__btn {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 1px solid var(--border-subtle);
+    background-color: transparent;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.filter-buttons__btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+    background-color: var(--bg-surface);
+}
+
+.filter-buttons__btn.active {
+    background-color: var(--primary-green);
+    color: var(--black);
+    border-color: var(--primary-green);
+}
+
+.filter-buttons__btn.active:hover {
+    background-color: var(--primary-green-hover);
+    border-color: var(--primary-green-hover);
+}
+
+/* Responsive Design */
+
+/* Large tablets */
+@media (max-width: 1024px) {
+    .filter-buttons {
+        gap: 10px;
+        padding: 0 0 18px 0;
+    }
+
+    .filter-buttons__btn {
+        padding: 9px 18px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Small tablets */
+@media (max-width: 768px) {
+    .filter-buttons {
+        justify-content: center;
+        padding: 0 0 16px 0;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .filter-buttons__btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+        border-radius: 18px;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    .filter-buttons {
+        gap: 6px;
+        padding: 0 0 14px 0;
+    }
+
+    .filter-buttons__btn {
+        padding: 7px 14px;
+        font-size: 0.75rem;
+        border-radius: 16px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 375px) {
+    .filter-buttons {
+        gap: 4px;
+        padding: 0 0 12px 0;
+    }
+
+    .filter-buttons__btn {
+        padding: 6px 12px;
+        font-size: 0.7rem;
+        border-radius: 14px;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .filter-buttons {
+        padding: 0 0 10px 0;
+        gap: 6px;
+    }
+
+    .filter-buttons__btn {
+        padding: 6px 14px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Very wide screens */
+@media (min-width: 1200px) {
+    .filter-buttons {
+        gap: 16px;
+        padding: 0 0 24px 0;
+    }
+
+    .filter-buttons__btn {
+        padding: 12px 24px;
+        font-size: 0.9rem;
+    }
+}
