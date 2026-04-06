@@ -1,0 +1,24 @@
+.main-header__left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.main-header__title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.025em;
+}
+
+.main-header__logo {
+    filter: brightness(0) invert(1);
+}
+
+@media (max-width: 768px) {
+    .main-header__title {
+        display: none; /* Hide 'SoundSpace' text, leave the logo icon */
+    }
+}
+
