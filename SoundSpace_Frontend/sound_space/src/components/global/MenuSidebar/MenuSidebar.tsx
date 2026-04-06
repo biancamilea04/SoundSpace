@@ -31,7 +31,7 @@ const MenuSidebar = () => {
                         label="Feed"
                         path="/feed"
                         badge={""}
-                        isActive={isActive("/feed")}
+                        isActive={isActive("/")}
                     />
                     <MenuSidebarItem
                         icon={Search}

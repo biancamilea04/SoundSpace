@@ -7,7 +7,7 @@ export async function GET(request: Request) {
     if (token) {
         const response = NextResponse.redirect(new URL(`/profile?token=${token}`, request.url));
         
-        response.cookies.set('auth_token', token, {
+        response.cookies.set('access_token', token, {
             httpOnly: false, 
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',

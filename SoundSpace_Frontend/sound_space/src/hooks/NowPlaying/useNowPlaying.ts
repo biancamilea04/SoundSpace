@@ -9,7 +9,7 @@ import {
 } from "@microsoft/signalr";
 import { NowPlayingData } from "@/types/nowPlaying";
 
-const TOKEN_KEY = "auth_token";
+const TOKEN_KEY = "access_token";
 const BACKEND_URL =
     process.env.NEXT_PUBLIC_BACKEND_API_URL || "https://localhost:7050";
 const SIGNALR_HUB = `${BACKEND_URL}/hubs/spotify`;
