@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import './ProfileMenu.css';
+import {logoutUser} from "@/services/auth/authService";
 
 interface HeaderProfileMenuProps {
     userName: string;
@@ -9,7 +10,6 @@ interface HeaderProfileMenuProps {
     avatarSrc: string;
     profileHref?: string;
     settingsHref?: string;
-    onLogout: () => void;
 }
 
 const ProfileMenu = ({
@@ -18,7 +18,6 @@ const ProfileMenu = ({
     avatarSrc,
     profileHref = '/profile',
     settingsHref = '/settings',
-    onLogout,
 }: HeaderProfileMenuProps) => {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const profileMenuRef = useRef<HTMLDivElement>(null);
@@ -47,7 +46,7 @@ const ProfileMenu = ({
 
     const handleLogout = () => {
         setShowProfileMenu(false);
-        onLogout();
+        logoutUser().then(r => {});
     };
 
     return (
