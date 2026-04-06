@@ -1,0 +1,107 @@
+.profile-menu {
+    position: relative;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: inherit;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.profile-menu:hover,
+.profile[aria-expanded="true"] {
+    background: var(--bg-surface);
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: auto;
+    bottom: calc(100% + 8px);
+    right: 0;
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    z-index: 200;
+}
+
+.profile-dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    padding: 10px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.profile-dropdown-item:hover {
+    background: var(--bg-elevated);
+}
+
+.profile-dropdown-item--danger {
+    color: #f87171;
+}
+
+.profile-avatar-wrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+}
+
+.profile-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.profile-name {
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.profile-song {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+}
+
+@media (max-width: 768px) {
+    .profile-info {
+        display: none;
+    }
+
+    .profile-dropdown {
+        right: -4px;
+        top: auto;
+        bottom: calc(100% + 8px);
+    }
+}

@@ -17,6 +17,7 @@ public class AuthController(
     IJwtService jwtService) : ControllerBase
 {
     private const string AccessCookieName = "access_token";
+    private const string RefreshCookieName = "refresh_token";
 
     private readonly IAuthService _authService = authService;
     private readonly IUserService _userService = userService;
@@ -115,10 +116,11 @@ public class AuthController(
         return Ok(new { token });
     }
 
-    [HttpGet("logout")]
+    [HttpPost("logout")]
     public IActionResult Logout()
     {
         Response.Cookies.Delete(AccessCookieName);
+        Response.Cookies.Delete(RefreshCookieName);
         return Ok();
     }
 }

@@ -5,23 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c4ccd9b1-444b-485c-ad59-e2010d6d501d" name="Changes" comment="add the feed page">
+      <change beforePath="$PROJECT_DIR$/.idea/copilotDiffState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/copilotDiffState.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Auth/AuthController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Auth/AuthController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Auth/Responses/SpotifyAuthResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Auth/Responses/SpotifyAuthResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Users/UsersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Users/UsersController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Models/Entities/User.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Models/Entities/User.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Persistence/ApplicationContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Persistence/ApplicationContext.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/JWT/Abstractions/IJwtService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/JWT/Abstractions/IJwtService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/JWT/JwtService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/JWT/JwtService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/User/Abstractions/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/User/Abstractions/IUserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/User/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/User/UserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/api/auth/callback/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/api/auth/callback/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/NowPlaying/useNowPlaying.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/NowPlaying/useNowPlaying.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/UserProfile/useUserProfile.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/UserProfile/useUserProfile.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/useActiveSidebar.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/useActiveSidebar.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/auth/authService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/auth/authService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/spotify/spotifyService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/spotify/spotifyService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/user/userService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/user/userService.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +17,9 @@
     <persistenceIdMap>
       <entry key="_C:/Users/Bianca Milea/Desktop/uni/Licenta/Bachelor_Thesis" value="3A4k9v5MULY788uiMERtlVVOu8G" />
     </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedChatMode">
+    <option name="chatModeId" value="Agent" />
   </component>
   <component name="CopilotUserSelectedModel">
     <selectedModels>
@@ -75,7 +63,7 @@
     "ReactCreateComponentLastSelected": "classBasedComponent",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "refresh__token",
+    "git-widget-placeholder": "small__user__component",
     "last_opened_file_path": "C:/Users/Bianca Milea/Desktop/uni/Licenta/Bachelor_Thesis/SoundSpace_Frontend/sound_space/public/icons",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
@@ -104,10 +92,10 @@
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\components\global" />
+      <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\components\global\Header\HeaderProfile" />
+      <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\components\global\Header\HeaderBrand" />
       <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\hooks\UserProfile" />
       <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\hooks\NowPlaying" />
-      <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\components\profile\SharePost" />
-      <recent name="C:\Users\Bianca Milea\Desktop\uni\Licenta\Bachelor_Thesis\SoundSpace_Frontend\sound_space\src\components\profile\ProfileHeader" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -188,11 +176,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/NowPlaying/useNowPlaying.ts</url>
-          <line>2</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/page.tsx</url>
           <line>2</line>
