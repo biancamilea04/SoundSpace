@@ -152,6 +152,39 @@ namespace SoundSpaceBackend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.AppRefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AppRefreshTokens");
+                });
+
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -229,12 +262,14 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("SpotifyRefreshToken")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("SpotifyTokenExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SpotifyTokenExpiresIn")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -308,6 +343,22 @@ namespace SoundSpaceBackend.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.AppRefreshToken", b =>
+                {
+                    b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.User", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,17 +1,10 @@
-import { NowPlayingData } from "@/types/nowPlaying";
+import { NowPlayingData } from '@/types/nowPlaying';
+import { apiFetch } from '@/lib/apiClient';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || "";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || '';
 
-export const fetchNowPlaying = async (
-    token: string
-): Promise<NowPlayingData | null> => {
-    const response = await fetch(`${BACKEND_URL}/api/Users/now-playing`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-        },
-    });
+export const fetchNowPlaying = async (): Promise<NowPlayingData | null> => {
+    const response = await apiFetch(`${BACKEND_URL}/api/Users/now-playing`);
 
     if (response.status === 204) return null;
 
