@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import './HeaderProfileMenu.css';
+import './ProfileMenu.css';
 
 interface HeaderProfileMenuProps {
     userName: string;
@@ -12,7 +12,7 @@ interface HeaderProfileMenuProps {
     onLogout: () => void;
 }
 
-const HeaderProfileMenu = ({
+const ProfileMenu = ({
     userName,
     currentSong,
     avatarSrc,
@@ -51,35 +51,37 @@ const HeaderProfileMenu = ({
     };
 
     return (
-        <div className="main-header__profile-menu" ref={profileMenuRef}>
+        <div className="profile-menu"
+             ref={profileMenuRef}
+             onClick={handleToggleProfileMenu}
+        >
             <button
                 type="button"
-                className="main-header__profile"
+                className="profile"
                 aria-label="Open profile menu"
                 aria-haspopup="menu"
                 aria-expanded={showProfileMenu}
-                onClick={handleToggleProfileMenu}
             >
-                <div className="main-header__profile-avatar-wrap">
+                <div className="profile-avatar-wrap">
                     <Image
                         src={avatarSrc}
                         alt="User avatar"
                         width={36}
                         height={36}
-                        className="main-header__profile-avatar"
+                        className="profile-avatar"
                     />
                 </div>
-                <div className="main-header__profile-info">
-                    <span className="main-header__profile-name">{userName}</span>
-                    <span className="main-header__profile-song">{currentSong}</span>
+                <div className="profile-info">
+                    <span className="profile-name">{userName}</span>
+                    <span className="profile-song">{currentSong}</span>
                 </div>
             </button>
 
             {showProfileMenu && (
-                <div className="main-header__profile-dropdown" role="menu" aria-label="Profile options">
+                <div className="profile-dropdown" role="menu" aria-label="Profile options">
                     <Link
                         href={profileHref}
-                        className="main-header__profile-dropdown-item"
+                        className="profile-dropdown-item"
                         role="menuitem"
                         onClick={handleCloseProfileMenu}
                     >
@@ -87,7 +89,7 @@ const HeaderProfileMenu = ({
                     </Link>
                     <Link
                         href={settingsHref}
-                        className="main-header__profile-dropdown-item"
+                        className="profile-dropdown-item"
                         role="menuitem"
                         onClick={handleCloseProfileMenu}
                     >
@@ -95,7 +97,7 @@ const HeaderProfileMenu = ({
                     </Link>
                     <button
                         type="button"
-                        className="main-header__profile-dropdown-item main-header__profile-dropdown-item--danger"
+                        className="profile-dropdown-item profile-dropdown-item--danger"
                         role="menuitem"
                         onClick={handleLogout}
                     >
@@ -107,4 +109,4 @@ const HeaderProfileMenu = ({
     );
 };
 
-export default HeaderProfileMenu;
+export default ProfileMenu;

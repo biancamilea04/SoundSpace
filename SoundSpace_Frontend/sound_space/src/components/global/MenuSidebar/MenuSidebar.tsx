@@ -6,6 +6,7 @@ import { Home, Search, MessageSquare } from 'lucide-react';
 
 import SidebarItemProps from "@/types/sidebar/sidebarItemProps";
 import { useActiveSidebar } from "@/hooks/useActiveSidebar";
+import ProfileMenu from "@/components/global/ProfileMenu/ProfileMenu";
 import './MenuSidebar.css';
 
 const MenuSidebarItem = ({ icon: Icon, label, path, badge, isActive }: SidebarItemProps & { isActive?: boolean }) => (
@@ -21,6 +22,12 @@ const MenuSidebarItem = ({ icon: Icon, label, path, badge, isActive }: SidebarIt
 const MenuSidebar = () => {
     const { isActive } = useActiveSidebar();
 
+    const handleLogout = () => {
+        if (typeof window !== 'undefined') {
+            window.location.href = '/';
+        }
+    };
+
     return (
         <div className="sidebar">
             <div className="sidebar-section">
@@ -29,7 +36,7 @@ const MenuSidebar = () => {
                     <MenuSidebarItem
                         icon={Home}
                         label="Feed"
-                        path="/feed"
+                        path="/"
                         badge={""}
                         isActive={isActive("/")}
                     />
@@ -48,6 +55,15 @@ const MenuSidebar = () => {
                         isActive={isActive("/messages")}
                     />
                 </div>
+            </div>
+
+            <div className="sidebar-footer">
+                <ProfileMenu
+                    userName="test"
+                    currentSong="test"
+                    avatarSrc="/icons/SoundSpaceIcon.png"
+                    onLogout={handleLogout}
+                />
             </div>
         </div>
     );
