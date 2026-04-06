@@ -8,8 +8,9 @@ import {
     HubConnection,
 } from "@microsoft/signalr";
 import { NowPlayingData } from "@/types/nowPlaying";
+import { getAccessTokenCookie } from "@/services/auth/authService";
+import { apiFetch } from "@/lib/apiClient";
 
-const TOKEN_KEY = "access_token";
 const BACKEND_URL =
     process.env.NEXT_PUBLIC_BACKEND_API_URL || "https://localhost:7050";
 const SIGNALR_HUB = `${BACKEND_URL}/hubs/spotify`;
@@ -28,10 +29,10 @@ export const useSpotifyStatus = (): UseSpotifyStatusResult => {
     const nowPlayingRef = useRef<NowPlayingData | null>(null);
     const connectionRef = useRef<HubConnection | null>(null);
 
-   useEffect(() => {
+    useEffect(() => {
         let isMounted = true;
 
-        const token = localStorage.getItem(TOKEN_KEY);
+        const token = getAccessTokenCookie();
         if (!token) {
             setIsLoading(false);
             return;
@@ -39,9 +40,7 @@ export const useSpotifyStatus = (): UseSpotifyStatusResult => {
 
         const fetchLastPlayed = async () => {
             try {
-                const res = await fetch(REST_ENDPOINT, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                const res = await apiFetch(REST_ENDPOINT);
 
                 if (!res.ok) {
                     console.error(
@@ -52,7 +51,7 @@ export const useSpotifyStatus = (): UseSpotifyStatusResult => {
 
                 const data: NowPlayingData = await res.json();
 
-               const withPausedFlag: NowPlayingData = {
+                const withPausedFlag: NowPlayingData = {
                     ...data,
                     isPlaying: false,
                 };
@@ -68,7 +67,7 @@ export const useSpotifyStatus = (): UseSpotifyStatusResult => {
             }
         };
 
-       const connection = new HubConnectionBuilder()
+        const connection = new HubConnectionBuilder()
             .withUrl(SIGNALR_HUB, {
                 accessTokenFactory: () => token,
             })
@@ -92,7 +91,6 @@ export const useSpotifyStatus = (): UseSpotifyStatusResult => {
             setIsLoading(false);
         });
 
-        // Pause event: mark the current track as no longer playing
         connection.on("ReceivePause", () => {
             if (!isMounted) return;
 

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
 namespace SoundSpaceBackend.Models.Entities;
@@ -33,4 +33,5 @@ public class User : IdentityUser<Guid>
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    public ICollection<AppRefreshToken> RefreshTokens { get; set; } = new List<AppRefreshToken>();
 }

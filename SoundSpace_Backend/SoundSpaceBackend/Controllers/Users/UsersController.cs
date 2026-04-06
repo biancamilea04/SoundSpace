@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +16,9 @@ public class UsersController(
     ISpotifyPlayerService spotifyPlayerService,
     ILogger<UsersController> logger) : ControllerBase
 {
-    ILogger<UsersController> _logger = logger;
-    IUserService _userService = userService;
-    ISpotifyPlayerService _spotifyPlayerService = spotifyPlayerService;
+    private readonly ILogger<UsersController> _logger = logger;
+    private readonly IUserService _userService = userService;
+    private readonly ISpotifyPlayerService _spotifyPlayerService = spotifyPlayerService;
     
     [HttpGet("profile")]
     public async Task<IActionResult> GetUserProfile()
@@ -48,7 +48,7 @@ public class UsersController(
 
         var result = await _spotifyPlayerService.GetCurrentlyPlayingTrackAsync(spotifyId);
         if (result == null)
-            return NoContent(); // 204 — nothing is currently playing
+            return NoContent(); 
 
         return Ok(result);
     }

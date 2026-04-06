@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using SoundSpaceBackend.Controllers.Auth.Responses;
 using SoundSpaceBackend.Persistence;
 using SoundSpaceBackend.Services.User.Abstractions;
 using SoundSpaceBackend.Services.User.DTOs;
+using UserEntity = SoundSpaceBackend.Models.Entities.User;
 
 namespace SoundSpaceBackend.Services.User;
 
@@ -24,14 +25,14 @@ public class UserService(
         var dto = new GetUserDto(
             user.DisplayName,
             user.ProfileImageUrl,
-            user.Email,
+            user.Email ?? string.Empty,
             user.Country,
             user.Followers);
 
         return Task.FromResult(dto);
     }
 
-    public Task CreateOrUpdateUserAsync(SpotifyAuthResponseDto spotifyProfileAuthResponse)
+    public Task<UserEntity> CreateOrUpdateUserAsync(SpotifyAuthResponseDto spotifyProfileAuthResponse)
     {
         var spotifyProfile = spotifyProfileAuthResponse.UserProfile;
 
@@ -41,7 +42,7 @@ public class UserService(
         if (user == null)
         {
             logger.LogInformation("[User] Creating new user for SpotifyId={SpotifyId}", spotifyProfile.Id);
-            user = new Models.Entities.User
+            user = new UserEntity
             {
                 SpotifyId              = spotifyProfile.Id,
                 DisplayName            = spotifyProfile.DisplayName,
@@ -63,12 +64,13 @@ public class UserService(
             user.ProfileImageUrl       = spotifyProfile.Images?.FirstOrDefault()?.Url;
             user.SpotifyAccessToken    = spotifyProfileAuthResponse.Tokens.AccessToken;
             user.SpotifyRefreshToken   = spotifyProfileAuthResponse.Tokens.RefreshToken;
+            user.SpotifyTokenExpiresIn = spotifyProfileAuthResponse.Tokens.ExpiresIn.ToString();
             user.SpotifyTokenExpiresAt = DateTime.UtcNow.AddSeconds(spotifyProfileAuthResponse.Tokens.ExpiresIn);
             dbContext.Users.Update(user);
         }
 
         dbContext.SaveChanges();
         logger.LogInformation("[User] Saved user for SpotifyId={SpotifyId}", spotifyProfile.Id);
-        return Task.CompletedTask;
+        return Task.FromResult(user);
     }
-}
+}

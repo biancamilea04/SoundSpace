@@ -1,22 +1,13 @@
-import { UserProfile } from "@/types/user";
+import { UserProfile } from '@/types/user';
+import { apiFetch } from '@/lib/apiClient';
 
-const BACKEND_URL =
-    process.env.NEXT_PUBLIC_BACKEND_API_URL || "";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || '';
 
-
-export const fetchUserProfile = async (
-    token: string
-): Promise<UserProfile> => {
-    const response = await fetch(`${BACKEND_URL}/api/Users/profile`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-        },
-    });
+export const fetchUserProfile = async (): Promise<UserProfile> => {
+    const response = await apiFetch(`${BACKEND_URL}/api/Users/profile`);
 
     if (response.status === 401) {
-        throw new Error("UNAUTHORIZED");
+        throw new Error('UNAUTHORIZED');
     }
 
     if (!response.ok) {
@@ -26,10 +17,10 @@ export const fetchUserProfile = async (
     const data = await response.json();
 
     return {
-        displayName: data.displayName ?? "",
-        profileImageUrl: data.profileImageUrl ?? "",
-        email: data.email ?? "",
-        country: data.country ?? "",
-        followers: data.followers ?? 0,
+        displayName:     data.displayName     ?? '',
+        profileImageUrl: data.profileImageUrl ?? '',
+        email:           data.email           ?? '',
+        country:         data.country         ?? '',
+        followers:       data.followers       ?? 0,
     };
 };
