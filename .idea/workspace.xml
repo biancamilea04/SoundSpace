@@ -5,17 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c4ccd9b1-444b-485c-ad59-e2010d6d501d" name="Changes" comment="add the feed page">
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Header/HeaderBrand/HeaderBrand.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Header/HeaderBrand/HeaderBrand.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Header/HeaderSearch/HeaderSearch.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Header/HeaderSearch/HeaderSearch.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/ProfileMenu/ProfileMenu.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/ProfileMenu/ProfileMenu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilotDiffState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/copilotDiffState.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Header/Header.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Header/Header.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Header/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Header/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/MenuSidebar/MenuSidebar.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/MenuSidebar/MenuSidebar.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/MenuSidebar/MenuSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/MenuSidebar/MenuSidebar.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +17,9 @@
     <persistenceIdMap>
       <entry key="_C:/Users/Bianca Milea/Desktop/uni/Licenta/Bachelor_Thesis" value="3A4k9v5MULY788uiMERtlVVOu8G" />
     </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedChatMode">
+    <option name="chatModeId" value="Agent" />
   </component>
   <component name="CopilotUserSelectedModel">
     <selectedModels>
