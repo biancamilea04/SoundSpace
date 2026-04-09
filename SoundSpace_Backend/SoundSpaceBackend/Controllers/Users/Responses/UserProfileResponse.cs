@@ -1,3 +1,3 @@
-﻿namespace SoundSpaceBackend.Controllers.Users.Responses;
+namespace SoundSpaceBackend.Controllers.Users.Responses;
 
-public record UserProfileResponse(string DisplayName, string? ProfileImageUrl, string Email, string Country, int Followers);
+public record UserProfileResponse(string SpotifyId, string DisplayName, string? ProfileImageUrl, string Email, string Country, int Followers);

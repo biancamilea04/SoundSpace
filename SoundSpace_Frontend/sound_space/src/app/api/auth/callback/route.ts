@@ -1,12 +1,46 @@
 import { NextResponse } from 'next/server';
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || '';
+
+const resolveProfileRedirectPath = async (token: string): Promise<string> => {
+    if (!BACKEND_URL) {
+        return '/profile';
+    }
+
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/Users/profile`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            cache: 'no-store',
+        });
+
+        if (!response.ok) {
+            return '/profile';
+        }
+
+        const data = (await response.json()) as { displayName?: unknown };
+        const displayName =
+            typeof data.displayName === 'string' ? data.displayName.trim() : '';
+
+        if (!displayName) {
+            return '/profile';
+        }
+
+        return `/profile/${encodeURIComponent(displayName)}`;
+    } catch {
+        return '/profile';
+    }
+};
+
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const token        = searchParams.get('token');
     const refreshToken = searchParams.get('refresh_token');
 
     if (token) {
-        const response = NextResponse.redirect(new URL('/profile', request.url));
+        const redirectPath = await resolveProfileRedirectPath(token);
+        const response = NextResponse.redirect(new URL(redirectPath, request.url));
 
         const isProd = process.env.NODE_ENV === 'production';
 
@@ -33,4 +67,3 @@ export async function GET(request: Request) {
 
     return NextResponse.redirect(new URL('/landing', request.url));
 }
-

@@ -6,6 +6,7 @@ import { Home, Search, MessageSquare } from 'lucide-react';
 
 import SidebarItemProps from "@/types/sidebar/sidebarItemProps";
 import { useActiveSidebar } from "@/hooks/useActiveSidebar";
+import { useUserProfile } from "@/hooks/UserProfile/useUserProfile";
 import ProfileMenu from "@/components/global/ProfileMenu/ProfileMenu";
 import './MenuSidebar.css';
 
@@ -21,12 +22,14 @@ const MenuSidebarItem = ({ icon: Icon, label, path, badge, isActive }: SidebarIt
 
 const MenuSidebar = () => {
     const { isActive } = useActiveSidebar();
+    const { user } = useUserProfile();
 
-    const handleLogout = () => {
-        if (typeof window !== 'undefined') {
-            window.location.href = '/';
-        }
-    };
+    const userName = user?.displayName || 'Profile';
+    const avatarSrc = user?.profileImageUrl || '/icons/SoundSpaceIcon.png';
+    const currentSong = user?.email || 'SoundSpace';
+    const profileHref = user?.displayName
+        ? `/profile/${encodeURIComponent(user.displayName)}`
+        : '/profile';
 
     return (
         <div className="sidebar">
@@ -59,10 +62,10 @@ const MenuSidebar = () => {
 
             <div className="sidebar-footer">
                 <ProfileMenu
-                    userName="test"
-                    currentSong="test"
-                    avatarSrc="/icons/SoundSpaceIcon.png"
-                    onLogout={handleLogout}
+                    userName={userName}
+                    currentSong={currentSong}
+                    avatarSrc={avatarSrc}
+                    profileHref={profileHref}
                 />
             </div>
         </div>

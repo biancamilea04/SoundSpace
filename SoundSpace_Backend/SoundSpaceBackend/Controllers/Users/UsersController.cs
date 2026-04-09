@@ -31,9 +31,24 @@ public class UsersController(
         }
 
         var user = await userService.GetUserBySpotifyIdAsync(spotifyId);
-        var userProfileResponse = new UserProfileResponse(user.DisplayName, user.ProfileImageUrl, user.Email, user.Country, user.Followers);
+        var userProfileResponse = new UserProfileResponse(user.SpotifyId, user.DisplayName, user.ProfileImageUrl, user.Email, user.Country, user.Followers);
         
         return Ok(userProfileResponse);
+    }
+
+    [HttpGet("profile/{displayName}")]
+    public async Task<IActionResult> GetUserProfileByDisplayName(string displayName)
+    {
+        try
+        {
+            var user = await userService.GetUserByDisplayNameAsync(displayName);
+            var userProfileResponse = new UserProfileResponse(user.SpotifyId, user.DisplayName, user.ProfileImageUrl, user.Email, user.Country, user.Followers);
+            return Ok(userProfileResponse);
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
     }
 
     [HttpGet("now-playing")]

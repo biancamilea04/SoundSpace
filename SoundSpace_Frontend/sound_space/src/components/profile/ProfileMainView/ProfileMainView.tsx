@@ -5,6 +5,8 @@ import { GenreTags } from "@/components/profile/GenreTags/GenreTags";
 import { PostComposer } from "@/components/profile/PostComposer/PostComposer";
 import { ProfileFeed } from "@/components/profile/ProfileFeed/ProfileFeed";
 import { useUserProfile } from "@/hooks/UserProfile/useUserProfile";
+import { fetchUserProfile } from "@/services/user/userService";
+import { useEffect, useState } from "react";
 import "./ProfileMainView.css";
 
 const GENRE_TAGS = [
@@ -12,8 +14,28 @@ const GENRE_TAGS = [
     "Hip-Hop", "Electronic", "R&B", "Pop",
 ];
 
-export const ProfileMainView = () => {
-    const { user, isLoading, error } = useUserProfile();
+interface ProfileMainViewProps {
+    username?: string;
+}
+
+export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
+    const { user, isLoading, error } = useUserProfile(username);
+    const [isOwnProfile, setIsOwnProfile] = useState(false);
+
+    useEffect(() => {
+        if (!user) return;
+
+        const checkOwnership = async () => {
+            try {
+                const loggedInUser = await fetchUserProfile();
+                setIsOwnProfile(loggedInUser.spotifyId === user.spotifyId);
+            } catch {
+                setIsOwnProfile(false);
+            }
+        };
+
+        checkOwnership();
+    }, [user]);
 
     if (isLoading) {
         return (
@@ -51,10 +73,12 @@ export const ProfileMainView = () => {
 
                     <GenreTags tags={GENRE_TAGS} />
 
-                    <PostComposer
-                        avatarUrl={user.profileImageUrl}
-                        onPost={(text) => console.log("Post:", text)}
-                    />
+                    {isOwnProfile && (
+                        <PostComposer
+                            avatarUrl={user.profileImageUrl}
+                            onPost={(text) => console.log("Post:", text)}
+                        />
+                    )}
 
                     <ProfileFeed />
                 </>
