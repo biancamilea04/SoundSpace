@@ -84,7 +84,7 @@ const ProfileMenu = ({
                         role="menuitem"
                         onClick={handleCloseProfileMenu}
                     >
-                        Profile
+                        My Profile
                     </Link>
                     <Link
                         href={settingsHref}

@@ -5,7 +5,7 @@ import Header from "@/components/global/Header/Header";
 import MenuSidebar from "@/components/global/MenuSidebar/MenuSidebar";
 import ProfileMainView from "@/components/profile/ProfileMainView/ProfileMainView";
 import ProfileSidebarRight from "@/components/profile/ProfileSidebarRight/ProfileSidebarRight";
-import "./page.css";
+import "./[username]/page.css";
 
 function ProfilePageContent() {
     return (
@@ -33,3 +33,4 @@ export default function ProfilePage() {
         </Suspense>
     );
 }
+

@@ -23,6 +23,30 @@ public class UserService(
         }
 
         var dto = new GetUserDto(
+            user.SpotifyId,
+            user.DisplayName,
+            user.ProfileImageUrl,
+            user.Email ?? string.Empty,
+            user.Country,
+            user.Followers);
+
+        return Task.FromResult(dto);
+    }
+
+    public Task<GetUserDto> GetUserByDisplayNameAsync(string displayName)
+    {
+        logger.LogInformation("[User] Fetching profile for DisplayName={DisplayName}", displayName);
+
+        var user = dbContext.Users.FirstOrDefault(
+            u => u.DisplayName.ToLower() == displayName.ToLower());
+        if (user == null)
+        {
+            logger.LogWarning("[User] User not found for DisplayName={DisplayName}", displayName);
+            throw new Exception("User not found");
+        }
+
+        var dto = new GetUserDto(
+            user.SpotifyId,
             user.DisplayName,
             user.ProfileImageUrl,
             user.Email ?? string.Empty,
