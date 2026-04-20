@@ -15,3 +15,14 @@ export const fetchNowPlaying = async (): Promise<NowPlayingData | null> => {
 
     return response.json() as Promise<NowPlayingData>;
 };
+
+export const fetchTopGenres = async (): Promise<string[]> => {
+    const response = await apiFetch(`${BACKEND_URL}/api/Users/top-genres`);
+
+    if (!response.ok) {
+        console.error(`[TopGenres] Failed to fetch (status ${response.status})`);
+        return [];
+    }
+
+    return response.json() as Promise<string[]>;
+};
