@@ -7,7 +7,7 @@ import { apiFetch } from '@/lib/apiClient';
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || '';
 
 export const fetchNowPlaying = async (): Promise<NowPlayingData | null> => {
-    const response = await apiFetch(`${BACKEND_URL}/api/Users/now-playing`);
+    const response = await apiFetch(`${BACKEND_URL}/api/users/now-playing`);
 
     if (response.status === 204) return null;
 
@@ -20,7 +20,7 @@ export const fetchNowPlaying = async (): Promise<NowPlayingData | null> => {
 };
 
 export const fetchTopGenres = async (): Promise<string[]> => {
-    const response = await apiFetch(`${BACKEND_URL}/api/Users/top-genres`);
+    const response = await apiFetch(`${BACKEND_URL}/api/users/top-genres`);
 
     if (!response.ok) {
         console.error(`[TopGenres] Failed to fetch (status ${response.status})`);
@@ -31,7 +31,7 @@ export const fetchTopGenres = async (): Promise<string[]> => {
 };
 
 export const fetchTopArtists = async (): Promise<TopArtist[]> => {
-    const response = await apiFetch(`${BACKEND_URL}/api/Users/top-artists`);
+    const response = await apiFetch(`${BACKEND_URL}/api/users/top-artists`);
 
     if (!response.ok) {
         console.error(`[TopArtists] Failed to fetch (status ${response.status})`);
@@ -42,7 +42,7 @@ export const fetchTopArtists = async (): Promise<TopArtist[]> => {
 };
 
 export const fetchTopTracks = async (): Promise<TopTrack[]> => {
-    const response = await apiFetch(`${BACKEND_URL}/api/Users/top-tracks`);
+    const response = await apiFetch(`${BACKEND_URL}/api/users/top-tracks`);
 
     if (!response.ok) {
         console.error(`[TopTracks] Failed to fetch (status ${response.status})`);
@@ -53,7 +53,7 @@ export const fetchTopTracks = async (): Promise<TopTrack[]> => {
 };
 
 export const fetchRecentStreams = async (limit: number = 5): Promise<RecentStream[]> => {
-    const response = await apiFetch(`${BACKEND_URL}/api/Users/recent-streams?limit=${limit}`);
+    const response = await apiFetch(`${BACKEND_URL}/api/users/recent-streams?limit=${limit}`);
 
     if (!response.ok) {
         console.error(`[RecentStreams] Failed to fetch (status ${response.status})`);
