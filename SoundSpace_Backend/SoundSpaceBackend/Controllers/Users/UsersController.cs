@@ -95,4 +95,18 @@ public class UsersController(
         var result = await _spotifyPlayerService.GetTopTracksAsync(spotifyId);
         return Ok(result);
     }
+
+    [HttpGet("recent-streams")]
+    public async Task<IActionResult> GetRecentStreams([FromQuery] int limit = 5)
+    {
+        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (spotifyId == null)
+        {
+            _logger.LogWarning("Spotify ID claim is missing in the token");
+            return Unauthorized();
+        }
+
+        var result = await _spotifyPlayerService.GetRecentStreamsAsync(spotifyId, limit);
+        return Ok(result);
+    }
 }
