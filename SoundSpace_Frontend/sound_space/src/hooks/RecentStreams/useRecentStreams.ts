@@ -18,18 +18,18 @@ export const useRecentStreams = (): UseRecentStreamsResult => {
         if (hasFetched.current) return;
         hasFetched.current = true;
 
-        const init = async () => {
+        const load = async () => {
             try {
                 const data = await fetchRecentStreams();
                 setStreams(data);
             } catch (err) {
-                console.error("[useRecentStreams] Error fetching recent streams:", err);
+                console.error("[useRecentStreams] Error fetching streams:", err);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        init();
+        load();
     }, []);
 
     return { streams, isLoading };

@@ -18,18 +18,18 @@ export const useTopArtists = (): UseTopArtistsResult => {
         if (hasFetched.current) return;
         hasFetched.current = true;
 
-        const init = async () => {
+        const load = async () => {
             try {
                 const data = await fetchTopArtists();
                 setArtists(data);
             } catch (err) {
-                console.error("[useTopArtists] Error fetching top artists:", err);
+                console.error("[useTopArtists] Error fetching artists:", err);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        init();
+        load();
     }, []);
 
     return { artists, isLoading };

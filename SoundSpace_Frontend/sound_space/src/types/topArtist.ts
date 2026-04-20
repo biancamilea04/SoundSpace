@@ -1,5 +1,5 @@
 export interface TopArtist {
     name: string;
-    imageUrl: string;
-    spotifyUrl: string;
+    imageUrl: string | null;
+    spotifyUrl: string | null;
 }

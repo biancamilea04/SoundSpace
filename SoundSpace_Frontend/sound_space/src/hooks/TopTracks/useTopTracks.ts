@@ -18,18 +18,18 @@ export const useTopTracks = (): UseTopTracksResult => {
         if (hasFetched.current) return;
         hasFetched.current = true;
 
-        const init = async () => {
+        const load = async () => {
             try {
                 const data = await fetchTopTracks();
                 setTracks(data);
             } catch (err) {
-                console.error("[useTopTracks] Error fetching top tracks:", err);
+                console.error("[useTopTracks] Error fetching tracks:", err);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        init();
+        load();
     }, []);
 
     return { tracks, isLoading };
