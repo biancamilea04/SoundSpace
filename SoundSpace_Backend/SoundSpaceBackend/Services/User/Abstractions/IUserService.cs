@@ -7,6 +7,7 @@ namespace SoundSpaceBackend.Services.User.Abstractions;
 public interface IUserService
 {
     public Task<GetUserDto> GetUserBySpotifyIdAsync(string spotifyId);
+    public Task<UserEntity> GetUserEntityBySpotifyIdAsync(string spotifyId);
     public Task<GetUserDto> GetUserByDisplayNameAsync(string displayName);
     public Task<UserEntity> CreateOrUpdateUserAsync(SpotifyAuthResponseDto spotifyProfileAuthResponse);
 }

@@ -2,25 +2,34 @@
 
 import { Headphones, Music, Send } from "lucide-react";
 import { useState } from "react";
+import { createPost } from "@/services/post/postService";
 import "./SharePost.css";
 
 interface SharePostProps {
-    onPost?: (text: string, song?: string) => void;
+    onPostCreated?: () => void;
 }
 
-export const SharePost = ({ onPost }: SharePostProps) => {
+export const SharePost = ({ onPostCreated }: SharePostProps) => {
     const [text, setText] = useState("");
-    const [attachedSong, setAttachedSong] = useState<string | null>(null);
+    const [spotifyUri, setSpotifyUri] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handlePost = () => {
-        if (!text.trim()) return;
-        onPost?.(text, attachedSong ?? undefined);
-        setText("");
-        setAttachedSong(null);
-    };
-
-    const handleAttachSong = () => {
-        setAttachedSong("Selected Song");
+    const handlePost = async () => {
+        if (!text.trim() || isSubmitting) return;
+        setIsSubmitting(true);
+        try {
+            await createPost({
+                content: text,
+                spotifyUri: spotifyUri.trim() || undefined,
+            });
+            setText("");
+            setSpotifyUri("");
+            onPostCreated?.();
+        } catch {
+            /* silent */
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -29,7 +38,6 @@ export const SharePost = ({ onPost }: SharePostProps) => {
                 Share Your Thoughts
             </h2>
             <div className="share-post__card">
-                {/* Input Area */}
                 <div className="share-post__input-row">
                     <div className="share-post__avatar">
                         <Headphones className="share-post__avatar-icon" />
@@ -44,38 +52,27 @@ export const SharePost = ({ onPost }: SharePostProps) => {
                     />
                 </div>
 
-                {/* Attached Song Chip */}
-                {attachedSong && (
-                    <div className="share-post__song-chip">
-                        <Music className="share-post__song-chip-icon" />
-                        <span className="share-post__song-chip-name">{attachedSong}</span>
-                        <button
-                            onClick={() => setAttachedSong(null)}
-                            className="share-post__song-chip-remove"
-                            aria-label="Remove attached song"
-                        >
-                            ✕
-                        </button>
+                <div className="share-post__input-row">
+                    <div className="share-post__avatar">
+                        <Music className="share-post__avatar-icon" />
                     </div>
-                )}
+                    <input
+                        type="text"
+                        value={spotifyUri}
+                        onChange={(e) => setSpotifyUri(e.target.value)}
+                        placeholder="Spotify URI (e.g. spotify:track:...)"
+                        className="share-post__input"
+                    />
+                </div>
 
-                {/* Actions */}
                 <div className="share-post__actions">
                     <button
-                        onClick={handleAttachSong}
-                        className="share-post__attach-btn"
-                    >
-                        <Music className="share-post__attach-icon" />
-                        Attach Song
-                    </button>
-
-                    <button
                         onClick={handlePost}
-                        disabled={!text.trim()}
+                        disabled={!text.trim() || isSubmitting}
                         className="share-post__post-btn"
                     >
                         <Send className="share-post__post-icon" />
-                        Post
+                        {isSubmitting ? "Posting..." : "Post"}
                     </button>
                 </div>
             </div>

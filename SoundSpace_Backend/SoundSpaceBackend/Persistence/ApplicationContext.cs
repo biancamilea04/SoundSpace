@@ -9,6 +9,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options) : 
 {
     public new DbSet<User> Users { get; set; }
     public DbSet<AppRefreshToken> AppRefreshTokens { get; set; }
+    public DbSet<Post> Posts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,6 +42,26 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options) : 
             entity.HasOne(t => t.User)
                 .WithMany(u => u.RefreshTokens)
                 .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Post>(entity =>
+        {
+            entity.HasKey(p => p.Id);
+
+            entity.Property(p => p.Content)
+                .IsRequired()
+                .HasMaxLength(2000);
+
+            entity.Property(p => p.SpotifyUri)
+                .HasMaxLength(500);
+
+            entity.Property(p => p.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.HasOne(p => p.User)
+                .WithMany(u => u.Posts)
+                .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

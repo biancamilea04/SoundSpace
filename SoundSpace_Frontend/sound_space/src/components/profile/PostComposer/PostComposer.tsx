@@ -2,20 +2,35 @@
 
 import { useState } from "react";
 import { Music, Send } from "lucide-react";
+import { createPost } from "@/services/post/postService";
 import "./PostComposer.css";
 
 interface PostComposerProps {
     avatarUrl?: string;
-    onPost?: (text: string, song?: string) => void;
+    onPostCreated?: () => void;
 }
 
-export const PostComposer = ({ avatarUrl, onPost }: PostComposerProps) => {
+export const PostComposer = ({ avatarUrl, onPostCreated }: PostComposerProps) => {
     const [text, setText] = useState("");
+    const [spotifyUri, setSpotifyUri] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handlePost = () => {
-        if (!text.trim()) return;
-        onPost?.(text);
-        setText("");
+    const handlePost = async () => {
+        if (!text.trim() || isSubmitting) return;
+        setIsSubmitting(true);
+        try {
+            await createPost({
+                content: text,
+                spotifyUri: spotifyUri.trim() || undefined,
+            });
+            setText("");
+            setSpotifyUri("");
+            onPostCreated?.();
+        } catch {
+            /* silent */
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -42,20 +57,29 @@ export const PostComposer = ({ avatarUrl, onPost }: PostComposerProps) => {
                 />
             </div>
 
-            <div className="post-composer__actions">
-                <button className="post-composer__attach-btn" type="button">
+            <div className="post-composer__input-row">
+                <div className="post-composer__avatar">
                     <Music size={16} />
-                    <span>Attach Track</span>
-                </button>
+                </div>
+                <input
+                    type="text"
+                    value={spotifyUri}
+                    onChange={(e) => setSpotifyUri(e.target.value)}
+                    placeholder="Spotify URI (e.g. spotify:track:...)"
+                    className="post-composer__input"
+                />
+            </div>
 
+            <div className="post-composer__actions">
+                <div />
                 <button
                     className="post-composer__post-btn"
                     type="button"
-                    disabled={!text.trim()}
+                    disabled={!text.trim() || isSubmitting}
                     onClick={handlePost}
                 >
                     <Send size={14} />
-                    <span>Post</span>
+                    <span>{isSubmitting ? "Posting..." : "Post"}</span>
                 </button>
             </div>
         </div>

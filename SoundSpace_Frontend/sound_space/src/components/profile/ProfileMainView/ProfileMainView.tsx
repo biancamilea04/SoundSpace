@@ -21,6 +21,7 @@ interface ProfileMainViewProps {
 export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
     const { user, isLoading, error } = useUserProfile(username);
     const [isOwnProfile, setIsOwnProfile] = useState(false);
+    const [feedKey, setFeedKey] = useState(0);
 
     useEffect(() => {
         if (!user) return;
@@ -76,11 +77,11 @@ export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
                     {isOwnProfile && (
                         <PostComposer
                             avatarUrl={user.profileImageUrl}
-                            onPost={(text) => console.log("Post:", text)}
+                            onPostCreated={() => setFeedKey((k) => k + 1)}
                         />
                     )}
 
-                    <ProfileFeed />
+                    <ProfileFeed spotifyId={user.spotifyId} refreshKey={feedKey} />
                 </>
             )}
         </div>

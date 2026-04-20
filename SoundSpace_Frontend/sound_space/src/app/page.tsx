@@ -4,93 +4,28 @@ import { Suspense } from "react";
 
 import MenuSidebar from "@/components/global/MenuSidebar/MenuSidebar";
 import SharePost from "@/components/global/SharePost/SharePost";
-import Post from "@/components/global/Post/Post";
+import FeedPost from "@/components/global/FeedPost/FeedPost";
 import './page.css';
 import FriendSidebar from "@/components/global/FriendSidebar/FriendSidebar";
 import Header from "@/components/global/Header/Header";
+import { useGlobalFeed } from "@/hooks/Post/useGlobalFeed";
 
 function PageContent() {
+	const { posts, isLoading, refresh } = useGlobalFeed();
+
 	return (
 		<div className="page-wrapper">
 			<Header title="Home" />
 			<div className="feed-container">
 				<MenuSidebar />
 				<div className="feed-main">
-					<SharePost />
+					<SharePost onPostCreated={refresh} />
 
-					{/* Mock Data Posts */}
-					<Post
-						user={{
-							name: "test",
-							avatarUrl: "https://eu.ui-avatars.com/api/?name=T+T&size=250",
-							isOnline: true
-						}}
-						timeAgo="[test]"
-						content="test"
-						stats={{ likes: 999, comments: 999 }}
-						song={{
-							title: "[Test]",
-							artist: "[Test]",
-							albumImageUrl: "/icons/SoundSpaceIcon.png",
-							durationFormatted: "[Test]"
-						}}
-					/>
+					{isLoading && <p style={{ color: "var(--text-muted)" }}>Loading feed...</p>}
 
-					<Post
-						user={{
-							name: "test",
-							avatarUrl: "https://eu.ui-avatars.com/api/?name=T+T&size=250",
-							isOnline: true
-						}}
-						timeAgo="[test]"
-						content="test"
-						stats={{ likes: 999, comments: 999 }}
-					/>
-
-					<Post
-						user={{
-							name: "test",
-							avatarUrl: "https://eu.ui-avatars.com/api/?name=T+T&size=250",
-							isOnline: true
-						}}
-						timeAgo="[test]"
-						content="test"
-						stats={{ likes: 999, comments: 999 }}
-						song={{
-							title: "[Test]",
-							artist: "[Test]",
-							albumImageUrl: "/icons/SoundSpaceIcon.png",
-							durationFormatted: "[Test]"
-						}}
-					/>
-
-					<Post
-						user={{
-							name: "test",
-							avatarUrl: "https://eu.ui-avatars.com/api/?name=T+T&size=250",
-							isOnline: true
-						}}
-						timeAgo="[test]"
-						content="test"
-						stats={{ likes: 999, comments: 999 }}
-					/>
-
-					<Post
-						user={{
-							name: "test",
-							avatarUrl: "https://eu.ui-avatars.com/api/?name=T+T&size=250",
-							isOnline: true
-						}}
-						timeAgo="[test]"
-						content="test"
-						stats={{ likes: 999, comments: 999 }}
-						song={{
-							title: "[Test]",
-							artist: "[Test]",
-							albumImageUrl: "/icons/SoundSpaceIcon.png",
-							durationFormatted: "[Test]"
-						}}
-					/>
+					{posts.map((post) => (
+						<FeedPost key={post.id} post={post} />
+					))}
 				</div>
 				<FriendSidebar />
 			</div>

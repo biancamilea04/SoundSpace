@@ -33,6 +33,15 @@ public class UserService(
         return Task.FromResult(dto);
     }
 
+    public Task<UserEntity> GetUserEntityBySpotifyIdAsync(string spotifyId)
+    {
+        var user = dbContext.Users.FirstOrDefault(u => u.SpotifyId == spotifyId);
+        if (user == null)
+            throw new Exception("User not found");
+
+        return Task.FromResult(user);
+    }
+
     public Task<GetUserDto> GetUserByDisplayNameAsync(string displayName)
     {
         logger.LogInformation("[User] Fetching profile for DisplayName={DisplayName}", displayName);
@@ -97,4 +106,4 @@ public class UserService(
         logger.LogInformation("[User] Saved user for SpotifyId={SpotifyId}", spotifyProfile.Id);
         return Task.FromResult(user);
     }
-}
+}
