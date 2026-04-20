@@ -14,42 +14,41 @@ public class SpotifyPlayerService(
     IMapper mapper,
     ILogger<SpotifyPlayerService> logger) : ISpotifyPlayerService
 {
-    private const string Barear = "Barear";
+    private const string Bearer = "Bearer";
     private const string CurrentlyPlayingUrl =
         "https://api.spotify.com/v1/me/player/currently-playing";
 
     private const string RecentlyPlayedUrl =
         "https://api.spotify.com/v1/me/player/recently-played?limit=1";
 
-    private const string TopArtistsUrl =
-        "https://api.spotify.com/v1/me/top/artists?limit=5";
+    private const string TopArtistsBaseUrl =
+        "https://api.spotify.com/v1/me/top/artists";
 
-    private const string TopTracksUrl =
-        "https://api.spotify.com/v1/me/top/tracks?limit=5";
+    private const string TopTracksBaseUrl =
+        "https://api.spotify.com/v1/me/top/tracks";
 
-    private const string RecentStreamsUrl =
-        "https://api.spotify.com/v1/me/player/recently-played?limit=5";
+    private const string RecentStreamsBaseUrl =
+        "https://api.spotify.com/v1/me/player/recently-played";
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true
     };
 
-    public async Task<List<TopArtistResponse>> GetTopArtistsAsync(string spotifyId)
+    public async Task<List<TopArtistResponse>> GetTopArtistsAsync(string spotifyId, int limit = 5)
     {
         var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
         if (accessToken == null)
         {
-            var message = $"No valid access token for SpotifyId={spotifyId}";
-            logger.LogWarning(message);
+            logger.LogWarning("[SpotifyPlayer] No valid access token for SpotifyId={SpotifyId}", spotifyId);
             return [];
         }
 
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue(Barear, accessToken);
+            new AuthenticationHeaderValue(Bearer, accessToken);
 
-        var response = await client.GetAsync(TopArtistsUrl);
+        var response = await client.GetAsync($"{TopArtistsBaseUrl}?limit={limit}");
 
         if (!response.IsSuccessStatusCode)
         {
@@ -76,7 +75,7 @@ public class SpotifyPlayerService(
         return result;
     }
 
-    public async Task<List<TopTrackResponse>> GetTopTracksAsync(string spotifyId)
+    public async Task<List<TopTrackResponse>> GetTopTracksAsync(string spotifyId, int limit = 5)
     {
         var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
         if (accessToken == null)
@@ -87,9 +86,9 @@ public class SpotifyPlayerService(
 
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue(Barear, accessToken);
+            new AuthenticationHeaderValue(Bearer, accessToken);
 
-        var response = await client.GetAsync(TopTracksUrl);
+        var response = await client.GetAsync($"{TopTracksBaseUrl}?limit={limit}");
 
         if (!response.IsSuccessStatusCode)
         {
@@ -118,7 +117,7 @@ public class SpotifyPlayerService(
        return result;
     }
 
-    public async Task<List<RecentStreamResponse>> GetRecentStreamsAsync(string spotifyId)
+    public async Task<List<RecentStreamResponse>> GetRecentStreamsAsync(string spotifyId, int limit = 5)
     {
         var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
         if (accessToken == null)
@@ -129,9 +128,9 @@ public class SpotifyPlayerService(
 
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue(Barear, accessToken);
+            new AuthenticationHeaderValue(Bearer, accessToken);
 
-        var response = await client.GetAsync(RecentStreamsUrl);
+        var response = await client.GetAsync($"{RecentStreamsBaseUrl}?limit={limit}");
 
         if (!response.IsSuccessStatusCode)
         {
@@ -173,7 +172,7 @@ public class SpotifyPlayerService(
 
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue(Barear, accessToken);
+            new AuthenticationHeaderValue(Bearer, accessToken);
 
         var response = await client.GetAsync(CurrentlyPlayingUrl);
 
@@ -206,7 +205,7 @@ public class SpotifyPlayerService(
     {
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue(Barear, accessToken);
+            new AuthenticationHeaderValue(Bearer, accessToken);
 
         var response = await client.GetAsync(RecentlyPlayedUrl);
         if (!response.IsSuccessStatusCode)
