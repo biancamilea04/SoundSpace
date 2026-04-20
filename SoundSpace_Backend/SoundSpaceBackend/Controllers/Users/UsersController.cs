@@ -9,7 +9,7 @@ using SoundSpaceBackend.Services.User.Abstractions;
 namespace SoundSpaceBackend.Controllers.Users;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/user")]
 [Authorize]
 public class UsersController(
     IUserService userService,
@@ -65,6 +65,34 @@ public class UsersController(
         if (result == null)
             return NoContent(); 
 
+        return Ok(result);
+    }
+
+    [HttpGet("top-artists")]
+    public async Task<IActionResult> GetTopArtists()
+    {
+        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (spotifyId == null)
+        {
+            _logger.LogWarning("Spotify ID claim is missing in the token");
+            return Unauthorized();
+        }
+
+        var result = await _spotifyPlayerService.GetTopArtistsAsync(spotifyId);
+        return Ok(result);
+    }
+
+    [HttpGet("top-tracks")]
+    public async Task<IActionResult> GetTopTracks()
+    {
+        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (spotifyId == null)
+        {
+            _logger.LogWarning("Spotify ID claim is missing in the token");
+            return Unauthorized();
+        }
+
+        var result = await _spotifyPlayerService.GetTopTracksAsync(spotifyId);
         return Ok(result);
     }
 }

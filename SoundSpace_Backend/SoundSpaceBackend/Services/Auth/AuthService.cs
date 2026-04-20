@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using SoundSpaceBackend.Controllers.Auth.Responses;
@@ -13,7 +13,6 @@ public class AuthService(
     ISpotifyTokenService spotifyTokenService,
     ILogger<AuthService> logger) : IAuthService
 {
-    // Read as a property so env is resolved after DotNetEnv.Load()
     private static string SpotifyApiBaseUrl =>
         Environment.GetEnvironmentVariable("SPOTIFY_API_BASE_URL") ?? "";
 
@@ -24,13 +23,14 @@ public class AuthService(
 
         const string scopes =
             "user-read-private user-read-email user-read-recently-played " +
-            "user-read-currently-playing user-read-playback-state";
+            "user-read-currently-playing user-read-playback-state user-top-read";
 
         var url = $"https://accounts.spotify.com/authorize" +
                   $"?response_type=code" +
                   $"&client_id={clientId}" +
                   $"&scope={Uri.EscapeDataString(scopes)}" +
-                  $"&redirect_uri={Uri.EscapeDataString(redirectUri!)}";
+                  $"&redirect_uri={Uri.EscapeDataString(redirectUri!)}" +
+                  $"&show_dialog=true";
 
         logger.LogInformation("[Auth] Generated Spotify login URL for clientId={ClientId}", clientId);
         return url;

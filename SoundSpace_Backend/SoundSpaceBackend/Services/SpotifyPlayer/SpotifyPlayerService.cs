@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
@@ -14,21 +14,156 @@ public class SpotifyPlayerService(
     IMapper mapper,
     ILogger<SpotifyPlayerService> logger) : ISpotifyPlayerService
 {
+    private const string Barear = "Barear";
     private const string CurrentlyPlayingUrl =
         "https://api.spotify.com/v1/me/player/currently-playing";
 
     private const string RecentlyPlayedUrl =
         "https://api.spotify.com/v1/me/player/recently-played?limit=1";
 
+    private const string TopArtistsUrl =
+        "https://api.spotify.com/v1/me/top/artists?limit=5";
+
+    private const string TopTracksUrl =
+        "https://api.spotify.com/v1/me/top/tracks?limit=5";
+
+    private const string RecentStreamsUrl =
+        "https://api.spotify.com/v1/me/player/recently-played?limit=5";
+
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true
     };
 
+    public async Task<List<TopArtistResponse>> GetTopArtistsAsync(string spotifyId)
+    {
+        var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
+        if (accessToken == null)
+        {
+            var message = $"No valid access token for SpotifyId={spotifyId}";
+            logger.LogWarning(message);
+            return [];
+        }
+
+        var client = httpClientFactory.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue(Barear, accessToken);
+
+        var response = await client.GetAsync(TopArtistsUrl);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync();
+            logger.LogError("[SpotifyPlayer] Top artists API error. Status={Status} Body={Body}",
+                response.StatusCode, body);
+            return [];
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+        var spotifyData = JsonSerializer.Deserialize<SpotifyTopArtistsDto>(json, JsonOptions);
+
+        if (spotifyData?.Items == null || spotifyData.Items.Count == 0)
+        {
+            return [];
+        }
+
+        var result = spotifyData.Items.Select(a => new TopArtistResponse(
+            a.Name,
+            a.Images?.FirstOrDefault()?.Url,
+            a.ExternalUrls?.Spotify
+        )).ToList();
+
+        return result;
+    }
+
+    public async Task<List<TopTrackResponse>> GetTopTracksAsync(string spotifyId)
+    {
+        var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
+        if (accessToken == null)
+        {
+            logger.LogWarning("[SpotifyPlayer] No valid access token for SpotifyId={SpotifyId}", spotifyId);
+            return [];
+        }
+
+        var client = httpClientFactory.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue(Barear, accessToken);
+
+        var response = await client.GetAsync(TopTracksUrl);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync();
+            logger.LogError("[SpotifyPlayer] Top tracks API error. Status={Status} Body={Body}",
+                response.StatusCode, body);
+            return [];
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+        var spotifyData = JsonSerializer.Deserialize<SpotifyTopTracksDto>(json, JsonOptions);
+
+        if (spotifyData?.Items == null || spotifyData.Items.Count == 0)
+        {
+            return [];
+        }
+
+        var result = spotifyData.Items.Select(t => new TopTrackResponse(
+            t.Name,
+            t.Artists.FirstOrDefault()?.Name ?? "Unknown Artist",
+            t.Artists.FirstOrDefault()?.ExternalUrls?.Spotify,
+            t.Album?.Images?.FirstOrDefault()?.Url,
+            t.ExternalUrls?.Spotify
+        )).ToList();
+
+       return result;
+    }
+
+    public async Task<List<RecentStreamResponse>> GetRecentStreamsAsync(string spotifyId)
+    {
+        var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
+        if (accessToken == null)
+        {
+            logger.LogWarning("[SpotifyPlayer] No valid access token for SpotifyId={SpotifyId}", spotifyId);
+            return [];
+        }
+
+        var client = httpClientFactory.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue(Barear, accessToken);
+
+        var response = await client.GetAsync(RecentStreamsUrl);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync();
+            logger.LogError("[SpotifyPlayer] Recent streams API error. Status={Status} Body={Body}",
+                response.StatusCode, body);
+            return [];
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+        var spotifyData = JsonSerializer.Deserialize<SpotifyRecentlyPlayedDto>(json, JsonOptions);
+
+        if (spotifyData?.Items == null || spotifyData.Items.Count == 0)
+        {
+           return [];
+        }
+
+        var result = spotifyData.Items
+            .Where(s => s.Track != null)
+            .Select(s => new RecentStreamResponse(
+                s.Track!.Name,
+                s.Track!.Artists.FirstOrDefault()?.Name ?? "Unknown Artist",
+                s.Track!.Artists.FirstOrDefault()?.ExternalUrls?.Spotify,
+                s.Track!.Album?.Images?.FirstOrDefault()?.Url,
+                s.Track!.ExternalUrls?.Spotify
+            )).ToList();
+        
+        return result;
+    }
+
     public async Task<NowPlayingResponse?> GetCurrentlyPlayingTrackAsync(string spotifyId)
     {
-        logger.LogInformation("[SpotifyPlayer] Fetching currently playing for SpotifyId={SpotifyId}", spotifyId);
-
         var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
         if (accessToken == null)
         {
@@ -38,13 +173,12 @@ public class SpotifyPlayerService(
 
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", accessToken);
+            new AuthenticationHeaderValue(Barear, accessToken);
 
         var response = await client.GetAsync(CurrentlyPlayingUrl);
 
         if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
         {
-            logger.LogInformation("[SpotifyPlayer] Nothing currently playing for SpotifyId={SpotifyId}. Falling back to recently played.", spotifyId);
             return await GetRecentlyPlayedTrackAsync(spotifyId, accessToken);
         }
 
@@ -61,14 +195,10 @@ public class SpotifyPlayerService(
 
         if (spotifyData?.Item == null)
         {
-            logger.LogInformation("[SpotifyPlayer] Response had no track item for SpotifyId={SpotifyId}. Falling back to recently played.", spotifyId);
             return await GetRecentlyPlayedTrackAsync(spotifyId, accessToken);
         }
 
         var result = mapper.Map<NowPlayingResponse>(spotifyData);
-        logger.LogInformation("[SpotifyPlayer] Returning track '{Track}' for SpotifyId={SpotifyId}",
-            result.SongTitle, spotifyId);
-
         return result;
     }
 
@@ -76,7 +206,7 @@ public class SpotifyPlayerService(
     {
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", accessToken);
+            new AuthenticationHeaderValue(Barear, accessToken);
 
         var response = await client.GetAsync(RecentlyPlayedUrl);
         if (!response.IsSuccessStatusCode)
@@ -98,9 +228,6 @@ public class SpotifyPlayerService(
         }
 
         var result = mapper.Map<NowPlayingResponse>(latestTrack);
-        logger.LogInformation("[SpotifyPlayer] Returning recently played track '{Track}' for SpotifyId={SpotifyId}",
-            result.SongTitle, spotifyId);
-
         return result;
     }
 }

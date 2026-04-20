@@ -10,7 +10,7 @@ using SoundSpaceBackend.Services.User.Abstractions;
 namespace SoundSpaceBackend.Controllers.Auth;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthController(
     IAuthService authService,
     IUserService userService,
