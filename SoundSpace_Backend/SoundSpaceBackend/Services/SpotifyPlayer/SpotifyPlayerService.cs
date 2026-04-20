@@ -75,6 +75,48 @@ public class SpotifyPlayerService(
         return result;
     }
 
+    public async Task<List<string>> GetTopGenresAsync(string spotifyId, int maxGenres = 10)
+    {
+        var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
+        if (accessToken == null)
+        {
+            logger.LogWarning("[SpotifyPlayer] No valid access token for SpotifyId={SpotifyId}", spotifyId);
+            return [];
+        }
+
+        var client = httpClientFactory.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue(Bearer, accessToken);
+
+        var response = await client.GetAsync($"{TopArtistsBaseUrl}?limit=50&time_range=medium_term");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync();
+            logger.LogError("[SpotifyPlayer] Top artists (genres) API error. Status={Status} Body={Body}",
+                response.StatusCode, body);
+            return [];
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+        var spotifyData = JsonSerializer.Deserialize<SpotifyTopArtistsDto>(json, JsonOptions);
+
+        if (spotifyData?.Items == null || spotifyData.Items.Count == 0)
+        {
+            return [];
+        }
+
+        var topGenres = spotifyData.Items
+            .SelectMany(a => a.Genres)
+            .GroupBy(g => g)
+            .OrderByDescending(g => g.Count())
+            .Take(maxGenres)
+            .Select(g => g.Key)
+            .ToList();
+
+        return topGenres;
+    }
+
     public async Task<List<TopTrackResponse>> GetTopTracksAsync(string spotifyId, int limit = 5)
     {
         var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);

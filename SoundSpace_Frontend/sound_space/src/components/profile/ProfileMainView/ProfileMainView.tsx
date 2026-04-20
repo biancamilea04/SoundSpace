@@ -5,14 +5,10 @@ import { GenreTags } from "@/components/profile/GenreTags/GenreTags";
 import { PostComposer } from "@/components/profile/PostComposer/PostComposer";
 import { ProfileFeed } from "@/components/profile/ProfileFeed/ProfileFeed";
 import { useUserProfile } from "@/hooks/UserProfile/useUserProfile";
+import { useTopGenres } from "@/hooks/TopGenres/useTopGenres";
 import { fetchUserProfile } from "@/services/user/userService";
 import { useEffect, useState } from "react";
 import "./ProfileMainView.css";
-
-const GENRE_TAGS = [
-    "Synthwave", "Indie Rock", "Techno", "Alternative",
-    "Hip-Hop", "Electronic", "R&B", "Pop",
-];
 
 interface ProfileMainViewProps {
     username?: string;
@@ -20,6 +16,7 @@ interface ProfileMainViewProps {
 
 export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
     const { user, isLoading, error } = useUserProfile(username);
+    const { genres, isLoading: genresLoading } = useTopGenres();
     const [isOwnProfile, setIsOwnProfile] = useState(false);
 
     useEffect(() => {
@@ -71,7 +68,7 @@ export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
                         playlists={0}
                     />
 
-                    <GenreTags tags={GENRE_TAGS} />
+                    <GenreTags tags={genres} isLoading={genresLoading} />
 
                     {isOwnProfile && (
                         <PostComposer

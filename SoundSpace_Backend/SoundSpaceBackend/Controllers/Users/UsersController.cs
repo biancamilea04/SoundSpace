@@ -109,4 +109,18 @@ public class UsersController(
         var result = await _spotifyPlayerService.GetRecentStreamsAsync(spotifyId, limit);
         return Ok(result);
     }
+
+    [HttpGet("top-genres")]
+    public async Task<IActionResult> GetTopGenres([FromQuery] int maxGenres = 10)
+    {
+        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (spotifyId == null)
+        {
+            _logger.LogWarning("Spotify ID claim is missing in the token");
+            return Unauthorized();
+        }
+
+        var result = await _spotifyPlayerService.GetTopGenresAsync(spotifyId, maxGenres);
+        return Ok(result);
+    }
 }
