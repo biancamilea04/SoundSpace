@@ -1,39 +1,70 @@
 "use client";
 
-import "./RecentStreams.css";
 import Image from "next/image";
-
-interface Stream {
-    title: string;
-    artist: string;
-    albumArtUrl: string;
-    timeAgo: string;
-}
+import { RecentStream } from "@/types/recentStream";
+import "./RecentStreams.css";
 
 interface RecentStreamsProps {
-    streams: Stream[];
+    streams: RecentStream[];
+    isLoading?: boolean;
 }
 
-export const RecentStreams = ({streams}: RecentStreamsProps) => {
+export const RecentStreams = ({ streams, isLoading }: RecentStreamsProps) => {
+    if (isLoading) {
+        return (
+            <div className="recent-streams">
+                <h3 className="recent-streams__title">Recent Streams</h3>
+                <span className="recent-streams__loading">Loading...</span>
+            </div>
+        );
+    }
+
+    if (streams.length === 0) {
+        return (
+            <div className="recent-streams">
+                <h3 className="recent-streams__title">Recent Streams</h3>
+                <span className="recent-streams__loading">No recent streams found. You may need to log out and log in again to grant permissions.</span>
+            </div>
+        );
+    }
+
     return (
         <div className="recent-streams">
             <h3 className="recent-streams__title">Recent Streams</h3>
             <div className="recent-streams__list">
-                {streams.map((stream, index) => (
-                    <div key={index} className="recent-streams__item">
-                        <Image
-                            src={stream.albumArtUrl}
-                            alt={`${stream.title} album art`}
-                            width={40}
-                            height={40}
-                            className="top-streams__album-art"
-                        />
-                        <div className="top-streams__info">
-                            <span className="recent-streams__track">{stream.title}</span>
-                            <span className="top-streams__artist">{stream.artist}</span>
+                {streams.map((stream, idx) => (
+                    <div key={`${stream.name}-${idx}`} className="recent-streams__item">
+                        {stream.imageUrl ? (
+                            <Image
+                                src={stream.imageUrl}
+                                alt={`${stream.name} album art`}
+                                width={40}
+                                height={40}
+                                className="recent-streams__album-art"
+                            />
+                        ) : (
+                            <div className="recent-streams__album-art recent-streams__album-art--fallback">
+                                {stream.name.charAt(0)}
+                            </div>
+                        )}
+                        <div className="recent-streams__info">
+                            <a
+                                href={stream.spotifyUrl || "#"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="recent-streams__track-name-link"
+                            >
+                                {stream.name}
+                            </a>
+                            <a
+                                href={stream.artistUrl || "#"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="recent-streams__artist-link"
+                            >
+                                {stream.artistName}
+                            </a>
                         </div>
-                        <span className="recent-streams__time">{stream.timeAgo}</span>
-
                     </div>
                 ))}
             </div>
@@ -42,3 +73,4 @@ export const RecentStreams = ({streams}: RecentStreamsProps) => {
 };
 
 export default RecentStreams;
+

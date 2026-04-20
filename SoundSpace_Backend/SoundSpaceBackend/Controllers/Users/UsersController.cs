@@ -1,4 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
+
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using SoundSpaceBackend.Services.User.Abstractions;
 namespace SoundSpaceBackend.Controllers.Users;
 
 [ApiController]
-[Route("api/user")]
+[Route("api/users")]
 [Authorize]
 public class UsersController(
     IUserService userService,

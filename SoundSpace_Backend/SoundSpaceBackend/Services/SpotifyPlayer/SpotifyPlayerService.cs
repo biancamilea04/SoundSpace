@@ -14,7 +14,7 @@ public class SpotifyPlayerService(
     IMapper mapper,
     ILogger<SpotifyPlayerService> logger) : ISpotifyPlayerService
 {
-    private const string Barear = "Barear";
+    private const string Bearer = "Bearer";
     private const string CurrentlyPlayingUrl =
         "https://api.spotify.com/v1/me/player/currently-playing";
 
@@ -47,7 +47,7 @@ public class SpotifyPlayerService(
 
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue(Barear, accessToken);
+            new AuthenticationHeaderValue(Bearer, accessToken);
 
         var response = await client.GetAsync(TopArtistsUrl);
 
@@ -87,7 +87,7 @@ public class SpotifyPlayerService(
 
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue(Barear, accessToken);
+            new AuthenticationHeaderValue(Bearer, accessToken);
 
         var response = await client.GetAsync(TopTracksUrl);
 
@@ -129,7 +129,7 @@ public class SpotifyPlayerService(
 
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue(Barear, accessToken);
+            new AuthenticationHeaderValue(Bearer, accessToken);
 
         var response = await client.GetAsync(RecentStreamsUrl);
 
@@ -173,7 +173,7 @@ public class SpotifyPlayerService(
 
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue(Barear, accessToken);
+            new AuthenticationHeaderValue(Bearer, accessToken);
 
         var response = await client.GetAsync(CurrentlyPlayingUrl);
 
@@ -206,7 +206,7 @@ public class SpotifyPlayerService(
     {
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue(Barear, accessToken);
+            new AuthenticationHeaderValue(Bearer, accessToken);
 
         var response = await client.GetAsync(RecentlyPlayedUrl);
         if (!response.IsSuccessStatusCode)
