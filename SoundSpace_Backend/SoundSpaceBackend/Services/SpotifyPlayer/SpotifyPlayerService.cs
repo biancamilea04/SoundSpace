@@ -88,33 +88,39 @@ public class SpotifyPlayerService(
         client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue(Bearer, accessToken);
 
-        var response = await client.GetAsync($"{TopArtistsBaseUrl}?limit=50&time_range=medium_term");
+        string[] timeRanges = ["medium_term", "short_term", "long_term"];
 
-        if (!response.IsSuccessStatusCode)
+        foreach (var timeRange in timeRanges)
         {
-            var body = await response.Content.ReadAsStringAsync();
-            logger.LogError("[SpotifyPlayer] Top artists (genres) API error. Status={Status} Body={Body}",
-                response.StatusCode, body);
-            return [];
+            var response = await client.GetAsync($"{TopArtistsBaseUrl}?limit=50&time_range={timeRange}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                logger.LogError("[SpotifyPlayer] Top artists (genres) API error for time_range={TimeRange}. Status={Status} Body={Body}",
+                    timeRange, response.StatusCode, body);
+                continue;
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+            var spotifyData = JsonSerializer.Deserialize<SpotifyTopArtistsDto>(json, JsonOptions);
+
+            if (spotifyData?.Items == null || spotifyData.Items.Count == 0)
+                continue;
+
+            var topGenres = spotifyData.Items
+                .SelectMany(a => a.Genres)
+                .GroupBy(g => g)
+                .OrderByDescending(g => g.Count())
+                .Take(maxGenres)
+                .Select(g => g.Key)
+                .ToList();
+
+            if (topGenres.Count > 0)
+                return topGenres;
         }
 
-        var json = await response.Content.ReadAsStringAsync();
-        var spotifyData = JsonSerializer.Deserialize<SpotifyTopArtistsDto>(json, JsonOptions);
-
-        if (spotifyData?.Items == null || spotifyData.Items.Count == 0)
-        {
-            return [];
-        }
-
-        var topGenres = spotifyData.Items
-            .SelectMany(a => a.Genres)
-            .GroupBy(g => g)
-            .OrderByDescending(g => g.Count())
-            .Take(maxGenres)
-            .Select(g => g.Key)
-            .ToList();
-
-        return topGenres;
+        return [];
     }
 
     public async Task<List<TopTrackResponse>> GetTopTracksAsync(string spotifyId, int limit = 5)
