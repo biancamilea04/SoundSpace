@@ -178,7 +178,7 @@ const ModalContent = ({ onSelect, onClose }: MediaSelectionModalProps) => {
                 ref={dialogRef}
             >
                 <div className="media-modal__header">
-                    <h2 className="media-modal__title">Attach Media</h2>
+                    <h2 className="media-modal__title">Add Media</h2>
                     <button
                         type="button"
                         className="media-modal__close-btn"

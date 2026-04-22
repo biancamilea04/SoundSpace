@@ -12,7 +12,7 @@ import { useGlobalFeed } from "@/hooks/Post/useGlobalFeed";
 import { useUserProfile } from "@/hooks/UserProfile/useUserProfile";
 
 function PageContent() {
-	const { posts, isLoading, refresh } = useGlobalFeed();
+	const { posts, isLoading, refresh, removePost } = useGlobalFeed();
 	const { user } = useUserProfile();
 
 	return (
@@ -30,7 +30,7 @@ function PageContent() {
 					{isLoading && posts.length === 0 && <p style={{ color: "var(--text-muted)", marginBottom: "16px" }}>Loading feed...</p>}
 
 					{posts.map((post) => (
-						<FeedPost key={post.id} post={post} />
+						<FeedPost key={post.id} post={post} onPostUpdated={refresh} onPostDeleted={removePost} />
 					))}
 				</div>
 				<FriendSidebar />

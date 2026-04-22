@@ -18,6 +18,9 @@ export interface PostProps {
     song?: SongProps;
     spotifyUri?: string;
     stats: PostStats;
+    isOwner?: boolean;
+    onEditPost?: () => void;
+    onDeletePost?: () => void;
 }
 
 export interface SelectedPostPayload {

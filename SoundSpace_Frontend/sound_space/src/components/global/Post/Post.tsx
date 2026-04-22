@@ -6,7 +6,7 @@ import PostFooter from './PostFooter/PostFooter';
 import type { PostProps } from './Post.types';
 import './Post.css';
 
-export const Post = ({ user, timeAgo, content, song, spotifyUri, stats }: PostProps) => {
+export const Post = ({ user, timeAgo, content, song, spotifyUri, stats, isOwner, onEditPost, onDeletePost }: PostProps) => {
     const postKey = `${user.name}|${timeAgo}|${content}`;
 
     const {
@@ -34,6 +34,9 @@ export const Post = ({ user, timeAgo, content, song, spotifyUri, stats }: PostPr
                 optionsMenuRef={optionsMenuRef}
                 onToggleOptionsMenu={toggleOptionsMenu}
                 onReportPost={handleReportPost}
+                isOwner={isOwner}
+                onEditPost={onEditPost}
+                onDeletePost={onDeletePost}
             />
             <PostContent content={content} song={song} spotifyUri={spotifyUri} />
             <PostFooter
