@@ -3,3 +3,7 @@
     flex-direction: column;
     gap: 16px;
 }
+
+.profile-feed__status {
+    color: var(--text-muted);
+}

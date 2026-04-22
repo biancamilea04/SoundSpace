@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import FeedPost from "@/components/global/FeedPost/FeedPost";
 import { useProfileFeed } from "@/hooks/Post/useProfileFeed";
 import "./ProfileFeed.css";
@@ -10,14 +11,23 @@ interface ProfileFeedProps {
 }
 
 export const ProfileFeed = ({ spotifyId, refreshKey }: ProfileFeedProps) => {
-    const { posts, isLoading } = useProfileFeed(spotifyId);
+    const { posts, isLoading, refresh } = useProfileFeed(spotifyId);
 
-    if (isLoading) {
-        return <p style={{ color: "var(--text-muted)" }}>Loading posts...</p>;
+    const previousKey = useRef(refreshKey);
+
+    useEffect(() => {
+        if (refreshKey !== undefined && refreshKey !== previousKey.current) {
+            previousKey.current = refreshKey;
+            refresh();
+        }
+    }, [refreshKey, refresh]);
+
+    if (isLoading && posts.length === 0) {
+        return <p className="profile-feed__status">Loading posts...</p>;
     }
 
     if (posts.length === 0) {
-        return <p style={{ color: "var(--text-muted)" }}>No posts yet.</p>;
+        return <p className="profile-feed__status">No posts yet.</p>;
     }
 
     return (

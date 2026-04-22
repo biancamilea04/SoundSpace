@@ -6,7 +6,7 @@ import {logoutUser} from "@/services/auth/authService";
 
 interface HeaderProfileMenuProps {
     userName: string;
-    currentSong: string;
+    currentSong?: string;
     avatarSrc: string;
     profileHref?: string;
     settingsHref?: string;
@@ -14,7 +14,6 @@ interface HeaderProfileMenuProps {
 
 const ProfileMenu = ({
     userName,
-    currentSong,
     avatarSrc,
     profileHref = '/profile',
     settingsHref = '/settings',
@@ -72,7 +71,6 @@ const ProfileMenu = ({
                 </div>
                 <div className="profile-info">
                     <span className="profile-name">{userName}</span>
-                    <span className="profile-song">{currentSong}</span>
                 </div>
             </button>
 
@@ -84,7 +82,7 @@ const ProfileMenu = ({
                         role="menuitem"
                         onClick={handleCloseProfileMenu}
                     >
-                        My Profile
+                        Profile
                     </Link>
                     <Link
                         href={settingsHref}
