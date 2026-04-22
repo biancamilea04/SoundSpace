@@ -81,22 +81,6 @@ export const ProfileHeader = ({
                         <strong className="profile-header__stat-value">{playlists}</strong> playlists
                     </span>
                 </div>
-
-                {/* Email & Country */}
-                <div className="profile-header__details">
-                    {email && (
-                        <span className="profile-header__detail">
-                            <Mail className="profile-header__detail-icon" />
-                            <span className="profile-header__detail-value">{email}</span>
-                        </span>
-                    )}
-                    {country && (
-                        <span className="profile-header__detail">
-                            <Globe className="profile-header__detail-icon" />
-                            <span className="profile-header__detail-value">{country}</span>
-                        </span>
-                    )}
-                </div>
             </div>
         </div>
     );

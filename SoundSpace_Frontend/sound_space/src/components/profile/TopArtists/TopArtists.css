@@ -32,7 +32,7 @@
 }
 
 .top-artists__item:hover {
-    text-decoration: underline;
+    background-color: var(--bg-hover, rgba(255, 255, 255, 0.05));
 }
 
 .top-artists__avatar {
@@ -43,8 +43,31 @@
     flex-shrink: 0;
 }
 
-.top-artists__name {
+.top-artists__avatar--fallback {
+    background-color: var(--border-subtle);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+.top-artists__link {
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.top-artists__link:hover {
+    text-decoration: underline;
+    color: var(--accent, #1db954);
+}
+
+.top-artists__loading {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
 }

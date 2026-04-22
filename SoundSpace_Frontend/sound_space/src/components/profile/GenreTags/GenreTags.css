@@ -1,8 +1,15 @@
 .genre-tags {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
     gap: 8px;
     padding: 0 4px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.genre-tags::-webkit-scrollbar {
+    display: none;
 }
 
 .genre-tags__pill {

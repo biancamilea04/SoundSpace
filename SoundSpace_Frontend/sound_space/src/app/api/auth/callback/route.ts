@@ -8,7 +8,7 @@ const resolveProfileRedirectPath = async (token: string): Promise<string> => {
     }
 
     try {
-        const response = await fetch(`${BACKEND_URL}/api/Users/profile`, {
+        const response = await fetch(`${BACKEND_URL}/api/users/profile`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
