@@ -14,7 +14,7 @@ const mapUserProfile = (data: Record<string, unknown>): UserProfile => ({
 });
 
 export const fetchUserProfile = async (): Promise<UserProfile> => {
-    const response = await apiFetch(`${BACKEND_URL}/api/Users/profile`);
+    const response = await apiFetch(`${BACKEND_URL}/api/users/profile`);
 
     if (response.status === 401) {
         throw new Error('UNAUTHORIZED');
@@ -30,7 +30,7 @@ export const fetchUserProfile = async (): Promise<UserProfile> => {
 
 export const fetchUserProfileByUsername = async (username: string): Promise<UserProfile> => {
     const response = await apiFetch(
-        `${BACKEND_URL}/api/Users/profile/${encodeURIComponent(username)}`
+        `${BACKEND_URL}/api/users/profile/${encodeURIComponent(username)}`
     );
 
     if (response.status === 401) {

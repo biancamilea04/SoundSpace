@@ -32,6 +32,7 @@
       <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/types/post.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/types/post.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/types/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/types/user.ts" afterDir="false" />
     </list>
+    <list default="true" id="c4ccd9b1-444b-485c-ad59-e2010d6d501d" name="Changes" comment="add the feed page" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,8 +48,8 @@
   </component>
   <component name="CopilotUserSelectedModel">
     <selectedModels>
-      <entry key="chat-panel" value="GPT-5.3-Codex" />
-      <entry key="agent-panel" value="GPT-5.3-Codex" />
+      <entry key="chat-panel" value="GPT-5.2" />
+      <entry key="agent-panel" value="GPT-5.2" />
     </selectedModels>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -104,8 +105,25 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Bianca Milea\\Desktop\\uni\\Licenta\\Bachelor_Thesis\\SoundSpace_Frontend\\sound_space\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ReactCreateComponentLastSelected": "classBasedComponent",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "integrat__profile__spotify",
+    "last_opened_file_path": "C:/Users/Bianca Milea/Desktop/uni/Licenta/Bachelor_Thesis/SoundSpace_Frontend/sound_space/public/icons",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "C:\\Users\\Bianca Milea\\Desktop\\uni\\Licenta\\Bachelor_Thesis\\SoundSpace_Frontend\\sound_space\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -163,6 +181,9 @@
       <workItem from="1775480294154" duration="4192000" />
       <workItem from="1775738608164" duration="1281000" />
       <workItem from="1776769248971" duration="13118000" />
+      <workItem from="1776006184310" duration="1053000" />
+      <workItem from="1776691452257" duration="2304000" />
+      <workItem from="1776694442867" duration="4127000" />
     </task>
     <task id="LOCAL-00001" summary="modify the frontend">
       <option name="closed" value="true" />
@@ -218,6 +239,9 @@
           <line>21</line>
           <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="2" />
+          <url>file://$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/RecentStreams/RecentStreams.tsx</url>
+          <line>43</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

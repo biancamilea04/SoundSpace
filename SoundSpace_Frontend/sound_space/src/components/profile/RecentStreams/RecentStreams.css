@@ -32,15 +32,20 @@
 }
 
 .recent-streams__track {
+    display: none;
+}
+
+.recent-streams__track-name-link {
     font-size: 0.8125rem;
     font-weight: 600;
     color: var(--text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-decoration: none;
 }
 
-.top-streams__album-art {
+.recent-streams__album-art {
     width: 40px;
     height: 40px;
     border-radius: 4px;
@@ -48,30 +53,41 @@
     flex-shrink: 0;
 }
 
-.top-streams__info {
+.recent-streams__info {
     display: flex;
     flex-direction: column;
     gap: 2px;
     min-width: 0;
 }
 
-.top-streams__artist {
+.recent-streams__artist-link {
     font-size: 0.75rem;
     color: var(--text-muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-decoration: none;
 }
 
-.top-streams__artist:hover,
-.recent-streams__track:hover {
+.recent-streams__artist-link:hover,
+.recent-streams__track-name-link:hover {
     text-decoration: underline;
 }
 
-.recent-streams__time {
-    font-size: 0.75rem;
+.recent-streams__album-art--fallback {
+    background-color: var(--border-subtle);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+.recent-streams__loading {
+    font-size: 0.875rem;
     color: var(--text-muted);
-    white-space: nowrap;
-    flex-shrink: 0;
-    margin-left: 12px;
+    text-align: center;
+    padding: 12px 0;
 }
