@@ -1,6 +1,8 @@
+"use client";
+
 import { PostData } from "@/types/post";
 import Post from "@/components/global/Post/Post";
-import SpotifyEmbed from "@/components/global/SpotifyEmbed/SpotifyEmbed";
+import "./FeedPost.css";
 
 const timeAgo = (dateStr: string): string => {
     const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
@@ -21,7 +23,7 @@ export const FeedPost = ({ post }: FeedPostProps) => {
     const avatarFallback = `https://eu.ui-avatars.com/api/?name=${encodeURIComponent(post.displayName)}&size=250&background=1ed760&color=000`;
 
     return (
-        <div>
+        <div className="feed-post">
             <Post
                 user={{
                     name: post.displayName,
@@ -30,9 +32,9 @@ export const FeedPost = ({ post }: FeedPostProps) => {
                 }}
                 timeAgo={timeAgo(post.createdAt)}
                 content={post.content}
+                spotifyUri={post.spotifyUri ?? undefined}
                 stats={{ likes: 0, comments: 0 }}
             />
-            {post.spotifyUri && <SpotifyEmbed spotifyUri={post.spotifyUri} />}
         </div>
     );
 };

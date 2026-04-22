@@ -1,0 +1,11 @@
+.feed-post {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+}
+
+.feed-post__media {
+    margin-top: -8px;
+    padding: 0 16px 16px;
+}
