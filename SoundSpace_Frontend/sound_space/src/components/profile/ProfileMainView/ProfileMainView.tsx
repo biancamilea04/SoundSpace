@@ -18,6 +18,7 @@ export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
     const { user, isLoading, error } = useUserProfile(username);
     const { genres, isLoading: genresLoading } = useTopGenres();
     const [isOwnProfile, setIsOwnProfile] = useState(false);
+    const [feedKey, setFeedKey] = useState(0);
 
     useEffect(() => {
         if (!user) return;
@@ -73,11 +74,12 @@ export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
                     {isOwnProfile && (
                         <PostComposer
                             avatarUrl={user.profileImageUrl}
-                            onPost={(text) => console.log("Post:", text)}
+                            username={user.displayName}
+                            onPostCreated={() => setFeedKey((k) => k + 1)}
                         />
                     )}
 
-                    <ProfileFeed />
+                    <ProfileFeed spotifyId={user.spotifyId} refreshKey={feedKey} />
                 </>
             )}
         </div>

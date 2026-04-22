@@ -16,7 +16,11 @@ export interface PostProps {
     timeAgo: string;
     content: string;
     song?: SongProps;
+    spotifyUri?: string;
     stats: PostStats;
+    isOwner?: boolean;
+    onEditPost?: () => void;
+    onDeletePost?: () => void;
 }
 
 export interface SelectedPostPayload {
@@ -25,5 +29,6 @@ export interface SelectedPostPayload {
     timeAgo: string;
     content: string;
     song?: SongProps;
+    spotifyUri?: string;
     stats: PostStats;
 }

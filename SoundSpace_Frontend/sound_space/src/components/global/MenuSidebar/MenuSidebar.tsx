@@ -26,7 +26,6 @@ const MenuSidebar = () => {
 
     const userName = user?.displayName || 'Profile';
     const avatarSrc = user?.profileImageUrl || '/icons/SoundSpaceIcon.png';
-    const currentSong = user?.email || 'SoundSpace';
     const profileHref = user?.displayName
         ? `/profile/${encodeURIComponent(user.displayName)}`
         : '/profile';
@@ -63,7 +62,6 @@ const MenuSidebar = () => {
             <div className="sidebar-footer">
                 <ProfileMenu
                     userName={userName}
-                    currentSong={currentSong}
                     avatarSrc={avatarSrc}
                     profileHref={profileHref}
                 />

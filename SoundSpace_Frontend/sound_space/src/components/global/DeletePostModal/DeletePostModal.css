@@ -1,0 +1,82 @@
+.delete-post-modal__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 1100;
+}
+
+.delete-post-modal__dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(92vw, 420px);
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    z-index: 1101;
+    padding: 16px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.delete-post-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.delete-post-modal__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.delete-post-modal__close {
+    background: transparent;
+    color: var(--text-muted);
+    border: 0;
+    border-radius: 8px;
+    padding: 4px;
+    display: inline-flex;
+    cursor: pointer;
+}
+
+.delete-post-modal__text {
+    margin: 14px 0 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.delete-post-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.delete-post-modal__button {
+    border: 0;
+    border-radius: 10px;
+    padding: 9px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.delete-post-modal__button:disabled,
+.delete-post-modal__close:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.delete-post-modal__button--secondary {
+    background: var(--bg-highlight);
+    color: var(--text-primary);
+}
+
+.delete-post-modal__button--danger {
+    background: var(--destructive);
+    color: #fff;
+}
+

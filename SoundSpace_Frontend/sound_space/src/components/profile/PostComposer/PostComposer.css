@@ -1,17 +1,22 @@
 .post-composer {
-    background-color: var(--bg-surface);
+    background-color: var(--bg-surface); 
     border-radius: 12px;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    border: 1px solid var(--border-subtle);
+    width: 100%;
+    max-width: 680px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
 }
 
-.post-composer__input-row {
+.post-composer__header {
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-bottom: 16px;
 }
 
 .post-composer__avatar {
@@ -35,48 +40,84 @@
     background-color: var(--bg-highlight);
 }
 
+.post-composer__username {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.post-composer__username:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.post-composer__content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
 .post-composer__input {
-    flex: 1;
-    background: transparent;
-    border: none;
+    width: 100%;
+    background-color: var(--bg-elevated);
+    border: 1px solid transparent;
     outline: none;
     color: var(--text-primary);
     font-size: 0.9375rem;
-    padding: 10px 0;
+    padding: 16px;
+    border-radius: 12px;
     font-family: inherit;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .post-composer__input::placeholder {
     color: var(--text-muted);
 }
 
+.post-composer__input:hover,
+.post-composer__input:focus {
+    background-color: var(--bg-highlight);
+}
+
+
 .post-composer__actions {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-top: 4px;
-    border-top: 1px solid var(--border-subtle);
 }
 
 .post-composer__attach-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     background: transparent;
     border: none;
     color: var(--text-muted);
-    font-size: 0.8125rem;
-    font-weight: 500;
+    font-size: 0.875rem;
+    font-weight: 600;
     cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 8px;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    padding: 8px 0;
+    transition: color 0.2s ease;
     font-family: inherit;
+}
+
+.post-composer__attach-icon {
+    color: var(--primary-green); 
 }
 
 .post-composer__attach-btn:hover {
     color: var(--text-primary);
-    background-color: var(--bg-elevated);
+}
+
+.post-composer__attach-btn--active {
+    color: var(--text-primary);
+}
+
+.post-composer__attach-btn--active .post-composer__attach-icon {
+    color: var(--primary-green);
 }
 
 .post-composer__post-btn {
@@ -84,11 +125,11 @@
     align-items: center;
     gap: 6px;
     background-color: var(--primary-green);
-    color: #000000;
+    color: var(--black); 
     border: none;
     border-radius: 9999px;
-    padding: 8px 20px;
-    font-size: 0.8125rem;
+    padding: 10px 24px;
+    font-size: 0.9375rem;
     font-weight: 700;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.15s ease, opacity 0.2s ease;
@@ -103,4 +144,5 @@
 .post-composer__post-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
 }

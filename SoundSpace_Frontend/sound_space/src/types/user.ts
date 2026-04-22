@@ -1,4 +1,5 @@
 export interface UserProfile {
+    id: string;
     spotifyId: string;
     displayName: string;
     profileImageUrl: string;

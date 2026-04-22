@@ -9,6 +9,8 @@ using SoundSpaceBackend.Services.Auth;
 using SoundSpaceBackend.Services.Auth.Abstractions;
 using SoundSpaceBackend.Services.JWT;
 using SoundSpaceBackend.Services.JWT.Abstractions;
+using SoundSpaceBackend.Services.Post;
+using SoundSpaceBackend.Services.Post.Abstractions;
 using SoundSpaceBackend.Services.SpotifyPlayer;
 using SoundSpaceBackend.Services.SpotifyPlayer.Abstractions;
 using SoundSpaceBackend.Services.SpotifyToken;
@@ -43,6 +45,7 @@ builder.Services.AddScoped<ISpotifyTokenService, SpotifyTokenService>();
 builder.Services.AddScoped<ISpotifyPlayerService, SpotifyPlayerService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddSwaggerGen(c =>

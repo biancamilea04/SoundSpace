@@ -23,6 +23,7 @@ public class UserService(
         }
 
         var dto = new GetUserDto(
+            user.Id,
             user.SpotifyId,
             user.DisplayName,
             user.ProfileImageUrl,
@@ -31,6 +32,15 @@ public class UserService(
             user.Followers);
 
         return Task.FromResult(dto);
+    }
+
+    public Task<UserEntity> GetUserEntityBySpotifyIdAsync(string spotifyId)
+    {
+        var user = dbContext.Users.FirstOrDefault(u => u.SpotifyId == spotifyId);
+        if (user == null)
+            throw new Exception("User not found");
+
+        return Task.FromResult(user);
     }
 
     public Task<GetUserDto> GetUserByDisplayNameAsync(string displayName)
@@ -46,6 +56,7 @@ public class UserService(
         }
 
         var dto = new GetUserDto(
+            user.Id,
             user.SpotifyId,
             user.DisplayName,
             user.ProfileImageUrl,
@@ -97,4 +108,4 @@ public class UserService(
         logger.LogInformation("[User] Saved user for SpotifyId={SpotifyId}", spotifyProfile.Id);
         return Task.FromResult(user);
     }
-}
+}

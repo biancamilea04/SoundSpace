@@ -3,7 +3,7 @@
     justify-content: space-between;
     align-items: center;
     padding-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--border-subtle);
 }
 
 .post__actions-left {
@@ -12,7 +12,7 @@
 }
 
 .post__action-btn {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--bg-elevated);
     border: none;
     border-radius: 20px;
     color: var(--text-muted);
@@ -27,12 +27,12 @@
 }
 
 .post__action-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--bg-highlight);
     color: var(--text-primary);
 }
 
 .post__action-btn--liked {
-    color: #ef4444;
+    color: var(--primary-green);
 }
 
 .post__action-btn--liked svg {
