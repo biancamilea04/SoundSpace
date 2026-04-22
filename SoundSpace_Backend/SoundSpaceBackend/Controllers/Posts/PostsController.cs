@@ -56,6 +56,64 @@ public class PostsController(
         return Created($"/api/posts/{response.Id}", response);
     }
 
+    [HttpPatch("{id:guid}")]
+    public async Task<IActionResult> UpdatePost(Guid id, [FromBody] UpdatePostRequest request)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (spotifyId == null)
+        {
+            _logger.LogWarning("[Posts] Spotify ID claim missing in token");
+            return Unauthorized();
+        }
+
+        var userId = (await userService.GetUserEntityBySpotifyIdAsync(spotifyId)).Id;
+
+        try
+        {
+            var post = await postService.UpdatePostAsync(id, userId, new UpdatePostDto(request.Content, request.SpotifyUri));
+            var response = new PostResponse(post.Id, post.UserId, post.DisplayName, post.ProfileImageUrl, post.Content, post.SpotifyUri, post.CreatedAt);
+            return Ok(response);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeletePost(Guid id)
+    {
+        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (spotifyId == null)
+        {
+            _logger.LogWarning("[Posts] Spotify ID claim missing in token");
+            return Unauthorized();
+        }
+
+        var userId = (await userService.GetUserEntityBySpotifyIdAsync(spotifyId)).Id;
+
+        try
+        {
+            await postService.DeletePostAsync(id, userId);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetAllPosts()
     {
