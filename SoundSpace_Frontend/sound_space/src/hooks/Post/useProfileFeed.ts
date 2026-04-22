@@ -39,7 +39,7 @@ export const useProfileFeed = (spotifyId: string | undefined): UseProfileFeedRes
         if (hasFetched.current || !spotifyId) return;
         hasFetched.current = true;
         load();
-    }, [load, userId]);
+    }, [load, spotifyId]);
 
     const refresh = useCallback(() => {
         hasFetched.current = false;
