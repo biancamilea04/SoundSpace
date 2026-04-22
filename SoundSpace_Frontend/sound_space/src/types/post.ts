@@ -12,3 +12,8 @@ export interface CreatePostPayload {
     content: string;
     spotifyUri?: string;
 }
+
+export interface UpdatePostPayload {
+    content: string;
+    spotifyUri?: string | null;
+}

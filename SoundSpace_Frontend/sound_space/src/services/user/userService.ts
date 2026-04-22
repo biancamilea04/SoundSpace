@@ -4,6 +4,7 @@ import { apiFetch } from '@/lib/apiClient';
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || '';
 
 const mapUserProfile = (data: Record<string, unknown>): UserProfile => ({
+    id:              (data.id as string)              ?? '',
     spotifyId:       (data.spotifyId as string)       ?? '',
     displayName:     (data.displayName as string)     ?? '',
     profileImageUrl: (data.profileImageUrl as string) ?? '',

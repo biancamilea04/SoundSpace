@@ -11,7 +11,7 @@ interface ProfileFeedProps {
 }
 
 export const ProfileFeed = ({ spotifyId, refreshKey }: ProfileFeedProps) => {
-    const { posts, isLoading, refresh } = useProfileFeed(spotifyId);
+    const { posts, isLoading, refresh, removePost } = useProfileFeed(spotifyId);
 
     const previousKey = useRef(refreshKey);
 
@@ -33,7 +33,7 @@ export const ProfileFeed = ({ spotifyId, refreshKey }: ProfileFeedProps) => {
     return (
         <div className="profile-feed">
             {posts.map((post) => (
-                <FeedPost key={post.id} post={post} />
+                <FeedPost key={post.id} post={post} onPostUpdated={refresh} onPostDeleted={removePost} />
             ))}
         </div>
     );
