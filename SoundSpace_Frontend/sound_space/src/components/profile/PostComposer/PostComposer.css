@@ -1,20 +1,27 @@
 .post-composer {
-    background-color: var(--bg-surface); /* Darker surface background */
+    background-color: var(--bg-surface); 
     border-radius: 12px;
     padding: 20px;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 680px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
 }
 
-.post-composer__layout {
+.post-composer__header {
     display: flex;
-    gap: 16px;
-    align-items: flex-start;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .post-composer__avatar {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
@@ -33,11 +40,23 @@
     background-color: var(--bg-highlight);
 }
 
+.post-composer__username {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.post-composer__username:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .post-composer__content {
-    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-bottom: 16px;
 }
 
 .post-composer__input {
@@ -86,7 +105,7 @@
 }
 
 .post-composer__attach-icon {
-    color: #9d84f0; 
+    color: var(--text-muted); 
 }
 
 .post-composer__attach-btn:hover {
@@ -106,7 +125,7 @@
     align-items: center;
     gap: 6px;
     background-color: var(--primary-green);
-    color: #ffffff; 
+    color: var(--black); 
     border: none;
     border-radius: 9999px;
     padding: 10px 24px;

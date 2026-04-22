@@ -26,7 +26,6 @@ export const ProfileHeader = ({
 }: ProfileHeaderProps) => {
     return (
         <div className="profile-header">
-            {/* Avatar */}
             <div className="profile-header__avatar-wrapper">
                 <div className="profile-header__avatar-glow" />
                 <div className="profile-header__avatar">
@@ -54,7 +53,6 @@ export const ProfileHeader = ({
                 </div>
             </div>
 
-            {/* Info */}
             <div className="profile-header__info">
                 {isPremium && (
                     <span className="profile-header__premium-badge">
@@ -82,7 +80,6 @@ export const ProfileHeader = ({
                     </span>
                 </div>
 
-                {/* Email & Country */}
                 <div className="profile-header__details">
                     {email && (
                         <span className="profile-header__detail">

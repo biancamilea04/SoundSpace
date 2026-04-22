@@ -9,9 +9,11 @@ import './page.css';
 import FriendSidebar from "@/components/global/FriendSidebar/FriendSidebar";
 import Header from "@/components/global/Header/Header";
 import { useGlobalFeed } from "@/hooks/Post/useGlobalFeed";
+import { useUserProfile } from "@/hooks/UserProfile/useUserProfile";
 
 function PageContent() {
 	const { posts, isLoading, refresh } = useGlobalFeed();
+	const { user } = useUserProfile();
 
 	return (
 		<div className="page-wrapper">
@@ -19,7 +21,11 @@ function PageContent() {
 			<div className="feed-container">
 				<MenuSidebar />
 				<div className="feed-main">
-					<PostComposer onPostCreated={refresh} />
+					<PostComposer 
+						avatarUrl={user?.profileImageUrl} 
+						username={user?.displayName}
+						onPostCreated={refresh} 
+					/>
 
 					{isLoading && posts.length === 0 && <p style={{ color: "var(--text-muted)", marginBottom: "16px" }}>Loading feed...</p>}
 

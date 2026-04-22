@@ -68,7 +68,7 @@
 
 .post__options-btn:hover {
     color: var(--text-primary);
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--bg-highlight);
 }
 
 .post__options-wrapper {
@@ -97,7 +97,7 @@
     border: none;
     border-radius: 8px;
     background: transparent;
-    color: #f87171;
+    color: var(--destructive);
     font-size: 13px;
     font-weight: 300;
     text-align: left;
@@ -106,5 +106,5 @@
 }
 
 .post__options-menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--bg-highlight);
 }

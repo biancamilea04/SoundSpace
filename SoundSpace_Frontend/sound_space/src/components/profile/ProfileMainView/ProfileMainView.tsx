@@ -77,6 +77,7 @@ export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
                     {isOwnProfile && (
                         <PostComposer
                             avatarUrl={user.profileImageUrl}
+                            username={user.displayName}
                             onPostCreated={() => setFeedKey((k) => k + 1)}
                         />
                     )}
