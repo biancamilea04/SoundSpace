@@ -105,7 +105,7 @@
 }
 
 .post-composer__attach-icon {
-    color: var(--text-muted); 
+    color: var(--primary-green); 
 }
 
 .post-composer__attach-btn:hover {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Flag, MoreHorizontal } from 'lucide-react';
+import { Flag, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import type { PostUser } from '../Post.types';
 import './PostHeader.css';
 
@@ -11,6 +11,9 @@ interface PostHeaderProps {
     optionsMenuRef: React.RefObject<HTMLDivElement | null>;
     onToggleOptionsMenu: () => void;
     onReportPost: () => void;
+    isOwner?: boolean;
+    onEditPost?: () => void;
+    onDeletePost?: () => void;
 }
 
 const PostHeader = ({
@@ -20,6 +23,9 @@ const PostHeader = ({
     optionsMenuRef,
     onToggleOptionsMenu,
     onReportPost,
+    isOwner,
+    onEditPost,
+    onDeletePost,
 }: PostHeaderProps) => {
     return (
         <header className="post__header">
@@ -50,7 +56,19 @@ const PostHeader = ({
 
                 {showOptionsMenu && (
                     <div className="post__options-menu" role="menu" aria-label="Post options">
-                        <button className="post__options-menu-item" onClick={onReportPost} role="menuitem">
+                        {isOwner && (
+                            <button className="post__options-menu-item" onClick={onEditPost} role="menuitem">
+                                <Pencil size={14} />
+                                <span>Edit Post</span>
+                            </button>
+                        )}
+                        {isOwner && (
+                            <button className="post__options-menu-item post__options-menu-item--danger" onClick={onDeletePost} role="menuitem">
+                                <Trash2 size={14} />
+                                <span>Delete Post</span>
+                            </button>
+                        )}
+                        <button className="post__options-menu-item post__options-menu-item--danger" onClick={onReportPost} role="menuitem">
                             <Flag size={14} />
                             <span>Report Post</span>
                         </button>

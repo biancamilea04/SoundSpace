@@ -97,12 +97,16 @@
     border: none;
     border-radius: 8px;
     background: transparent;
-    color: var(--destructive);
+    color: var(--text-primary);
     font-size: 13px;
     font-weight: 300;
     text-align: left;
     cursor: pointer;
     transition: background-color 0.2s;
+}
+
+.post__options-menu-item--danger {
+    color: var(--destructive);
 }
 
 .post__options-menu-item:hover {
