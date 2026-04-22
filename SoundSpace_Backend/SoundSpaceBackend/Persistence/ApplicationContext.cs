@@ -59,6 +59,13 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options) : 
             entity.Property(p => p.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+            entity.Property(p => p.IsDeleted)
+                .HasDefaultValue(false);
+
+            entity.HasIndex(p => p.IsDeleted);
+
+            entity.HasQueryFilter(p => !p.IsDeleted);
+
             entity.HasOne(p => p.User)
                 .WithMany(u => u.Posts)
                 .HasForeignKey(p => p.UserId)
