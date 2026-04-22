@@ -67,6 +67,70 @@ public class PostService(
             .ToListAsync();
     }
 
+    public async Task<GetPostDto> UpdatePostAsync(Guid postId, Guid userId, UpdatePostDto dto)
+    {
+        logger.LogInformation("[Post] Updating post PostId={PostId} for UserId={UserId}", postId, userId);
+
+        var post = await dbContext.Posts
+            .IgnoreQueryFilters()
+            .Include(p => p.User)
+            .FirstOrDefaultAsync(p => p.Id == postId)
+            ?? throw new KeyNotFoundException($"Post {postId} not found");
+
+        if (post.IsDeleted)
+            throw new KeyNotFoundException($"Post {postId} not found");
+
+        if (post.UserId != userId)
+            throw new UnauthorizedAccessException("Not the post author");
+
+        post.Content = dto.Content;
+        post.SpotifyUri = dto.SpotifyUri;
+
+        if (dto.SpotifyUri == null)
+        {
+            post.SpotifyName = null;
+            post.SpotifyCoverUrl = null;
+            post.SpotifySubtitle = null;
+            post.SpotifyMediaType = null;
+        }
+
+        await dbContext.SaveChangesAsync();
+
+        return new GetPostDto(
+            post.Id,
+            post.UserId,
+            post.User.DisplayName,
+            post.User.ProfileImageUrl,
+            post.Content,
+            post.SpotifyUri,
+            post.SpotifyName,
+            post.SpotifyCoverUrl,
+            post.SpotifySubtitle,
+            post.SpotifyMediaType,
+            post.CreatedAt);
+    }
+
+    public async Task DeletePostAsync(Guid postId, Guid userId)
+    {
+        logger.LogInformation("[Post] Soft deleting post PostId={PostId} for UserId={UserId}", postId, userId);
+
+        var post = await dbContext.Posts
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(p => p.Id == postId)
+            ?? throw new KeyNotFoundException($"Post {postId} not found");
+
+        if (post.IsDeleted)
+            throw new KeyNotFoundException($"Post {postId} not found");
+
+        if (post.UserId != userId)
+            throw new UnauthorizedAccessException("Not the post author");
+
+        post.IsDeleted = true;
+        post.DeletedAt = DateTime.UtcNow;
+
+        await dbContext.SaveChangesAsync();
+    }
+
     public async Task<List<GetPostDto>> GetPostsByUserIdAsync(Guid userId)
     {
         logger.LogInformation("[Post] Fetching posts for UserId={UserId}", userId);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import "./DeletePostModal.css";
@@ -12,12 +12,6 @@ interface DeletePostModalProps {
 }
 
 export const DeletePostModal = ({ isDeleting, onClose, onConfirm }: DeletePostModalProps) => {
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
     useEffect(() => {
         const prev = document.body.style.overflow;
         document.body.style.overflow = "hidden";
@@ -39,7 +33,7 @@ export const DeletePostModal = ({ isDeleting, onClose, onConfirm }: DeletePostMo
         };
     }, [isDeleting, onClose]);
 
-    if (!mounted) {
+    if (typeof window === "undefined") {
         return null;
     }
 
@@ -92,4 +86,5 @@ export const DeletePostModal = ({ isDeleting, onClose, onConfirm }: DeletePostMo
 };
 
 export default DeletePostModal;
+
 
