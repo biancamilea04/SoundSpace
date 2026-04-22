@@ -27,7 +27,7 @@ public class UsersController(
         }
 
         var user = await _userService.GetUserBySpotifyIdAsync(spotifyId);
-        var userProfileResponse = new UserProfileResponse(user.SpotifyId, user.DisplayName, user.ProfileImageUrl, user.Email, user.Country, user.Followers);
+        var userProfileResponse = new UserProfileResponse(user.Id, user.SpotifyId, user.DisplayName, user.ProfileImageUrl, user.Email, user.Country, user.Followers);
         
         return Ok(userProfileResponse);
     }
@@ -38,7 +38,7 @@ public class UsersController(
         try
         {
             var user = await _userService.GetUserByDisplayNameAsync(displayName);
-            var userProfileResponse = new UserProfileResponse(user.SpotifyId, user.DisplayName, user.ProfileImageUrl, user.Email, user.Country, user.Followers);
+            var userProfileResponse = new UserProfileResponse(user.Id, user.SpotifyId, user.DisplayName, user.ProfileImageUrl, user.Email, user.Country, user.Followers);
             return Ok(userProfileResponse);
         }
         catch (Exception)
