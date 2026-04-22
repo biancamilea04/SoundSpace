@@ -48,7 +48,7 @@ const RECENT_LABEL: Record<SpotifyMediaType, string> = {
 const EMPTY_LABEL: Record<SpotifyMediaType, string> = {
     track: 'No recently played songs.',
     album: 'No recently played albums.',
-    episode: 'No saved episodes.',
+    episode: 'No episodes.',
 };
 
 const ModalContent = ({ onSelect, onClose }: MediaSelectionModalProps) => {

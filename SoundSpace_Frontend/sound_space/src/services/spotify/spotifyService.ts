@@ -1,3 +1,5 @@
+"use client";
+
 import { NowPlayingData } from '@/types/nowPlaying';
 import { TopArtist } from '@/types/topArtist';
 import { TopTrack } from '@/types/topTrack';
@@ -30,6 +32,8 @@ export const fetchSpotifyItem = async (uri: string): Promise<SpotifyMediaItem | 
     } catch {
         return null;
     }
+};
+
 export const fetchTopGenres = async (): Promise<string[]> => {
     const response = await apiFetch(`${BACKEND_URL}/api/users/top-genres`);
 

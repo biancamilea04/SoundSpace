@@ -69,7 +69,7 @@ export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
                         playlists={0}
                     />
 
-                    <GenreTags tags={genres} isLoading={genresLoading} />
+                    {isOwnProfile && <GenreTags tags={genres} isLoading={genresLoading} />}
 
                     {isOwnProfile && (
                         <PostComposer

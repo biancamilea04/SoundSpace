@@ -64,7 +64,6 @@
 
 .top-artists__link:hover {
     text-decoration: underline;
-    color: var(--accent, #1db954);
 }
 
 .top-artists__loading {

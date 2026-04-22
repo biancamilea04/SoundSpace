@@ -106,7 +106,13 @@ public class SpotifyPlayerService(
             var spotifyData = JsonSerializer.Deserialize<SpotifyTopArtistsDto>(json, JsonOptions);
 
             if (spotifyData?.Items == null || spotifyData.Items.Count == 0)
+            {
+                logger.LogWarning("[SpotifyPlayer] No top artists returned for time_range={TimeRange}", timeRange);
                 continue;
+            }
+
+            logger.LogDebug("[SpotifyPlayer] time_range={TimeRange}: {ArtistCount} artists, total genre entries={GenreCount}",
+                timeRange, spotifyData.Items.Count, spotifyData.Items.SelectMany(a => a.Genres).Count());
 
             var topGenres = spotifyData.Items
                 .SelectMany(a => a.Genres)
@@ -118,9 +124,65 @@ public class SpotifyPlayerService(
 
             if (topGenres.Count > 0)
                 return topGenres;
+
+            logger.LogWarning("[SpotifyPlayer] Artists returned for time_range={TimeRange} but all have empty genre lists", timeRange);
         }
 
-        return [];
+        logger.LogInformation("[SpotifyPlayer] Falling back to top-tracks artist genre lookup");
+        return await GetGenresViaTopTracksArtistsAsync(client, maxGenres);
+    }
+
+    private async Task<List<string>> GetGenresViaTopTracksArtistsAsync(HttpClient client, int maxGenres)
+    {
+        var tracksResponse = await client.GetAsync($"{TopTracksBaseUrl}?limit=50&time_range=long_term");
+        if (!tracksResponse.IsSuccessStatusCode)
+        {
+            logger.LogWarning("[SpotifyPlayer] Top-tracks artist fallback: request failed. Status={Status}", tracksResponse.StatusCode);
+            return [];
+        }
+
+        var tracksJson = await tracksResponse.Content.ReadAsStringAsync();
+        var tracksData = JsonSerializer.Deserialize<SpotifyTopTracksDto>(tracksJson, JsonOptions);
+
+        var artistIds = tracksData?.Items?
+            .SelectMany(t => t.Artists)
+            .Where(a => a.Id != null)
+            .Select(a => a.Id!)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Take(50)
+            .ToList() ?? [];
+
+        if (artistIds.Count == 0)
+        {
+            logger.LogWarning("[SpotifyPlayer] Top-tracks artist fallback: no artist IDs found in top tracks");
+            return [];
+        }
+
+        // Batch fetch — /v1/artists accepts up to 50 IDs in one request
+        var ids = string.Join(",", artistIds);
+        var batchResponse = await client.GetAsync($"https://api.spotify.com/v1/artists?ids={ids}");
+        if (!batchResponse.IsSuccessStatusCode)
+        {
+            logger.LogWarning("[SpotifyPlayer] Top-tracks artist fallback: batch fetch failed. Status={Status}", batchResponse.StatusCode);
+            return [];
+        }
+
+        var batchJson = await batchResponse.Content.ReadAsStringAsync();
+        var batchData = JsonSerializer.Deserialize<SpotifyArtistsBatchDto>(batchJson, JsonOptions);
+
+        var genres = batchData?.Artists?
+            .Where(a => a.Genres.Count > 0)
+            .SelectMany(a => a.Genres)
+            .GroupBy(g => g, StringComparer.OrdinalIgnoreCase)
+            .OrderByDescending(g => g.Count())
+            .Take(maxGenres)
+            .Select(g => g.Key)
+            .ToList() ?? [];
+
+        if (genres.Count == 0)
+            logger.LogWarning("[SpotifyPlayer] Top-tracks artist fallback: artists from top tracks also have no genre data");
+
+        return genres;
     }
 
     public async Task<List<TopTrackResponse>> GetTopTracksAsync(string spotifyId, int limit = 5)

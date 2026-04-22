@@ -23,7 +23,8 @@ public class AuthService(
 
         const string scopes =
             "user-read-private user-read-email user-read-recently-played " +
-            "user-read-currently-playing user-read-playback-state user-top-read";
+            "user-read-currently-playing user-read-playback-state user-top-read " +
+            "user-library-read";
 
         var url = $"https://accounts.spotify.com/authorize" +
                   $"?response_type=code" +
