@@ -9,6 +9,7 @@ interface UseProfileFeedResult {
     isLoading: boolean;
     error: string | null;
     refresh: () => void;
+    removePost: (postId: string) => void;
 }
 
 export const useProfileFeed = (spotifyId: string | undefined): UseProfileFeedResult => {
@@ -46,5 +47,9 @@ export const useProfileFeed = (spotifyId: string | undefined): UseProfileFeedRes
         load();
     }, [load]);
 
-    return { posts, isLoading, error, refresh };
+    const removePost = useCallback((postId: string) => {
+        setPosts((prev) => prev.filter((post) => post.id !== postId));
+    }, []);
+
+    return { posts, isLoading, error, refresh, removePost };
 };

@@ -9,6 +9,7 @@ interface UseGlobalFeedResult {
     isLoading: boolean;
     error: string | null;
     refresh: () => void;
+    removePost: (postId: string) => void;
 }
 
 export const useGlobalFeed = (): UseGlobalFeedResult => {
@@ -41,5 +42,9 @@ export const useGlobalFeed = (): UseGlobalFeedResult => {
         load();
     }, [load]);
 
-    return { posts, isLoading, error, refresh };
+    const removePost = useCallback((postId: string) => {
+        setPosts((prev) => prev.filter((post) => post.id !== postId));
+    }, []);
+
+    return { posts, isLoading, error, refresh, removePost };
 };
