@@ -12,14 +12,10 @@ namespace SoundSpaceBackend.Controllers.Users;
 [Route("api/[controller]")]
 [Authorize]
 public class UsersController(
-    IUserService userService,
-    ISpotifyPlayerService spotifyPlayerService,
-    ILogger<UsersController> logger) : ControllerBase
+    IUserService _userService,
+    ISpotifyPlayerService _spotifyPlayerService,
+    ILogger<UsersController> _logger) : ControllerBase
 {
-    private readonly ILogger<UsersController> _logger = logger;
-    private readonly IUserService _userService = userService;
-    private readonly ISpotifyPlayerService _spotifyPlayerService = spotifyPlayerService;
-    
     [HttpGet("profile")]
     public async Task<IActionResult> GetUserProfile()
     {
@@ -30,7 +26,7 @@ public class UsersController(
             return Unauthorized();
         }
 
-        var user = await userService.GetUserBySpotifyIdAsync(spotifyId);
+        var user = await _userService.GetUserBySpotifyIdAsync(spotifyId);
         var userProfileResponse = new UserProfileResponse(user.SpotifyId, user.DisplayName, user.ProfileImageUrl, user.Email, user.Country, user.Followers);
         
         return Ok(userProfileResponse);
@@ -41,7 +37,7 @@ public class UsersController(
     {
         try
         {
-            var user = await userService.GetUserByDisplayNameAsync(displayName);
+            var user = await _userService.GetUserByDisplayNameAsync(displayName);
             var userProfileResponse = new UserProfileResponse(user.SpotifyId, user.DisplayName, user.ProfileImageUrl, user.Email, user.Country, user.Followers);
             return Ok(userProfileResponse);
         }

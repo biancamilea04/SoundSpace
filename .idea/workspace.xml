@@ -5,22 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c4ccd9b1-444b-485c-ad59-e2010d6d501d" name="Changes" comment="add the feed page">
-      <change beforePath="$PROJECT_DIR$/.idea/copilotDiffState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/copilotDiffState.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilotDiffState.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Users/Responses/UserProfileResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Users/Responses/UserProfileResponse.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Users/UsersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Controllers/Users/UsersController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/User/Abstractions/IUserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/User/Abstractions/IUserService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/User/DTOs/GetUserDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/User/DTOs/GetUserDto.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/User/UserService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/User/UserService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Migrations/ApplicationContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Migrations/ApplicationContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/SpotifyPlayer/Abstractions/ISpotifyPlayerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/SpotifyPlayer/Abstractions/ISpotifyPlayerService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/SpotifyPlayer/DTOs/SpotifyMediaItemResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/SpotifyPlayer/DTOs/SpotifyMediaItemResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/SpotifyPlayer/DTOs/SpotifySearchDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/SpotifyPlayer/DTOs/SpotifySearchDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/SpotifyPlayer/SpotifyPlayerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Backend/SoundSpaceBackend/Services/SpotifyPlayer/SpotifyPlayerService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/api/auth/callback/route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/api/auth/callback/route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/profile/page.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/profile/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/profile/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/FeedPost/FeedPost.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/FeedPost/FeedPost.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/MenuSidebar/MenuSidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/MenuSidebar/MenuSidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/Post.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/Post.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/Post.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/Post.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/Post.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/Post.types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostContent/PostContent.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostContent/PostContent.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostContent/PostContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostContent/PostContent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostFooter/PostFooter.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostFooter/PostFooter.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostHeader/PostHeader.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostHeader/PostHeader.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostHeader/PostHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/Post/PostHeader/PostHeader.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/ProfileMenu/ProfileMenu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/ProfileMenu/ProfileMenu.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/ProfileMainView/ProfileMainView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/ProfileMainView/ProfileMainView.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/UserProfile/useUserProfile.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/UserProfile/useUserProfile.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/user/userService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/user/userService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/types/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/types/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/SpotifyEmbed/SpotifyEmbed.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/global/SpotifyEmbed/SpotifyEmbed.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/NowPlaying/NowPlaying.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/NowPlaying/NowPlaying.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/PostComposer/PostComposer.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/PostComposer/PostComposer.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/PostComposer/PostComposer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/PostComposer/PostComposer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/ProfileFeed/ProfileFeed.css" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/ProfileFeed/ProfileFeed.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/ProfileFeed/ProfileFeed.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/ProfileFeed/ProfileFeed.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/Post/useProfileFeed.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/hooks/Post/useProfileFeed.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/spotify/spotifyService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/services/spotify/spotifyService.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +63,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="98bcd33500d3138b1d6a619ed66143f65d64cc17" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -77,7 +95,7 @@
     &quot;ReactCreateComponentLastSelected&quot;: &quot;classBasedComponent&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;posts__feature&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Bianca Milea/Desktop/uni/Licenta/Bachelor_Thesis/SoundSpace_Frontend/sound_space/public/icons&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -147,6 +165,7 @@
       <workItem from="1775393854174" duration="6787000" />
       <workItem from="1775480294154" duration="4192000" />
       <workItem from="1775738608164" duration="1281000" />
+      <workItem from="1776769248971" duration="8928000" />
     </task>
     <task id="LOCAL-00001" summary="modify the frontend">
       <option name="closed" value="true" />
@@ -192,14 +211,16 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/app/page.tsx</url>
+          <url>file://$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/ProfileFeed/ProfileFeed.tsx</url>
           <line>2</line>
-          <option name="timeStamp" value="2" />
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/profile/RecentStreams/RecentStreams.tsx</url>
-          <line>30</line>
-          <option name="timeStamp" value="3" />
+          <url>file://$PROJECT_DIR$/SoundSpace_Frontend/sound_space/src/components/post/SinglePost/SinglePost.tsx</url>
+          <line>21</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

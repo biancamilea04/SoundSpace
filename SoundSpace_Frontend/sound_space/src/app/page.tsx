@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 
 import MenuSidebar from "@/components/global/MenuSidebar/MenuSidebar";
-import SharePost from "@/components/global/SharePost/SharePost";
+import PostComposer from "@/components/profile/PostComposer/PostComposer";
 import FeedPost from "@/components/global/FeedPost/FeedPost";
 import './page.css';
 import FriendSidebar from "@/components/global/FriendSidebar/FriendSidebar";
@@ -19,9 +19,9 @@ function PageContent() {
 			<div className="feed-container">
 				<MenuSidebar />
 				<div className="feed-main">
-					<SharePost onPostCreated={refresh} />
+					<PostComposer onPostCreated={refresh} />
 
-					{isLoading && <p style={{ color: "var(--text-muted)" }}>Loading feed...</p>}
+					{isLoading && posts.length === 0 && <p style={{ color: "var(--text-muted)", marginBottom: "16px" }}>Loading feed...</p>}
 
 					{posts.map((post) => (
 						<FeedPost key={post.id} post={post} />
