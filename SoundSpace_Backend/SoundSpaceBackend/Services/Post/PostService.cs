@@ -22,6 +22,10 @@ public class PostService(
             UserId = userId,
             Content = dto.Content,
             SpotifyUri = dto.SpotifyUri,
+            SpotifyName = dto.SpotifyName,
+            SpotifyCoverUrl = dto.SpotifyCoverUrl,
+            SpotifySubtitle = dto.SpotifySubtitle,
+            SpotifyMediaType = dto.SpotifyMediaType,
         };
 
         dbContext.Posts.Add(post);
@@ -34,6 +38,10 @@ public class PostService(
             user.ProfileImageUrl,
             post.Content,
             post.SpotifyUri,
+            post.SpotifyName,
+            post.SpotifyCoverUrl,
+            post.SpotifySubtitle,
+            post.SpotifyMediaType,
             post.CreatedAt);
     }
 
@@ -51,6 +59,10 @@ public class PostService(
                 p.User.ProfileImageUrl,
                 p.Content,
                 p.SpotifyUri,
+                p.SpotifyName,
+                p.SpotifyCoverUrl,
+                p.SpotifySubtitle,
+                p.SpotifyMediaType,
                 p.CreatedAt))
             .ToListAsync();
     }
@@ -70,6 +82,10 @@ public class PostService(
                 p.User.ProfileImageUrl,
                 p.Content,
                 p.SpotifyUri,
+                p.SpotifyName,
+                p.SpotifyCoverUrl,
+                p.SpotifySubtitle,
+                p.SpotifyMediaType,
                 p.CreatedAt))
             .ToListAsync();
     }

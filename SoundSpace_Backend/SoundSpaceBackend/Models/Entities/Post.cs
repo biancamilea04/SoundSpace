@@ -21,5 +21,17 @@ public class Post
     [MaxLength(500)]
     public string? SpotifyUri { get; set; }
 
+    [MaxLength(500)]
+    public string? SpotifyName { get; set; }
+
+    [MaxLength(500)]
+    public string? SpotifyCoverUrl { get; set; }
+
+    [MaxLength(500)]
+    public string? SpotifySubtitle { get; set; }
+
+    [MaxLength(50)]
+    public string? SpotifyMediaType { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

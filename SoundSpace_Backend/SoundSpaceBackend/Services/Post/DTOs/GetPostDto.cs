@@ -7,4 +7,8 @@ public record GetPostDto(
     string? ProfileImageUrl,
     string Content,
     string? SpotifyUri,
+    string? SpotifyName,
+    string? SpotifyCoverUrl,
+    string? SpotifySubtitle,
+    string? SpotifyMediaType,
     DateTime CreatedAt);

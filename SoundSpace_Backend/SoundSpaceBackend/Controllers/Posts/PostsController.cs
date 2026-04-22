@@ -35,7 +35,13 @@ public class PostsController(
         var user = await userService.GetUserBySpotifyIdAsync(spotifyId);
         var userId = (await userService.GetUserEntityBySpotifyIdAsync(spotifyId)).Id;
 
-        var dto = new CreatePostDto(request.Content, request.SpotifyUri);
+        var dto = new CreatePostDto(
+            request.Content,
+            request.SpotifyUri,
+            request.SpotifyName,
+            request.SpotifyCoverUrl,
+            request.SpotifySubtitle,
+            request.SpotifyMediaType);
         var post = await postService.CreatePostAsync(userId, dto);
 
         var response = new PostResponse(
