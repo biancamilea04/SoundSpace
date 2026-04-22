@@ -32,7 +32,7 @@
 }
 
 .post__action-btn--liked {
-    color: #ef4444;
+    color: var(--primary-green);
 }
 
 .post__action-btn--liked svg {

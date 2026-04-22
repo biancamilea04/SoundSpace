@@ -35,7 +35,7 @@ const PostHeader = ({
                 </div>
                 <div className="post__meta">
                     <h3 className="post__user-name">{user.name}</h3>
-                    <span className="post__time">{timeAgo}</span>
+                    <span className="post__time">· {timeAgo}</span>
                 </div>
             </div>
             <div className="post__options-wrapper" ref={optionsMenuRef}>

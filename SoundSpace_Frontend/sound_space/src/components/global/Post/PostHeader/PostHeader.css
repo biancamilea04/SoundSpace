@@ -28,19 +28,29 @@
 
 .post__meta {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
 }
 
 .post__user-name {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
-    margin: 0 0 2px 0;
+    margin: 0;
     color: var(--text-primary);
+    transition: text-decoration 0.2s;
+    white-space: nowrap;
+}
+
+.post__user-name:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .post__time {
     font-size: 12px;
     color: var(--text-muted);
+    white-space: nowrap;
 }
 
 .post__options-btn {

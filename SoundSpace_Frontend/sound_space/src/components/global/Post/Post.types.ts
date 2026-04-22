@@ -16,6 +16,7 @@ export interface PostProps {
     timeAgo: string;
     content: string;
     song?: SongProps;
+    spotifyUri?: string;
     stats: PostStats;
 }
 
@@ -25,5 +26,6 @@ export interface SelectedPostPayload {
     timeAgo: string;
     content: string;
     song?: SongProps;
+    spotifyUri?: string;
     stats: PostStats;
 }

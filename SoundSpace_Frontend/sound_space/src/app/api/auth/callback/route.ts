@@ -4,7 +4,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || '';
 
 const resolveProfileRedirectPath = async (token: string): Promise<string> => {
     if (!BACKEND_URL) {
-        return '/profile';
+        return '/';
     }
 
     try {
@@ -16,7 +16,7 @@ const resolveProfileRedirectPath = async (token: string): Promise<string> => {
         });
 
         if (!response.ok) {
-            return '/profile';
+            return '/';
         }
 
         const data = (await response.json()) as { displayName?: unknown };
@@ -24,12 +24,12 @@ const resolveProfileRedirectPath = async (token: string): Promise<string> => {
             typeof data.displayName === 'string' ? data.displayName.trim() : '';
 
         if (!displayName) {
-            return '/profile';
+            return '/';
         }
 
         return `/profile/${encodeURIComponent(displayName)}`;
     } catch {
-        return '/profile';
+        return '/';
     }
 };
 
