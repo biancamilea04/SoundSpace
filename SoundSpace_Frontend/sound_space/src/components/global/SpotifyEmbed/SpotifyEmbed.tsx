@@ -1,3 +1,5 @@
+import './SpotifyEmbed.css';
+
 interface SpotifyEmbedProps {
     spotifyUri: string;
 }
@@ -22,7 +24,7 @@ export const SpotifyEmbed = ({ spotifyUri }: SpotifyEmbedProps) => {
 
     return (
         <iframe
-            style={{ borderRadius: "12px", marginTop: "12px" }}
+            className="spotify-embed"
             src={embedUrl}
             width="100%"
             height="152"
