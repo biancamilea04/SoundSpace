@@ -1,0 +1,147 @@
+.spotify-album-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background-color: var(--bg-base);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 12px;
+    width: 100%;
+    cursor: default;
+    transition: background-color 0.2s ease;
+}
+
+.spotify-album-card:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Cover art */
+.spotify-album-card__cover-wrap {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: var(--bg-surface);
+    position: relative;
+}
+
+.spotify-album-card__cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Right metadata stack */
+.spotify-album-card__meta {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+/* Spotify icon + type badge row */
+.spotify-album-card__badge-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+
+.spotify-album-card__type {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+/* Title */
+.spotify-album-card__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+}
+
+.spotify-album-card__title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.spotify-album-card__title a:hover {
+    text-decoration: underline;
+}
+
+/* Artist / subtitle */
+.spotify-album-card__subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.spotify-album-card__subtitle a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.spotify-album-card__subtitle a:hover {
+    text-decoration: underline;
+}
+
+/* Skeleton loader */
+.spotify-album-card--skeleton {
+    pointer-events: none;
+}
+
+.spotify-album-card__skeleton-cover {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--bg-surface) 25%, rgba(255, 255, 255, 0.05) 50%, var(--bg-surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    flex-shrink: 0;
+}
+
+.spotify-album-card__skeleton-lines {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+}
+
+.spotify-album-card__skeleton-line {
+    height: 10px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--bg-surface) 25%, rgba(255, 255, 255, 0.05) 50%, var(--bg-surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+}
+
+.spotify-album-card__skeleton-line--short {
+    width: 40%;
+}
+
+.spotify-album-card__skeleton-line--medium {
+    width: 65%;
+}
+
+.spotify-album-card__skeleton-line--long {
+    width: 85%;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
