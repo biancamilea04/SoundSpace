@@ -23,6 +23,7 @@ public class UserService(
         }
 
         var dto = new GetUserDto(
+            user.Id,
             user.SpotifyId,
             user.DisplayName,
             user.ProfileImageUrl,
@@ -55,6 +56,7 @@ public class UserService(
         }
 
         var dto = new GetUserDto(
+            user.Id,
             user.SpotifyId,
             user.DisplayName,
             user.ProfileImageUrl,
