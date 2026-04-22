@@ -5,5 +5,7 @@ public record SpotifyMediaItemResponse(
     string Name,
     string Type,
     string CoverUrl,
-    string Subtitle
+    string Subtitle,
+    string ExternalUrl,
+    string SubtitleUrl
 );

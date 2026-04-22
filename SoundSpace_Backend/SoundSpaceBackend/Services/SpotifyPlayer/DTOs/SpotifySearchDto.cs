@@ -33,10 +33,16 @@ public class SpotifyEpisodeDto
 
     [JsonPropertyName("show")]
     public SpotifyEpisodeShowDto? Show { get; set; }
+
+    [JsonPropertyName("external_urls")]
+    public SpotifyExternalUrlsDto? ExternalUrls { get; set; }
 }
 
 public class SpotifyEpisodeShowDto
 {
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
+
+    [JsonPropertyName("external_urls")]
+    public SpotifyExternalUrlsDto? ExternalUrls { get; set; }
 }

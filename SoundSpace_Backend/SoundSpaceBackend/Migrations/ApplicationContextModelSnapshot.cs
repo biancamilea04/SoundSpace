@@ -185,6 +185,52 @@ namespace SoundSpaceBackend.Migrations
                     b.ToTable("AppRefreshTokens");
                 });
 
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Post", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("SpotifyCoverUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("SpotifyMediaType")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("SpotifyName")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("SpotifySubtitle")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("SpotifyUri")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Posts");
+                });
+
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -356,8 +402,21 @@ namespace SoundSpaceBackend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Post", b =>
+                {
+                    b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.User", b =>
                 {
+                    b.Navigation("Posts");
+
                     b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
