@@ -100,5 +100,4 @@ publish/
 # Local secrets
 secrets.json
 
-# JetBrains Rider
 *.sln.iml
