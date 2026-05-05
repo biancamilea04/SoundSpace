@@ -1,0 +1,77 @@
+.friend-history-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    opacity: 0.75;
+    transition: opacity 0.15s;
+}
+
+.friend-history-item:hover {
+    opacity: 1;
+    background-color: var(--bg-elevated);
+}
+
+.friend-history-item__avatar {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: var(--bg-elevated);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.friend-history-item__avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.friend-history-item__avatar-fallback {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.friend-history-item__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.friend-history-item__name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.friend-history-item__subtitle {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+.friend-history-item__badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.friend-history-item__badge--accepted {
+    background-color: rgba(30, 215, 96, 0.15);
+    color: var(--primary-green);
+}
+
+.friend-history-item__badge--rejected {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: var(--destructive);
+}

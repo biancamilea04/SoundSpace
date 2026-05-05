@@ -6,6 +6,8 @@ export interface PostData {
     content: string;
     spotifyUri: string | null;
     createdAt: string;
+    likeCount: number;
+    isLikedByCurrentUser: boolean;
 }
 
 export interface CreatePostPayload {

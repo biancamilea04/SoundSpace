@@ -6,11 +6,12 @@ import PostFooter from './PostFooter/PostFooter';
 import type { PostProps } from './Post.types';
 import './Post.css';
 
-export const Post = ({ user, timeAgo, content, song, spotifyUri, stats, isOwner, onEditPost, onDeletePost }: PostProps) => {
+export const Post = ({ postId, user, timeAgo, content, song, spotifyUri, stats, isOwner, onEditPost, onDeletePost }: PostProps) => {
     const postKey = `${user.name}|${timeAgo}|${content}`;
 
     const {
         liked,
+        likeCount,
         showShareMenu,
         showOptionsMenu,
         shareMenuRef,
@@ -21,8 +22,11 @@ export const Post = ({ user, timeAgo, content, song, spotifyUri, stats, isOwner,
         handleReportPost,
         handleShare,
     } = usePostInteractions({
+        postId,
         userName: user.name,
         content,
+        initialLiked: stats.isLikedByCurrentUser,
+        initialLikeCount: stats.likes,
     });
 
     return (
@@ -40,8 +44,9 @@ export const Post = ({ user, timeAgo, content, song, spotifyUri, stats, isOwner,
             />
             <PostContent content={content} song={song} spotifyUri={spotifyUri} />
             <PostFooter
-                stats={stats}
+                stats={{ ...stats, likes: likeCount }}
                 postData={{
+                    postId,
                     postKey,
                     user,
                     timeAgo,
@@ -49,6 +54,8 @@ export const Post = ({ user, timeAgo, content, song, spotifyUri, stats, isOwner,
                     song,
                     spotifyUri,
                     stats,
+                    likeCount,
+                    isLikedByCurrentUser: liked,
                 }}
                 liked={liked}
                 showShareMenu={showShareMenu}
