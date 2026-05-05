@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Flag, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import type { PostUser } from '../Post.types';
 import './PostHeader.css';
@@ -40,7 +41,9 @@ const PostHeader = ({
                     />
                 </div>
                 <div className="post__meta">
-                    <h3 className="post__user-name">{user.name}</h3>
+                    <Link href={`/profile/${encodeURIComponent(user.name)}`} className="post__user-name-link">
+                        <h3 className="post__user-name">{user.name}</h3>
+                    </Link>
                     <span className="post__time">· {timeAgo}</span>
                 </div>
             </div>
