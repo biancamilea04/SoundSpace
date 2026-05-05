@@ -1,0 +1,77 @@
+.friendship-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+    white-space: nowrap;
+}
+
+.friendship-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.friendship-btn--add {
+    background-color: var(--primary-green);
+    color: #000;
+}
+
+.friendship-btn--add:hover:not(:disabled) {
+    background-color: var(--primary-green-hover);
+}
+
+.friendship-btn--friends {
+    background-color: var(--bg-elevated);
+    color: var(--text-muted);
+    cursor: default;
+}
+
+.friendship-btn--sent {
+    background-color: var(--bg-elevated);
+    color: var(--text-muted);
+    cursor: default;
+}
+
+.friendship-btn--accept {
+    background-color: var(--primary-green);
+    color: #000;
+}
+
+.friendship-btn--accept:hover:not(:disabled) {
+    background-color: var(--primary-green-hover);
+}
+
+.friendship-btn--reject {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-strong);
+}
+
+.friendship-btn--reject:hover:not(:disabled) {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.friendship-btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+.friendship-btn__skeleton {
+    width: 110px;
+    height: 36px;
+    border-radius: 20px;
+    background-color: var(--bg-elevated);
+    animation: friendship-btn-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes friendship-btn-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
