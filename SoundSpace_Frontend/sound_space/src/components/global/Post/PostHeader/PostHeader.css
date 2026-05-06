@@ -42,6 +42,10 @@
     white-space: nowrap;
 }
 
+.post__user-name-link {
+    text-decoration: none;
+}
+
 .post__user-name:hover {
     text-decoration: underline;
     cursor: pointer;

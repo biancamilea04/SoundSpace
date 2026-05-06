@@ -9,9 +9,11 @@ export interface PostUser {
 export interface PostStats {
     likes: number;
     comments: number;
+    isLikedByCurrentUser: boolean;
 }
 
 export interface PostProps {
+    postId: string;
     user: PostUser;
     timeAgo: string;
     content: string;
@@ -24,6 +26,7 @@ export interface PostProps {
 }
 
 export interface SelectedPostPayload {
+    postId: string;
     postKey: string;
     user: PostUser;
     timeAgo: string;
@@ -31,4 +34,6 @@ export interface SelectedPostPayload {
     song?: SongProps;
     spotifyUri?: string;
     stats: PostStats;
+    likeCount?: number;
+    isLikedByCurrentUser?: boolean;
 }

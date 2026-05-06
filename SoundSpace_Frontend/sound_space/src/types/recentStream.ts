@@ -1,7 +1,8 @@
 export interface RecentStream {
-    name: string;
+    title: string;
     artistName: string;
     artistUrl: string | null;
-    imageUrl: string | null;
+    coverUrl: string | null;
     spotifyUrl: string | null;
+    playedAt: string;
 }

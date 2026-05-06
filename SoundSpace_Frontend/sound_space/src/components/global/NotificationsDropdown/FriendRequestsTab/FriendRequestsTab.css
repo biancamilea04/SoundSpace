@@ -1,0 +1,33 @@
+.friend-requests-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.friend-requests-tab__section {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.friend-requests-tab__section + .friend-requests-tab__section {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.friend-requests-tab__label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    padding: 0 12px 6px;
+}
+
+.friend-requests-tab__empty {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    padding: 8px 12px;
+    text-align: center;
+}

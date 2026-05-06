@@ -1,217 +1,272 @@
-import { useCallback, useEffect, useState } from 'react';
-import type { Comment } from '../../types/comment';
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { CommentData, CommentNode } from '../../types/comment';
 import type { SelectedPostPayload } from '../../components/global/Post/Post.types';
+import { fetchCommentsByPostId, createComment, updateComment, deleteComment } from '../../services/comment/commentService';
+import { toggleLike } from '../../services/post/likeService';
+import { useUserProfile } from '../UserProfile/useUserProfile';
 
 interface UseSinglePostPageResult {
     selectedPost: SelectedPostPayload;
     liked: boolean;
     likeCount: number;
-    comments: Comment[];
+    comments: CommentNode[];
+    isLoadingComments: boolean;
+    commentsError: string | null;
     replyToName: string | null;
+    currentUserId: string | null;
     currentUserAvatar: string;
     handleToggleLike: () => void;
-    handleStartReply: (comment: Comment) => void;
+    handleStartReply: (commentId: string, userName: string) => void;
     handleCancelReply: () => void;
     handleAddComment: (text: string) => void;
+    handleEditComment: (commentId: string, newText: string) => void;
+    handleDeleteComment: (commentId: string) => void;
 }
 
-const initialComments: Comment[] = [
-    {
-        id: '1',
-        user: { name: 'test_user_1', avatarUrl: '/icons/SoundSpaceIcon.png' },
-        text: 'test',
-        timeAgo: '2h ago',
-    },
-    {
-        id: '2',
-        user: { name: 'test_user_2', avatarUrl: '/icons/SoundSpaceIcon.png' },
-        text: 'test',
-        timeAgo: '1h ago',
-    },
-    {
-        id: '3',
-        user: { name: 'test_user_3', avatarUrl: '/icons/SoundSpaceIcon.png' },
-        text: 'test',
-        timeAgo: '45m ago',
-    },
-    {
-        id: '4',
-        user: { name: 'test_user_4', avatarUrl: '/icons/SoundSpaceIcon.png' },
-        text: 'test',
-        timeAgo: '30m ago',
-    },
-    {
-        id: '5',
-        user: { name: 'test_user_5', avatarUrl: '/icons/SoundSpaceIcon.png' },
-        text: 'test',
-        timeAgo: '15m ago',
-    },
-];
-
-const initialLikeCount = 245;
-const currentUserAvatar = '/icons/SoundSpaceIcon.png';
-
 const fallbackPost: SelectedPostPayload = {
+    postId: '',
     postKey: 'fallback-post',
-    user: { name: 'test_user', avatarUrl: currentUserAvatar },
-    timeAgo: '3h ago',
-    content: 'test',
-    stats: { likes: initialLikeCount, comments: initialComments.length },
-    song: {
-        title: 'Midnight Echoes',
-        artist: 'The Synthwave Collective',
-        albumImageUrl: '/icons/SoundSpaceIcon.png',
-        durationFormatted: '1:24',
-    },
+    user: { name: 'Unknown', avatarUrl: '/icons/SoundSpaceIcon.png' },
+    timeAgo: '',
+    content: '',
+    stats: { likes: 0, comments: 0, isLikedByCurrentUser: false },
+    likeCount: 0,
+    isLikedByCurrentUser: false,
 };
 
-const commentsStoragePrefix = 'postComments:';
-
-const getCommentsStorageKey = (postKey: string): string => {
-    return `${commentsStoragePrefix}${encodeURIComponent(postKey)}`;
-};
-
-const isComment = (value: unknown): value is Comment => {
-    if (!value || typeof value !== 'object') {
-        return false;
-    }
-
-    const maybeComment = value as Partial<Comment>;
+const isSelectedPostPayload = (value: unknown): value is SelectedPostPayload => {
+    if (!value || typeof value !== 'object') return false;
+    const maybe = value as Partial<SelectedPostPayload>;
     return (
-        typeof maybeComment.id === 'string'
-        && typeof maybeComment.text === 'string'
-        && typeof maybeComment.timeAgo === 'string'
-        && typeof maybeComment.user?.name === 'string'
-        && typeof maybeComment.user?.avatarUrl === 'string'
+        typeof maybe.postId === 'string'
+        && typeof maybe.postKey === 'string'
+        && typeof maybe.user?.name === 'string'
+        && typeof maybe.content === 'string'
+        && typeof maybe.stats === 'object'
     );
 };
 
 const getStoredPost = (): SelectedPostPayload => {
-    if (typeof window === 'undefined') {
-        return fallbackPost;
-    }
+    if (typeof window === 'undefined') return fallbackPost;
 
-    const storedPost = window.sessionStorage.getItem('selectedPost');
-    if (!storedPost) {
-        return fallbackPost;
-    }
+    const raw = window.sessionStorage.getItem('selectedPost');
+    if (!raw) return fallbackPost;
 
     try {
-        const parsedPost = JSON.parse(storedPost) as SelectedPostPayload;
-        if (!parsedPost?.user?.name || !parsedPost?.content || !parsedPost?.stats || !parsedPost?.postKey) {
-            return fallbackPost;
-        }
-
-        return parsedPost;
+        const parsed = JSON.parse(raw) as unknown;
+        return isSelectedPostPayload(parsed) ? parsed : fallbackPost;
     } catch {
         window.sessionStorage.removeItem('selectedPost');
         return fallbackPost;
     }
 };
 
-const getStoredComments = (postKey: string): Comment[] => {
-    if (typeof window === 'undefined') {
-        return initialComments;
+const buildCommentTree = (flat: CommentData[]): CommentNode[] => {
+    const nodeMap = new Map<string, CommentNode>();
+
+    for (const item of flat) {
+        nodeMap.set(item.id, {
+            id: item.id,
+            userId: item.userId,
+            displayName: item.displayName,
+            profileImageUrl: item.profileImageUrl,
+            content: item.content,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt,
+            replies: [],
+        });
     }
 
-    const storedComments = window.sessionStorage.getItem(getCommentsStorageKey(postKey));
-    if (!storedComments) {
-        return initialComments;
-    }
+    const roots: CommentNode[] = [];
 
-    try {
-        const parsedComments = JSON.parse(storedComments) as unknown;
-        if (!Array.isArray(parsedComments)) {
-            return initialComments;
+    for (const item of flat) {
+        const node = nodeMap.get(item.id)!;
+        if (!item.parentCommentId) {
+            roots.push(node);
+        } else {
+            const parent = nodeMap.get(item.parentCommentId);
+            if (parent) {
+                parent.replies.push(node);
+            } else {
+                roots.push(node);
+            }
         }
-
-        const validComments = parsedComments.filter(isComment);
-        return validComments.length > 0 ? validComments : initialComments;
-    } catch {
-        return initialComments;
     }
+
+    return roots;
 };
 
-const addReplyToThread = (comments: Comment[], parentCommentId: string, reply: Comment): Comment[] => {
-    return comments.map((comment) => {
-        if (comment.id === parentCommentId) {
-            return {
-                ...comment,
-                replies: [...(comment.replies || []), reply],
-            };
+const updateNodeInTree = (nodes: CommentNode[], commentId: string, newContent: string, updatedAt: string): CommentNode[] => {
+    return nodes.map((node) => {
+        if (node.id === commentId) {
+            return { ...node, content: newContent, updatedAt };
         }
-
-        if (!comment.replies || comment.replies.length === 0) {
-            return comment;
+        if (node.replies.length > 0) {
+            return { ...node, replies: updateNodeInTree(node.replies, commentId, newContent, updatedAt) };
         }
-
-        return {
-            ...comment,
-            replies: addReplyToThread(comment.replies, parentCommentId, reply),
-        };
+        return node;
     });
+};
+
+const removeNodeFromTree = (nodes: CommentNode[], commentId: string): CommentNode[] => {
+    return nodes
+        .filter((node) => node.id !== commentId)
+        .map((node) => ({
+            ...node,
+            replies: removeNodeFromTree(node.replies, commentId),
+        }));
 };
 
 export const useSinglePostPage = (): UseSinglePostPageResult => {
     const [selectedPost] = useState<SelectedPostPayload>(getStoredPost);
-    const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState<number>(selectedPost.stats.likes);
-    const [comments, setComments] = useState<Comment[]>(() => getStoredComments(selectedPost.postKey));
+    const [liked, setLiked] = useState(() => selectedPost.isLikedByCurrentUser ?? false);
+    const [likeCount, setLikeCount] = useState<number>(() => selectedPost.likeCount ?? selectedPost.stats.likes);
+    const [comments, setComments] = useState<CommentNode[]>([]);
+    const [isLoadingComments, setIsLoadingComments] = useState(true);
+    const [commentsError, setCommentsError] = useState<string | null>(null);
     const [replyTo, setReplyTo] = useState<{ commentId: string; userName: string } | null>(null);
+    const hasFetched = useRef(false);
+
+    const { user } = useUserProfile();
+    const currentUserId = user?.id ?? null;
+    const currentUserAvatar = user?.profileImageUrl ?? '/icons/SoundSpaceIcon.png';
 
     useEffect(() => {
-        if (typeof window === 'undefined') {
+        if (hasFetched.current || !selectedPost.postId) {
+            setIsLoadingComments(false);
             return;
         }
 
-        window.sessionStorage.setItem(getCommentsStorageKey(selectedPost.postKey), JSON.stringify(comments));
-    }, [comments, selectedPost.postKey]);
+        hasFetched.current = true;
 
-    const handleToggleLike = useCallback(() => {
-        setLiked((prevLiked) => {
-            const nextLiked = !prevLiked;
-            setLikeCount((prevCount) => (nextLiked ? prevCount + 1 : prevCount - 1));
-            return nextLiked;
-        });
-    }, []);
+        fetchCommentsByPostId(selectedPost.postId)
+            .then((flat) => {
+                setComments(buildCommentTree(flat));
+            })
+            .catch(() => {
+                setCommentsError('Failed to load comments');
+            })
+            .finally(() => {
+                setIsLoadingComments(false);
+            });
+    }, [selectedPost.postId]);
 
-    const handleStartReply = useCallback((comment: Comment) => {
-        setReplyTo({ commentId: comment.id, userName: comment.user.name });
+    const handleToggleLike = useCallback(async () => {
+        if (!selectedPost.postId) return;
+
+        const prevLiked = liked;
+        const prevCount = likeCount;
+
+        setLiked(!prevLiked);
+        setLikeCount(prevLiked ? prevCount - 1 : prevCount + 1);
+
+        try {
+            const result = await toggleLike(selectedPost.postId);
+            setLiked(result.isLikedByCurrentUser);
+            setLikeCount(result.likeCount);
+        } catch {
+            setLiked(prevLiked);
+            setLikeCount(prevCount);
+        }
+    }, [selectedPost.postId, liked, likeCount]);
+
+    const handleStartReply = useCallback((commentId: string, userName: string) => {
+        setReplyTo({ commentId, userName });
     }, []);
 
     const handleCancelReply = useCallback(() => {
         setReplyTo(null);
     }, []);
 
-    const handleAddComment = useCallback((text: string) => {
-        const newComment: Comment = {
-            id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-            user: { name: 'You', avatarUrl: currentUserAvatar },
-            text,
-            timeAgo: 'Just now',
-        };
+    const handleAddComment = useCallback(async (text: string) => {
+        if (!selectedPost.postId) return;
 
-        setComments((prevComments) => {
-            if (!replyTo) {
-                return [newComment, ...prevComments];
-            }
+        try {
+            const created = await createComment({
+                content: text,
+                postId: selectedPost.postId,
+                parentCommentId: replyTo?.commentId,
+            });
 
-            return addReplyToThread(prevComments, replyTo.commentId, newComment);
-        });
+            setComments((prev) => {
+                if (!created.parentCommentId) {
+                    const node: CommentNode = {
+                        id: created.id,
+                        userId: created.userId,
+                        displayName: created.displayName,
+                        profileImageUrl: created.profileImageUrl,
+                        content: created.content,
+                        createdAt: created.createdAt,
+                        updatedAt: created.updatedAt,
+                        replies: [],
+                    };
+                    return [node, ...prev];
+                }
 
-        setReplyTo(null);
-    }, [replyTo]);
+                const addReply = (nodes: CommentNode[]): CommentNode[] =>
+                    nodes.map((node) => {
+                        if (node.id === created.parentCommentId) {
+                            const reply: CommentNode = {
+                                id: created.id,
+                                userId: created.userId,
+                                displayName: created.displayName,
+                                profileImageUrl: created.profileImageUrl,
+                                content: created.content,
+                                createdAt: created.createdAt,
+                                updatedAt: created.updatedAt,
+                                replies: [],
+                            };
+                            return { ...node, replies: [...node.replies, reply] };
+                        }
+                        return { ...node, replies: addReply(node.replies) };
+                    });
+
+                return addReply(prev);
+            });
+
+            setReplyTo(null);
+        } catch {
+            // comment creation failed silently; user can retry
+        }
+    }, [selectedPost.postId, replyTo]);
+
+    const handleEditComment = useCallback(async (commentId: string, newText: string) => {
+        try {
+            const updated = await updateComment(commentId, { content: newText });
+            setComments((prev) =>
+                updateNodeInTree(prev, commentId, updated.content, updated.updatedAt ?? new Date().toISOString())
+            );
+        } catch {
+            // edit failed silently
+        }
+    }, []);
+
+    const handleDeleteComment = useCallback(async (commentId: string) => {
+        try {
+            await deleteComment(commentId);
+            setComments((prev) => removeNodeFromTree(prev, commentId));
+        } catch {
+            // delete failed silently
+        }
+    }, []);
 
     return {
         selectedPost,
         liked,
         likeCount,
         comments,
-        replyToName: replyTo?.userName || null,
+        isLoadingComments,
+        commentsError,
+        replyToName: replyTo?.userName ?? null,
+        currentUserId,
         currentUserAvatar,
         handleToggleLike,
         handleStartReply,
         handleCancelReply,
         handleAddComment,
+        handleEditComment,
+        handleDeleteComment,
     };
 };

@@ -1,14 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { toggleLike } from '@/services/post/likeService';
 
 type SharePlatform = 'instagram' | 'facebook' | 'x';
 
 interface UsePostInteractionsParams {
+    postId: string;
     userName: string;
     content: string;
+    initialLiked: boolean;
+    initialLikeCount: number;
 }
 
 interface UsePostInteractionsResult {
     liked: boolean;
+    likeCount: number;
     showShareMenu: boolean;
     showOptionsMenu: boolean;
     shareMenuRef: React.RefObject<HTMLDivElement | null>;
@@ -32,8 +37,9 @@ const getShareUrl = (platform: SharePlatform, currentUrl: string, shareText: str
     return `https://x.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareText)}`;
 };
 
-export const usePostInteractions = ({ userName, content }: UsePostInteractionsParams): UsePostInteractionsResult => {
-    const [liked, setLiked] = useState(false);
+export const usePostInteractions = ({ postId, userName, content, initialLiked, initialLikeCount }: UsePostInteractionsParams): UsePostInteractionsResult => {
+    const [liked, setLiked] = useState(initialLiked);
+    const [likeCount, setLikeCount] = useState(initialLikeCount);
     const [showShareMenu, setShowShareMenu] = useState(false);
     const [showOptionsMenu, setShowOptionsMenu] = useState(false);
     const shareMenuRef = useRef<HTMLDivElement>(null);
@@ -58,9 +64,22 @@ export const usePostInteractions = ({ userName, content }: UsePostInteractionsPa
         };
     }, []);
 
-    const toggleLiked = useCallback(() => {
-        setLiked((prev) => !prev);
-    }, []);
+    const toggleLiked = useCallback(async () => {
+        const prevLiked = liked;
+        const prevCount = likeCount;
+
+        setLiked(!prevLiked);
+        setLikeCount(prevLiked ? prevCount - 1 : prevCount + 1);
+
+        try {
+            const result = await toggleLike(postId);
+            setLiked(result.isLikedByCurrentUser);
+            setLikeCount(result.likeCount);
+        } catch {
+            setLiked(prevLiked);
+            setLikeCount(prevCount);
+        }
+    }, [postId, liked, likeCount]);
 
     const toggleShareMenu = useCallback(() => {
         setShowShareMenu((prev) => {
@@ -101,6 +120,7 @@ export const usePostInteractions = ({ userName, content }: UsePostInteractionsPa
 
     return {
         liked,
+        likeCount,
         showShareMenu,
         showOptionsMenu,
         shareMenuRef,
