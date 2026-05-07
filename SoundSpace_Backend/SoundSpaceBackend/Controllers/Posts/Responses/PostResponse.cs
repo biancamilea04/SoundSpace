@@ -7,4 +7,6 @@ public record PostResponse(
     string? ProfileImageUrl,
     string Content,
     string? SpotifyUri,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    int LikeCount,
+    bool IsLikedByCurrentUser);
