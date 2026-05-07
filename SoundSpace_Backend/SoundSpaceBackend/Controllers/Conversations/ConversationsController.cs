@@ -95,7 +95,7 @@ public class ConversationsController(
         if (userId == null) return Unauthorized();
 
         var count = await conversationService.GetUnreadConversationCountAsync(userId.Value);
-        return Ok(new { count });
+        return Ok(count);
     }
 
     private async Task<Guid?> ResolveUserIdAsync()
