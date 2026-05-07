@@ -119,4 +119,19 @@ public class UsersController(
         var result = await _spotifyPlayerService.GetTopGenresAsync(spotifyId, maxGenres);
         return Ok(result);
     }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchUsers([FromQuery] string q)
+    {
+        if (string.IsNullOrWhiteSpace(q) || q.Trim().Length < 2)
+            return BadRequest("Query must be at least 2 characters.");
+
+        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (spotifyId == null)
+            return Unauthorized();
+
+        var currentUser = await _userService.GetUserEntityBySpotifyIdAsync(spotifyId);
+        var results = await _userService.SearchUsersAsync(q, currentUser.Id);
+        return Ok(results);
+    }
 }
