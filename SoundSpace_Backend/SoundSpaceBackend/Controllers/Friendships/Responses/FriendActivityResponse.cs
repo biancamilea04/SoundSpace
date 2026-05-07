@@ -18,5 +18,5 @@ public record FriendActivityResponse(
     string? LastPlayedUri,
     string? LastPlayedCoverUrl,
     DateTime? MusicStatusUpdatedAt,
-    DateTime LastSeen
+    DateTime? LastSeen
 );
