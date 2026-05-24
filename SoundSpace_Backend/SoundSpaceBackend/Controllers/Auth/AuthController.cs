@@ -102,8 +102,7 @@ public class AuthController(
         {
             accessToken  = result.Value.AccessToken,
             refreshToken = result.Value.RefreshToken
-        });
-    }
+        }); }
 
     [HttpGet("token")]
     [Authorize]
