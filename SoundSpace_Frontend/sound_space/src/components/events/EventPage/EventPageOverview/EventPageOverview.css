@@ -1,0 +1,104 @@
+.epo {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-top: 8px;
+}
+
+.epo__section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.epo__eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.epo__description {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* ── Stats grid ───────────────────── */
+
+.epo__stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+@media (min-width: 640px) {
+    .epo__stats {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.epo__stat {
+    background-color: var(--bg-elevated);
+    border-radius: 10px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: transform 0.2s ease;
+}
+
+.epo__stat:hover {
+    transform: translateY(-2px);
+}
+
+.epo__stat-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.epo__stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+/* ── Photos mosaic ────────────────── */
+
+.epo__photos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+@media (min-width: 640px) {
+    .epo__photos-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.epo__photo-tile {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    background-color: var(--bg-elevated);
+}
+
+.epo__photo-img {
+    object-fit: cover;
+    transition: transform 500ms ease;
+}
+
+.epo__photo-tile:hover .epo__photo-img {
+    transform: scale(1.06);
+}

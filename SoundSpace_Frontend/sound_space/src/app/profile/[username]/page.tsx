@@ -22,7 +22,7 @@ function ProfilePageContent() {
                         <ProfileMainView username={username} />
                     </div>
                     <div className="profile-layout-right">
-                        <ProfileSidebarRight />
+                        <ProfileSidebarRight username={username} />
                     </div>
                 </div>
             </div>

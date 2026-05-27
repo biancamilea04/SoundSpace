@@ -2,6 +2,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ChatHubProvider } from '@/contexts/ChatHubContext';
+import { AudioPlayerProvider } from '@/contexts/AudioPlayerContext';
+import NewChatModal from '@/components/global/NewChatModal/NewChatModal';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
     const [queryClient] = useState(
@@ -18,7 +20,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     return (
         <QueryClientProvider client={queryClient}>
             <ChatHubProvider>
-                {children}
+                <AudioPlayerProvider>
+                    {children}
+                    <NewChatModal />
+                </AudioPlayerProvider>
             </ChatHubProvider>
         </QueryClientProvider>
     );

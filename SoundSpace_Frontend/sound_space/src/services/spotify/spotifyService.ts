@@ -30,6 +30,8 @@ export const fetchSpotifyItem = async (uri: string): Promise<SpotifyMediaItem | 
     } catch {
         return null;
     }
+};
+
 export const fetchTopGenres = async (): Promise<string[]> => {
     const response = await apiFetch(`${BACKEND_URL}/api/users/top-genres`);
 
@@ -68,6 +70,50 @@ export const fetchRecentStreams = async (limit: number = 5): Promise<RecentStrea
 
     if (!response.ok) {
         console.error(`[RecentStreams] Failed to fetch (status ${response.status})`);
+        return [];
+    }
+
+    return response.json() as Promise<RecentStream[]>;
+};
+
+export const fetchTopGenresByUsername = async (username: string): Promise<string[]> => {
+    const response = await apiFetch(`${BACKEND_URL}/api/users/${encodeURIComponent(username)}/top-genres`);
+
+    if (!response.ok) {
+        console.error(`[TopGenres] Failed to fetch for user ${username} (status ${response.status})`);
+        return [];
+    }
+
+    return response.json() as Promise<string[]>;
+};
+
+export const fetchTopArtistsByUsername = async (username: string): Promise<TopArtist[]> => {
+    const response = await apiFetch(`${BACKEND_URL}/api/users/${encodeURIComponent(username)}/top-artists`);
+
+    if (!response.ok) {
+        console.error(`[TopArtists] Failed to fetch for user ${username} (status ${response.status})`);
+        return [];
+    }
+
+    return response.json() as Promise<TopArtist[]>;
+};
+
+export const fetchTopTracksByUsername = async (username: string): Promise<TopTrack[]> => {
+    const response = await apiFetch(`${BACKEND_URL}/api/users/${encodeURIComponent(username)}/top-tracks`);
+
+    if (!response.ok) {
+        console.error(`[TopTracks] Failed to fetch for user ${username} (status ${response.status})`);
+        return [];
+    }
+
+    return response.json() as Promise<TopTrack[]>;
+};
+
+export const fetchRecentStreamsByUsername = async (username: string, limit: number = 5): Promise<RecentStream[]> => {
+    const response = await apiFetch(`${BACKEND_URL}/api/users/${encodeURIComponent(username)}/recent-streams?limit=${limit}`);
+
+    if (!response.ok) {
+        console.error(`[RecentStreams] Failed to fetch for user ${username} (status ${response.status})`);
         return [];
     }
 

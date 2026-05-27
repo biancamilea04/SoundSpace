@@ -10,6 +10,7 @@ interface HeaderProfileMenuProps {
     avatarSrc: string;
     profileHref?: string;
     settingsHref?: string;
+    likedPostsHref?: string;
 }
 
 const ProfileMenu = ({
@@ -17,6 +18,7 @@ const ProfileMenu = ({
     avatarSrc,
     profileHref = '/profile',
     settingsHref = '/settings',
+    likedPostsHref = '/liked-posts',
 }: HeaderProfileMenuProps) => {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const profileMenuRef = useRef<HTMLDivElement>(null);
@@ -91,6 +93,14 @@ const ProfileMenu = ({
                         onClick={handleCloseProfileMenu}
                     >
                         Settings
+                    </Link>
+                    <Link
+                        href={likedPostsHref}
+                        className="profile-dropdown-item"
+                        role="menuitem"
+                        onClick={handleCloseProfileMenu}
+                    >
+                        Liked Posts
                     </Link>
                     <button
                         type="button"

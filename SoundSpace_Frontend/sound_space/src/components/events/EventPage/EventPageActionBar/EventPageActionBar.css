@@ -1,0 +1,137 @@
+.epab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 24px;
+    background-color: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background-color 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+@media (min-width: 768px) {
+    .epab {
+        padding: 10px 40px;
+    }
+}
+
+.epab--sticky {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgba(18, 18, 18, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-subtle);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* ── Tabs ─────────────────────────── */
+
+.epab__tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.epab__tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.epab__tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.epab__tab--active {
+    background-color: var(--text-primary);
+    color: var(--black);
+}
+
+.epab__tab:hover:not(.epab__tab--active) {
+    background-color: var(--bg-elevated);
+    color: var(--text-secondary);
+}
+
+/* ── Actions ─────────────────────── */
+
+.epab__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.epab__share {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--bg-elevated);
+    border: none;
+    border-radius: 50%;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.epab__share:hover {
+    background: var(--bg-highlight);
+    color: var(--text-primary);
+}
+
+.epab__attend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    border-radius: 20px;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.epab__attend:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.epab__attend--off {
+    background-color: var(--text-primary);
+    color: #000;
+}
+
+.epab__attend--off:hover:not(:disabled) {
+    background-color: var(--primary-green);
+}
+
+.epab__attend--on {
+    background-color: var(--primary-green);
+    color: #000;
+}
+
+.epab__attend--on:hover:not(:disabled) {
+    background-color: var(--primary-green-hover);
+}

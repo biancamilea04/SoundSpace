@@ -32,6 +32,7 @@ var host = Host.CreateDefaultBuilder(args)
 
         services.AddHostedService<PollingWorker>();
         services.AddHostedService<CurrentlyPlayingWorker>();
+        services.AddHostedService<LikedSongsSyncWorker>();
     })
     .Build();
 

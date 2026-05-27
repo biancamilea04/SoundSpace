@@ -1,9 +1,10 @@
 "use client";
 
-import {createContext, type ReactNode, useCallback, useContext, useEffect, useRef,} from "react";
+import {createContext, type ReactNode, useCallback, useContext, useEffect, useMemo, useRef,} from "react";
 import {type HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel,} from "@microsoft/signalr";
 import {getAccessTokenCookie} from "@/services/auth/authService";
 import {useMessageStore} from "@/stores/messageStore";
+import type {MessageState} from "@/stores/messageStore";
 import {usePresenceStore} from "@/stores/presenceStore";
 import {useNotificationStore} from "@/stores/notificationStore";
 import type {Message} from "@/types/message";
@@ -16,13 +17,29 @@ interface BackendMessageDto {
     text: string | null;
     createdAt: string;
     isDeleted: boolean;
+    editedAt: string | null;
 }
+
+type ConversationHandlers = {
+    onMessage: Set<(msg: Message) => void>;
+    onDelete: Set<(messageId: string) => void>;
+    onEdit: Set<(messageId: string, text: string, editedAt: string) => void>;
+};
 
 interface ChatHubContextValue {
     sendMessage: (conversationId: string, text: string) => Promise<void>;
     deleteMessage: (messageId: string) => Promise<void>;
+    editMessage: (messageId: string, newText: string) => Promise<void>;
     markConversationRead: (conversationId: string) => Promise<void>;
     isConnected: () => boolean;
+    joinEventGroup: (eventId: string) => Promise<void>;
+    leaveEventGroup: (eventId: string) => Promise<void>;
+    subscribeToConversation: (
+        conversationId: string,
+        onMessage: (msg: Message) => void,
+        onDelete: (messageId: string) => void,
+        onEdit: (messageId: string, text: string, editedAt: string) => void
+    ) => () => void;
 }
 
 const ChatHubContext = createContext<ChatHubContextValue | null>(null);
@@ -32,9 +49,10 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || "https://localhos
 export function ChatHubProvider({ children }: { children: ReactNode }) {
     const connectionRef = useRef<HubConnection | null>(null);
     const storeRef = useRef(useMessageStore.getState());
+    const conversationSubscribers = useRef<Map<string, ConversationHandlers>>(new Map());
 
     useEffect(() => {
-        return useMessageStore.subscribe((state) => {
+        return useMessageStore.subscribe((state: MessageState) => {
             storeRef.current = state;
         });
     }, []);
@@ -78,11 +96,31 @@ export function ChatHubProvider({ children }: { children: ReactNode }) {
             } else {
                 storeRef.current.incrementUnread(dto.conversationId);
             }
+
+            // Notify event chat subscribers
+            const subs = conversationSubscribers.current.get(dto.conversationId);
+            if (subs) subs.onMessage.forEach((cb) => cb(message));
         });
 
         connection.on("MessageDeleted", (tombstone: BackendMessageDto) => {
             if (!isMounted) return;
             storeRef.current.replaceWithTombstone(tombstone.id, tombstone.conversationId);
+
+            const subs = conversationSubscribers.current.get(tombstone.conversationId);
+            if (subs) subs.onDelete.forEach((cb) => cb(tombstone.id));
+        });
+
+        connection.on("MessageEdited", (dto: BackendMessageDto) => {
+            if (!isMounted) return;
+            useMessageStore.getState().updateMessageText(
+                dto.id,
+                dto.conversationId,
+                dto.text ?? "",
+                dto.editedAt ?? new Date().toISOString()
+            );
+
+            const subs = conversationSubscribers.current.get(dto.conversationId);
+            if (subs) subs.onEdit.forEach((cb) => cb(dto.id, dto.text ?? "", dto.editedAt ?? new Date().toISOString()));
         });
 
         connection.on("OnlineUsers", (ids: string[]) => {
@@ -98,6 +136,7 @@ export function ChatHubProvider({ children }: { children: ReactNode }) {
         connection.on("UserWentOffline", (id: string) => {
             if (!isMounted) return;
             usePresenceStore.getState().markOffline(id);
+            useMessageStore.getState().updateUserLastSeen(id, "just now");
         });
 
         connection.on("MessagesSeen", (conversationId: string, messageIds: string[]) => {
@@ -123,17 +162,14 @@ export function ChatHubProvider({ children }: { children: ReactNode }) {
             isMounted = false;
             connection.off("ReceiveMessage");
             connection.off("MessageDeleted");
+            connection.off("MessageEdited");
             connection.off("OnlineUsers");
             connection.off("UserCameOnline");
             connection.off("UserWentOffline");
             connection.off("MessagesSeen");
             connection.off("FriendRequestReceived");
             connection.off("FriendRequestAccepted");
-            if (connection.state === HubConnectionState.Connected) {
-                connection.stop().catch((err) =>
-                    console.error("[ChatHubProvider] Error stopping SignalR:", err)
-                );
-            }
+            connection.stop().catch(() => {});
             connectionRef.current = null;
         };
     }, []);
@@ -152,6 +188,12 @@ export function ChatHubProvider({ children }: { children: ReactNode }) {
         await conn.invoke("DeleteMessage", messageId);
     }, []);
 
+    const editMessage = useCallback(async (messageId: string, newText: string) => {
+        const conn = connectionRef.current;
+        if (!conn || conn.state !== HubConnectionState.Connected) return;
+        await conn.invoke("EditMessage", messageId, newText);
+    }, []);
+
     const markConversationRead = useCallback(async (conversationId: string) => {
         const conn = connectionRef.current;
         if (!conn || conn.state !== HubConnectionState.Connected) return;
@@ -163,8 +205,55 @@ export function ChatHubProvider({ children }: { children: ReactNode }) {
         []
     );
 
+    const joinEventGroup = useCallback(async (eventId: string) => {
+        const conn = connectionRef.current;
+        if (!conn || conn.state !== HubConnectionState.Connected) return;
+        await conn.invoke("JoinEventGroup", eventId);
+    }, []);
+
+    const leaveEventGroup = useCallback(async (eventId: string) => {
+        const conn = connectionRef.current;
+        if (!conn || conn.state !== HubConnectionState.Connected) return;
+        await conn.invoke("LeaveEventGroup", eventId);
+    }, []);
+
+    const subscribeToConversation = useCallback((
+        conversationId: string,
+        onMessage: (msg: Message) => void,
+        onDelete: (messageId: string) => void,
+        onEdit: (messageId: string, text: string, editedAt: string) => void
+    ) => {
+        const existing: ConversationHandlers = conversationSubscribers.current.get(conversationId) ?? {
+            onMessage: new Set(),
+            onDelete: new Set(),
+            onEdit: new Set(),
+        };
+        existing.onMessage.add(onMessage);
+        existing.onDelete.add(onDelete);
+        existing.onEdit.add(onEdit);
+        conversationSubscribers.current.set(conversationId, existing);
+
+        return () => {
+            existing.onMessage.delete(onMessage);
+            existing.onDelete.delete(onDelete);
+            existing.onEdit.delete(onEdit);
+            if (existing.onMessage.size === 0 && existing.onDelete.size === 0 && existing.onEdit.size === 0) {
+                conversationSubscribers.current.delete(conversationId);
+            }
+        };
+    }, []);
+
+    const value = useMemo(
+        () => ({
+            sendMessage, deleteMessage, editMessage, markConversationRead, isConnected,
+            joinEventGroup, leaveEventGroup, subscribeToConversation,
+        }),
+        [sendMessage, deleteMessage, editMessage, markConversationRead, isConnected,
+         joinEventGroup, leaveEventGroup, subscribeToConversation]
+    );
+
     return (
-        <ChatHubContext.Provider value={{ sendMessage, deleteMessage, markConversationRead, isConnected }}>
+        <ChatHubContext.Provider value={value}>
             {children}
         </ChatHubContext.Provider>
     );

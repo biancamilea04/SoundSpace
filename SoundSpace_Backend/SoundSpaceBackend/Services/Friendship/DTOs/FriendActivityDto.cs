@@ -18,5 +18,5 @@ public record FriendActivityDto(
     string? LastPlayedUri,
     string? LastPlayedCoverUrl,
     DateTime? MusicStatusUpdatedAt,
-    DateTime LastSeen
+    DateTime? LastSeen
 );

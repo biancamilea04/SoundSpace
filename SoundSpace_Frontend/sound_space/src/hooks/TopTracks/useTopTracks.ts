@@ -1,26 +1,27 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { TopTrack } from "@/types/topTrack";
-import { fetchTopTracks } from "@/services/spotify/spotifyService";
+import { fetchTopTracks, fetchTopTracksByUsername } from "@/services/spotify/spotifyService";
 
 interface UseTopTracksResult {
     tracks: TopTrack[];
     isLoading: boolean;
 }
 
-export const useTopTracks = (): UseTopTracksResult => {
+export const useTopTracks = (username?: string): UseTopTracksResult => {
     const [tracks, setTracks] = useState<TopTrack[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const hasFetched = useRef(false);
 
     useEffect(() => {
-        if (hasFetched.current) return;
-        hasFetched.current = true;
+        setIsLoading(true);
+        setTracks([]);
 
         const load = async () => {
             try {
-                const data = await fetchTopTracks();
+                const data = username
+                    ? await fetchTopTracksByUsername(username)
+                    : await fetchTopTracks();
                 setTracks(data);
             } catch (err) {
                 console.error("[useTopTracks] Error fetching tracks:", err);
@@ -30,7 +31,7 @@ export const useTopTracks = (): UseTopTracksResult => {
         };
 
         load();
-    }, []);
+    }, [username]);
 
     return { tracks, isLoading };
 };

@@ -1,25 +1,26 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { fetchTopGenres } from "@/services/spotify/spotifyService";
+import { useEffect, useState } from "react";
+import { fetchTopGenres, fetchTopGenresByUsername } from "@/services/spotify/spotifyService";
 
 interface UseTopGenresResult {
     genres: string[];
     isLoading: boolean;
 }
 
-export const useTopGenres = (): UseTopGenresResult => {
+export const useTopGenres = (username?: string): UseTopGenresResult => {
     const [genres, setGenres] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const hasFetched = useRef(false);
 
     useEffect(() => {
-        if (hasFetched.current) return;
-        hasFetched.current = true;
+        setIsLoading(true);
+        setGenres([]);
 
         const load = async () => {
             try {
-                const data = await fetchTopGenres();
+                const data = username
+                    ? await fetchTopGenresByUsername(username)
+                    : await fetchTopGenres();
                 setGenres(data);
             } catch (err) {
                 console.error("[useTopGenres] Error fetching genres:", err);
@@ -29,7 +30,7 @@ export const useTopGenres = (): UseTopGenresResult => {
         };
 
         load();
-    }, []);
+    }, [username]);
 
     return { genres, isLoading };
 };

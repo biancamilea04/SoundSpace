@@ -1,6 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SoundSpaceBackend.Controllers.Auth.Responses;
+using SoundSpaceBackend.Controllers.Users.Responses;
 using SoundSpaceBackend.Persistence;
+using SoundSpaceBackend.Services.SpotifyPlayer.DTOs;
 using SoundSpaceBackend.Services.User.Abstractions;
 using SoundSpaceBackend.Services.User.DTOs;
 using UserEntity = SoundSpaceBackend.Models.Entities.User;
@@ -65,6 +68,64 @@ public class UserService(
             user.Followers);
 
         return Task.FromResult(dto);
+    }
+
+    public async Task<List<UserSearchResultDto>> SearchUsersAsync(string query, Guid excludeUserId)
+    {
+        var q = query.Trim().ToLower();
+        return await dbContext.Users
+            .Where(u => u.Id != excludeUserId && u.DisplayName.ToLower().Contains(q))
+            .OrderBy(u => u.DisplayName)
+            .Take(20)
+            .Select(u => new UserSearchResultDto(u.Id, u.DisplayName, u.ProfileImageUrl))
+            .ToListAsync();
+    }
+
+    public async Task<List<TopArtistResponse>> GetTopArtistsByUserIdAsync(Guid userId)
+    {
+        return await dbContext.TopArtists
+            .Where(a => a.UserId == userId)
+            .OrderBy(a => a.Rank)
+            .Select(a => new TopArtistResponse(a.Name, a.ImageUrl, a.SpotifyUrl, a.SpotifyArtistId))
+            .ToListAsync();
+    }
+
+    public async Task<List<TopTrackResponse>> GetTopTracksByUserIdAsync(Guid userId)
+    {
+        return await dbContext.TopTracks
+            .Where(t => t.UserId == userId)
+            .OrderBy(t => t.Rank)
+            .Select(t => new TopTrackResponse(t.Title, t.ArtistName, t.ArtistUrl, t.CoverUrl, t.SpotifyUrl, t.SpotifyTrackId))
+            .ToListAsync();
+    }
+
+    public async Task<List<RecentStreamResponse>> GetRecentStreamsByUserIdAsync(Guid userId, int limit)
+    {
+        return await dbContext.RecentStreams
+            .Where(s => s.UserId == userId)
+            .OrderByDescending(s => s.PlayedAt)
+            .Take(limit)
+            .Select(s => new RecentStreamResponse(s.Title, s.ArtistName, s.ArtistUrl, s.CoverUrl, s.SpotifyUrl, s.SpotifyTrackId, s.PlayedAt))
+            .ToListAsync();
+    }
+
+    public Task<UserMusicStatusResponse?> GetUserMusicStatusByDisplayNameAsync(string displayName)
+    {
+        var user = dbContext.Users.FirstOrDefault(
+            u => u.DisplayName.ToLower() == displayName.ToLower());
+
+        if (user == null) return Task.FromResult<UserMusicStatusResponse?>(null);
+
+        return Task.FromResult<UserMusicStatusResponse?>(new UserMusicStatusResponse(
+            user.Id,
+            user.IsListening,
+            user.CurrentlyPlayingTitle,
+            user.CurrentlyPlayingArtist,
+            user.CurrentlyPlayingArtistUrl,
+            user.CurrentlyPlayingCoverUrl,
+            user.CurrentlyPlayingUri,
+            user.CurrentlyPlayingProgressMs
+        ));
     }
 
     public Task<UserEntity> CreateOrUpdateUserAsync(SpotifyAuthResponseDto spotifyProfileAuthResponse)

@@ -1,4 +1,4 @@
-import { UserProfile } from '@/types/user';
+import { UserProfile, UserMusicStatus, UserSearchResultDto } from '@/types/user';
 import { apiFetch } from '@/lib/apiClient';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || '';
@@ -47,4 +47,16 @@ export const fetchUserProfileByUsername = async (username: string): Promise<User
 
     const data = await response.json();
     return mapUserProfile(data);
+};
+
+export const fetchUserMusicStatus = async (username: string): Promise<UserMusicStatus | null> => {
+    const res = await apiFetch(`${BACKEND_URL}/api/users/${encodeURIComponent(username)}/music-status`);
+    if (!res.ok) return null;
+    return res.json();
+};
+
+export const searchUsers = async (query: string): Promise<UserSearchResultDto[]> => {
+    const res = await apiFetch(`${BACKEND_URL}/api/users/search?q=${encodeURIComponent(query)}`);
+    if (!res.ok) return [];
+    return res.json();
 };

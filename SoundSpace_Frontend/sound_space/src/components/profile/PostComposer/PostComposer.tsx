@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { Music, Send } from "lucide-react";
-import { createPost } from "@/services/post/postService";
+import { createPost, createEventPost } from "@/services/post/postService";
+import type { PostData } from "@/types/post";
 import { SpotifyAttachmentPreview } from "@/components/global/SpotifyAttachmentPreview/SpotifyAttachmentPreview";
 import { MediaSelectionModal } from "@/components/global/MediaSelectionModal/MediaSelectionModal";
 import type { SpotifyMediaPayload } from "@/types/spotify";
@@ -12,10 +13,11 @@ import "./PostComposer.css";
 interface PostComposerProps {
     avatarUrl?: string;
     username?: string;
-    onPostCreated?: () => void;
+    eventId?: string;
+    onPostCreated?: (post?: PostData) => void;
 }
 
-export const PostComposer = ({ avatarUrl, username, onPostCreated }: PostComposerProps) => {
+export const PostComposer = ({ avatarUrl, username, eventId, onPostCreated }: PostComposerProps) => {
     const [text, setText] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedMedia, setSelectedMedia] = useState<SpotifyMediaPayload | null>(null);
@@ -25,14 +27,22 @@ export const PostComposer = ({ avatarUrl, username, onPostCreated }: PostCompose
         if (!text.trim() || isSubmitting) return;
         setIsSubmitting(true);
         try {
-            await createPost({
+            const payload = {
                 content: text,
                 spotifyUri: selectedMedia?.uri,
-            });
+                spotifyName: selectedMedia?.name,
+                spotifyCoverUrl: selectedMedia?.coverUrl,
+                spotifySubtitle: selectedMedia?.subtitle,
+                spotifyMediaType: selectedMedia?.type,
+                previewUrl: selectedMedia?.previewUrl ?? undefined,
+            };
+            const post = eventId
+                ? await createEventPost(eventId, payload)
+                : await createPost(payload);
             setText("");
             setSelectedMedia(null);
             setShowModal(false);
-            onPostCreated?.();
+            onPostCreated?.(post);
         } catch {
         } finally {
             setIsSubmitting(false);

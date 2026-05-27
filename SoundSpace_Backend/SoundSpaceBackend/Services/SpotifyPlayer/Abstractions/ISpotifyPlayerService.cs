@@ -12,4 +12,5 @@ public interface ISpotifyPlayerService
     Task<List<TopTrackResponse>> GetTopTracksAsync(string spotifyId, int limit = 5);
     Task<List<RecentStreamResponse>> GetRecentStreamsAsync(string spotifyId, int limit = 5);
     Task<List<string>> GetTopGenresAsync(string spotifyId, int maxGenres = 10);
+    Task<PlayTrackResultCode> PlayTrackAsync(string spotifyId, string trackUri, int positionMs = 0);
 }

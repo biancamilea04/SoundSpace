@@ -1,0 +1,177 @@
+.cem-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+    backdrop-filter: blur(4px);
+}
+
+.cem-modal {
+    background-color: var(--bg-surface);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+}
+
+.cem-modal::-webkit-scrollbar {
+    display: none;
+}
+
+.cem-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 0;
+}
+
+.cem-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.cem-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.cem-close:hover {
+    color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.cem-form {
+    padding: 20px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cem-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cem-row--2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 480px) {
+    .cem-row--2col {
+        grid-template-columns: 1fr;
+    }
+}
+
+.cem-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.cem-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.4px;
+}
+
+.cem-input {
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 14px;
+    padding: 10px 12px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease;
+    font-family: inherit;
+}
+
+.cem-input::placeholder {
+    color: var(--text-tertiary);
+}
+
+.cem-input:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 2px var(--primary-green-glow);
+}
+
+.cem-input::-webkit-calendar-picker-indicator {
+    filter: invert(0.6);
+    cursor: pointer;
+}
+
+.cem-textarea {
+    resize: vertical;
+    min-height: 72px;
+}
+
+.cem-error {
+    font-size: 12px;
+    color: var(--destructive);
+}
+
+.cem-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 8px;
+}
+
+.cem-btn {
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.3px;
+}
+
+.cem-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.cem-btn--cancel {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-strong);
+}
+
+.cem-btn--cancel:hover:not(:disabled) {
+    color: var(--text-primary);
+    border-color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.cem-btn--submit {
+    background-color: var(--primary-green);
+    color: #000;
+}
+
+.cem-btn--submit:hover:not(:disabled) {
+    background-color: var(--primary-green-hover);
+    transform: scale(1.03);
+}

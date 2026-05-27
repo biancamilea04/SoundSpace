@@ -6,7 +6,11 @@ import PostFooter from './PostFooter/PostFooter';
 import type { PostProps } from './Post.types';
 import './Post.css';
 
-export const Post = ({ postId, user, timeAgo, content, song, spotifyUri, stats, isOwner, onEditPost, onDeletePost }: PostProps) => {
+export const Post = ({
+    postId, user, timeAgo, content, song,
+    spotifyUri, spotifyName, spotifyCoverUrl, spotifySubtitle, spotifyMediaType, previewUrl,
+    stats, isOwner, onEditPost, onDeletePost,
+}: PostProps) => {
     const postKey = `${user.name}|${timeAgo}|${content}`;
 
     const {
@@ -42,7 +46,17 @@ export const Post = ({ postId, user, timeAgo, content, song, spotifyUri, stats, 
                 onEditPost={onEditPost}
                 onDeletePost={onDeletePost}
             />
-            <PostContent content={content} song={song} spotifyUri={spotifyUri} />
+            <PostContent
+                content={content}
+                song={song}
+                spotifyUri={spotifyUri}
+                spotifyName={spotifyName}
+                spotifyCoverUrl={spotifyCoverUrl}
+                spotifySubtitle={spotifySubtitle}
+                spotifyMediaType={spotifyMediaType}
+                previewUrl={previewUrl}
+                postId={postId}
+            />
             <PostFooter
                 stats={{ ...stats, likes: likeCount }}
                 postData={{
@@ -53,6 +67,11 @@ export const Post = ({ postId, user, timeAgo, content, song, spotifyUri, stats, 
                     content,
                     song,
                     spotifyUri,
+                    spotifyName,
+                    spotifyCoverUrl,
+                    spotifySubtitle,
+                    spotifyMediaType,
+                    previewUrl,
                     stats,
                     likeCount,
                     isLikedByCurrentUser: liked,

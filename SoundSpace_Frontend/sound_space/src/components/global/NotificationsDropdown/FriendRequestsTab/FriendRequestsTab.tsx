@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNotificationStore } from '@/stores/notificationStore';
+import type { Friendship } from '@/types/friendship';
 import { useIncomingRequests } from '@/hooks/Friendship/useIncomingRequests';
 import { acceptRequest, rejectRequest } from '@/services/friendship/friendshipService';
 import { fetchUserProfile } from '@/services/user/userService';
@@ -55,7 +56,7 @@ const FriendRequestsTab = () => {
                 {!isLoading && pendingRequests.length === 0 && (
                     <div className="friend-requests-tab__empty">No pending requests</div>
                 )}
-                {pendingRequests.map((req) => (
+                {pendingRequests.map((req: Friendship) => (
                     <FriendRequestItem
                         key={req.id}
                         request={req}

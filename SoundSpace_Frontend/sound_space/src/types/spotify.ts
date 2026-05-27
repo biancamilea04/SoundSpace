@@ -8,6 +8,7 @@ export interface SpotifyMediaItem {
     subtitle: string;
     externalUrl: string;
     subtitleUrl: string;
+    previewUrl?: string | null;
 }
 
 export type SpotifyMediaPayload = SpotifyMediaItem;

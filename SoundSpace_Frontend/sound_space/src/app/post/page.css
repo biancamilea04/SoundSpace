@@ -215,12 +215,16 @@
 }
 
 .post-page__action-btn--liked {
-    color: #ef4444;
+    color: var(--primary-green-hover);
+}
+
+.post-page__action-btn--liked svg {
+    fill: currentColor;
 }
 
 .post-page__action-btn--liked:hover {
-    color: #ef4444;
-    background: rgba(239, 68, 68, 0.1);
+    color: var(--primary-green-hover);
+    background: var(--bg-surface);
 }
 
 /* ─── Divider ─── */

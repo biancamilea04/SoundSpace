@@ -11,4 +11,9 @@ public record GetPostDto(
     string? SpotifyCoverUrl,
     string? SpotifySubtitle,
     string? SpotifyMediaType,
-    DateTime CreatedAt);
+    string? PreviewUrl,
+    int? PreviewStartSecond,
+    int? PreviewDuration,
+    DateTime CreatedAt,
+    Guid? EventId,
+    string? EventTitle);

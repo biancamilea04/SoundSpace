@@ -13,16 +13,21 @@ export interface MessageUser {
 export interface Message {
     id: string;
     senderId: string;
-    text: string;
+    text: string | null;
     timestamp: string;
     isRead: boolean;
+    isDeleted?: boolean;
+    conversationId?: string;
+    editedAt?: string | null;
 }
 
 export interface Conversation {
     id: string;
     user: MessageUser;
-    lastMessage: string;
+    lastMessage: string | null;
     lastMessageTime: string;
     unreadCount: number;
     messages: Message[];
+    isPending?: boolean;
+    targetUserId?: string;
 }

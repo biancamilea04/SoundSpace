@@ -22,7 +22,7 @@ public class ConversationService(ApplicationContext db) : IConversationService
             .FirstOrDefaultAsync();
 
         if (existing != null)
-            return await BuildSummaryAsync(existing);
+            return await BuildSummaryAsync(existing, currentUserId);
 
         await using var tx = await db.Database.BeginTransactionAsync();
 
@@ -49,7 +49,7 @@ public class ConversationService(ApplicationContext db) : IConversationService
                 .ThenInclude(cp => cp.User)
             .FirstAsync();
 
-        return await BuildSummaryAsync(created);
+        return await BuildSummaryAsync(created, currentUserId);
     }
 
     public async Task<List<ConversationSummaryDto>> GetUserConversationsAsync(Guid userId)
@@ -60,7 +60,7 @@ public class ConversationService(ApplicationContext db) : IConversationService
             .ToListAsync();
 
         var conversations = await db.Conversations
-            .Where(c => convIds.Contains(c.Id))
+            .Where(c => convIds.Contains(c.Id) && !c.IsGroup)
             .Include(c => c.Participants)
                 .ThenInclude(cp => cp.User)
             .OrderByDescending(c => c.CreatedAt)
@@ -68,7 +68,7 @@ public class ConversationService(ApplicationContext db) : IConversationService
 
         var result = new List<ConversationSummaryDto>();
         foreach (var conv in conversations)
-            result.Add(await BuildSummaryAsync(conv));
+            result.Add(await BuildSummaryAsync(conv, userId));
 
         return result;
     }
@@ -142,13 +142,20 @@ public class ConversationService(ApplicationContext db) : IConversationService
             .ToList();
     }
 
+    public Task<List<Guid>> GetAllConversationIdsAsync(Guid userId) =>
+        db.ConversationParticipants
+            .Where(cp => cp.UserId == userId)
+            .Select(cp => cp.ConversationId)
+            .ToListAsync();
+
     public Task<int> GetUnreadConversationCountAsync(Guid userId) =>
         db.ConversationParticipants
             .Where(cp => cp.UserId == userId &&
                          cp.Conversation.Messages.Any(m => !m.IsRead && !m.IsDeleted && m.SenderId != userId))
             .CountAsync();
 
-    private async Task<ConversationSummaryDto> BuildSummaryAsync(Models.Entities.Conversation conv)
+    private async Task<ConversationSummaryDto> BuildSummaryAsync(
+        Models.Entities.Conversation conv, Guid currentUserId)
     {
         var lastMessage = await db.Messages
             .Where(m => m.ConversationId == conv.Id)
@@ -161,9 +168,16 @@ public class ConversationService(ApplicationContext db) : IConversationService
                 m.CreatedAt,
                 m.IsDeleted,
                 m.IsRead,
-                m.ReadAt
+                m.ReadAt,
+                m.EditedAt
             ))
             .FirstOrDefaultAsync();
+
+        var unreadCount = await db.Messages
+            .CountAsync(m => m.ConversationId == conv.Id
+                          && !m.IsRead
+                          && !m.IsDeleted
+                          && m.SenderId != currentUserId);
 
         var participants = conv.Participants.Select(cp => new ParticipantDto(
             cp.UserId,
@@ -172,6 +186,7 @@ public class ConversationService(ApplicationContext db) : IConversationService
             cp.User.LastSeen
         )).ToList();
 
-        return new ConversationSummaryDto(conv.Id, conv.IsGroup, conv.CreatedAt, participants, lastMessage);
+        return new ConversationSummaryDto(conv.Id, conv.IsGroup, conv.CreatedAt,
+            participants, lastMessage, unreadCount);
     }
 }

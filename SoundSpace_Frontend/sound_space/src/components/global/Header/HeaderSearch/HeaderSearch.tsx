@@ -1,15 +1,55 @@
-import React from 'react';
+"use client";
+
+import React, { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useSearchUsers } from '@/hooks/Users/useSearchUsers';
 import './HeaderSearch.css';
 
-interface HeaderSearchProps {
-    placeholder?: string;
-    value?: string;
-    onChange?: (value: string) => void;
-}
+const HeaderSearch = ({ placeholder = 'Search users...' }: { placeholder?: string }) => {
+    const router = useRouter();
+    const [searchInput, setSearchInput] = useState('');
+    const [isOpen, setIsOpen] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
 
-const HeaderSearch = ({ placeholder = 'Search', value, onChange }: HeaderSearchProps) => {
+    const debouncedQuery = useDebounce(searchInput, 400);
+    const isSearching = debouncedQuery.trim().length >= 2;
+
+    const { data: results, isLoading } = useSearchUsers(debouncedQuery);
+
+    useEffect(() => {
+        setIsOpen(isSearching);
+    }, [isSearching]);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setIsOpen(false);
+                setSearchInput('');
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+        return () => document.removeEventListener('keydown', handleEscape);
+    }, []);
+
+    const handleSelect = (displayName: string) => {
+        router.push(`/profile/${encodeURIComponent(displayName)}`);
+        setSearchInput('');
+        setIsOpen(false);
+    };
+
     return (
-        <div className="main-header__center">
+        <div className="main-header__center" ref={containerRef}>
             <div className="main-header__search">
                 <svg
                     className="main-header__search-icon"
@@ -27,13 +67,39 @@ const HeaderSearch = ({ placeholder = 'Search', value, onChange }: HeaderSearchP
                     type="text"
                     className="main-header__search-input"
                     placeholder={placeholder}
-                    value={value}
-                    onChange={(event) => onChange?.(event.target.value)}
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    onFocus={() => isSearching && setIsOpen(true)}
                 />
             </div>
+
+            {isOpen && (
+                <div className="main-header__search-dropdown">
+                    {isLoading && (
+                        <div className="main-header__search-state">Searching…</div>
+                    )}
+                    {!isLoading && results && results.length === 0 && (
+                        <div className="main-header__search-state">No users found.</div>
+                    )}
+                    {!isLoading && results && results.map((user) => (
+                        <button
+                            key={user.id}
+                            className="main-header__search-item"
+                            onClick={() => handleSelect(user.displayName)}
+                        >
+                            <div className="main-header__search-avatar">
+                                {user.profileImageUrl
+                                    ? <img src={user.profileImageUrl} alt={user.displayName} className="main-header__search-avatar-img" />
+                                    : <span className="main-header__search-avatar-fallback">{user.displayName[0].toUpperCase()}</span>
+                                }
+                            </div>
+                            <span className="main-header__search-name">{user.displayName}</span>
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
 
 export default HeaderSearch;
-

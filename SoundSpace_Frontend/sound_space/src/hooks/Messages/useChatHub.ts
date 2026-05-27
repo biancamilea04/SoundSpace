@@ -21,11 +21,13 @@ interface BackendMessageDto {
     text: string | null;
     createdAt: string;
     isDeleted: boolean;
+    editedAt: string | null;
 }
 
 interface UseChatHubResult {
     sendMessage: (conversationId: string, text: string) => Promise<void>;
     deleteMessage: (messageId: string) => Promise<void>;
+    editMessage: (messageId: string, newText: string) => Promise<void>;
     markConversationRead: (conversationId: string) => Promise<void>;
     isConnected: () => boolean;
 }
@@ -82,6 +84,16 @@ export const useChatHub = (): UseChatHubResult => {
             storeRef.current.replaceWithTombstone(tombstone.id, tombstone.conversationId);
         });
 
+        connection.on("MessageEdited", (dto: BackendMessageDto) => {
+            if (!isMounted) return;
+            storeRef.current.updateMessageText(
+                dto.id,
+                dto.conversationId,
+                dto.text ?? "",
+                dto.editedAt ?? new Date().toISOString()
+            );
+        });
+
         connection.on("OnlineUsers", (ids: string[]) => {
             if (!isMounted) return;
             usePresenceStore.getState().setOnlineUsers(ids);
@@ -110,6 +122,7 @@ export const useChatHub = (): UseChatHubResult => {
             isMounted = false;
             connection.off("ReceiveMessage");
             connection.off("MessageDeleted");
+            connection.off("MessageEdited");
             connection.off("OnlineUsers");
             connection.off("UserCameOnline");
             connection.off("UserWentOffline");
@@ -140,6 +153,12 @@ export const useChatHub = (): UseChatHubResult => {
         await conn.invoke("DeleteMessage", messageId);
     }, []);
 
+    const editMessage = useCallback(async (messageId: string, newText: string) => {
+        const conn = connectionRef.current;
+        if (!conn || conn.state !== HubConnectionState.Connected) return;
+        await conn.invoke("EditMessage", messageId, newText);
+    }, []);
+
     const markConversationRead = useCallback(async (conversationId: string) => {
         const conn = connectionRef.current;
         if (!conn || conn.state !== HubConnectionState.Connected) return;
@@ -151,5 +170,5 @@ export const useChatHub = (): UseChatHubResult => {
         []
     );
 
-    return { sendMessage, deleteMessage, markConversationRead, isConnected };
+    return { sendMessage, deleteMessage, editMessage, markConversationRead, isConnected };
 };

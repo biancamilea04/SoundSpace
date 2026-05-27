@@ -1,26 +1,27 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { RecentStream } from "@/types/recentStream";
-import { fetchRecentStreams } from "@/services/spotify/spotifyService";
+import { fetchRecentStreams, fetchRecentStreamsByUsername } from "@/services/spotify/spotifyService";
 
 interface UseRecentStreamsResult {
     streams: RecentStream[];
     isLoading: boolean;
 }
 
-export const useRecentStreams = (): UseRecentStreamsResult => {
+export const useRecentStreams = (username?: string): UseRecentStreamsResult => {
     const [streams, setStreams] = useState<RecentStream[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const hasFetched = useRef(false);
 
     useEffect(() => {
-        if (hasFetched.current) return;
-        hasFetched.current = true;
+        setIsLoading(true);
+        setStreams([]);
 
         const load = async () => {
             try {
-                const data = await fetchRecentStreams();
+                const data = username
+                    ? await fetchRecentStreamsByUsername(username)
+                    : await fetchRecentStreams();
                 setStreams(data);
             } catch (err) {
                 console.error("[useRecentStreams] Error fetching streams:", err);
@@ -30,7 +31,7 @@ export const useRecentStreams = (): UseRecentStreamsResult => {
         };
 
         load();
-    }, []);
+    }, [username]);
 
     return { streams, isLoading };
 };

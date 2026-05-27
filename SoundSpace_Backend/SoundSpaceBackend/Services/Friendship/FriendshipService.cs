@@ -67,26 +67,28 @@ public class FriendshipService(
 
     public async Task<List<GetFriendshipDto>> GetIncomingRequestsAsync(Guid userId)
     {
-        return await dbContext.Friendships
+        var friendships = await dbContext.Friendships
             .Include(f => f.Sender)
             .Include(f => f.Receiver)
             .Where(f => f.ReceiverId == userId && f.Status == FriendshipStatus.Pending)
             .OrderByDescending(f => f.CreatedAt)
-            .Select(f => MapToDto(f, f.Sender, f.Receiver))
             .ToListAsync();
+
+        return friendships.Select(f => MapToDto(f, f.Sender, f.Receiver)).ToList();
     }
 
     public async Task<List<GetFriendshipDto>> GetRequestHistoryAsync(Guid userId)
     {
-        return await dbContext.Friendships
+        var friendships = await dbContext.Friendships
             .Include(f => f.Sender)
             .Include(f => f.Receiver)
             .Where(f =>
                 (f.SenderId == userId || f.ReceiverId == userId) &&
                 f.Status != FriendshipStatus.Pending)
             .OrderByDescending(f => f.UpdatedAt ?? f.CreatedAt)
-            .Select(f => MapToDto(f, f.Sender, f.Receiver))
             .ToListAsync();
+
+        return friendships.Select(f => MapToDto(f, f.Sender, f.Receiver)).ToList();
     }
 
     public async Task<GetFriendshipDto> AcceptAsync(Guid requestId, Guid currentUserId)

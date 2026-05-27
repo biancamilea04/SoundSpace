@@ -9,4 +9,6 @@ public interface IPostService
     Task<List<GetPostDto>> GetPostsByUserIdAsync(Guid userId);
     Task<GetPostDto> UpdatePostAsync(Guid postId, Guid userId, UpdatePostDto dto);
     Task DeletePostAsync(Guid postId, Guid userId);
+    Task<List<GetPostDto>> GetEventPostsAsync(Guid eventId);
+    Task<List<GetPostDto>> GetEventFeedAsync(Guid userId, int page, int pageSize);
 }

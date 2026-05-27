@@ -1,0 +1,76 @@
+.pgp {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.pgp__post {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pgp__post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pgp__avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--bg-elevated);
+    flex-shrink: 0;
+}
+
+.pgp__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pgp__name {
+    width: 100px;
+    height: 12px;
+    border-radius: 6px;
+    background: var(--bg-elevated);
+}
+
+.pgp__time {
+    width: 60px;
+    height: 10px;
+    border-radius: 6px;
+    background: var(--bg-elevated);
+}
+
+.pgp__body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pgp__line {
+    height: 12px;
+    border-radius: 6px;
+    background: var(--bg-elevated);
+}
+
+.pgp__line--full { width: 100%; }
+.pgp__line--partial { width: 65%; }
+
+.pgp__footer {
+    display: flex;
+    align-items: center;
+}
+
+.pgp__like {
+    height: 12px;
+    border-radius: 6px;
+    background: var(--bg-elevated);
+}

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { Friendship } from '@/types/friendship';
 
-interface NotificationState {
+export interface NotificationState {
     pendingRequests: Friendship[];
     setPendingRequests: (requests: Friendship[]) => void;
     addRequest: (request: Friendship) => void;

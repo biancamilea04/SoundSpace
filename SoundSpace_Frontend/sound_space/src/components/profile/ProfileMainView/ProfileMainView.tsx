@@ -4,10 +4,12 @@ import { ProfileHeader } from "@/components/profile/ProfileHeader/ProfileHeader"
 import { GenreTags } from "@/components/profile/GenreTags/GenreTags";
 import { PostComposer } from "@/components/profile/PostComposer/PostComposer";
 import { ProfileFeed } from "@/components/profile/ProfileFeed/ProfileFeed";
+import { FriendshipButton } from "@/components/profile/FriendshipButton/FriendshipButton";
 import { useUserProfile } from "@/hooks/UserProfile/useUserProfile";
 import { useTopGenres } from "@/hooks/TopGenres/useTopGenres";
 import { fetchUserProfile } from "@/services/user/userService";
 import { useEffect, useState } from "react";
+import type { UserProfile } from "@/types/user";
 import "./ProfileMainView.css";
 
 interface ProfileMainViewProps {
@@ -18,6 +20,7 @@ export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
     const { user, isLoading, error } = useUserProfile(username);
     const { genres, isLoading: genresLoading } = useTopGenres();
     const [isOwnProfile, setIsOwnProfile] = useState(false);
+    const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
     const [feedKey, setFeedKey] = useState(0);
 
     useEffect(() => {
@@ -26,6 +29,7 @@ export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
         const checkOwnership = async () => {
             try {
                 const loggedInUser = await fetchUserProfile();
+                setCurrentUser(loggedInUser);
                 setIsOwnProfile(loggedInUser.spotifyId === user.spotifyId);
             } catch {
                 setIsOwnProfile(false);
@@ -62,11 +66,15 @@ export const ProfileMainView = ({ username }: ProfileMainViewProps) => {
                     <ProfileHeader
                         name={user.displayName}
                         avatarUrl={user.profileImageUrl}
-                        email={user.email}
-                        country={user.country}
                         followers={user.followers}
                         following={0}
                         playlists={0}
+                        action={currentUser && (
+                            <FriendshipButton
+                                currentUserId={currentUser.id}
+                                profileUserId={user.id}
+                            />
+                        )}
                     />
 
                     <GenreTags tags={genres} isLoading={genresLoading} />

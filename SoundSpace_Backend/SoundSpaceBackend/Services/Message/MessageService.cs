@@ -21,7 +21,7 @@ public class MessageService(ApplicationContext db) : IMessageService
 
         return new MessageDto(message.Id, message.ConversationId, message.SenderId,
             message.Text, message.CreatedAt, message.IsDeleted,
-            message.IsRead, message.ReadAt);
+            message.IsRead, message.ReadAt, message.EditedAt);
     }
 
     public async Task<MessageDto> SoftDeleteMessageAsync(Guid messageId, Guid requestingUserId)
@@ -39,7 +39,7 @@ public class MessageService(ApplicationContext db) : IMessageService
         await db.SaveChangesAsync();
 
         return new MessageDto(message.Id, message.ConversationId, message.SenderId,
-            null, message.CreatedAt, true, message.IsRead, message.ReadAt);
+            null, message.CreatedAt, true, message.IsRead, message.ReadAt, null);
     }
 
     public async Task<List<MessageDto>> GetConversationMessagesAsync(Guid conversationId, int page, int pageSize)
@@ -57,9 +57,31 @@ public class MessageService(ApplicationContext db) : IMessageService
                 m.CreatedAt,
                 m.IsDeleted,
                 m.IsRead,
-                m.ReadAt
+                m.ReadAt,
+                m.EditedAt
             ))
             .ToListAsync();
+    }
+
+    public async Task<MessageDto> EditMessageAsync(Guid messageId, Guid requestingUserId, string newText)
+    {
+        var message = await db.Messages.FindAsync(messageId)
+            ?? throw new KeyNotFoundException($"Message {messageId} not found.");
+
+        if (message.SenderId != requestingUserId)
+            throw new UnauthorizedAccessException("Only the sender can edit this message.");
+
+        if (message.IsDeleted)
+            throw new InvalidOperationException("Cannot edit a deleted message.");
+
+        message.Text = newText;
+        message.EditedAt = DateTime.UtcNow;
+
+        await db.SaveChangesAsync();
+
+        return new MessageDto(message.Id, message.ConversationId, message.SenderId,
+            message.Text, message.CreatedAt, message.IsDeleted,
+            message.IsRead, message.ReadAt, message.EditedAt);
     }
 
     public async Task<(List<Guid> MessageIds, Guid SenderId)> MarkMessagesAsReadAsync(

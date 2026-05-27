@@ -1,0 +1,37 @@
+.attend-btn {
+    border: none;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+}
+
+.attend-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.attend-btn--default {
+    background-color: var(--primary-green);
+    color: #000;
+}
+
+.attend-btn--default:hover:not(:disabled) {
+    background-color: var(--primary-green-hover);
+    transform: scale(1.04);
+}
+
+.attend-btn--attending {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-strong);
+}
+
+.attend-btn--attending:hover:not(:disabled) {
+    border-color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.06);
+}

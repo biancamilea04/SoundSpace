@@ -48,6 +48,7 @@ public class MusicStatusController(
             lastPlayedArtistUrl = request.LastPlayedArtistUrl,
             lastPlayedUri = request.LastPlayedUri,
             lastPlayedCoverUrl = request.LastPlayedCoverUrl,
+            musicStatusUpdatedAt = request.MusicStatusUpdatedAt,
         };
 
         foreach (var friendId in friendIds.Where(id => onlineIds.Contains(id)))

@@ -33,18 +33,18 @@ export const TopTracks = ({ tracks, isLoading }: TopTracksProps) => {
             <h3 className="top-tracks__title">Top Tracks</h3>
             <div className="top-tracks__list">
                 {tracks.map((track) => (
-                    <div key={track.name} className="top-tracks__item">
+                    <div key={track.title} className="top-tracks__item">
                         {track.imageUrl ? (
                             <Image
                                 src={track.imageUrl}
-                                alt={`${track.name} album art`}
+                                alt={`${track.title} album art`}
                                 width={40}
                                 height={40}
                                 className="top-tracks__album-art"
                             />
                         ) : (
                             <div className="top-tracks__album-art top-tracks__album-art--fallback">
-                                {track.name.charAt(0)}
+                                {track.title?.charAt(0) ?? '?'}
                             </div>
                         )}
                         <div className="top-tracks__info">
@@ -54,7 +54,7 @@ export const TopTracks = ({ tracks, isLoading }: TopTracksProps) => {
                                 rel="noopener noreferrer"
                                 className="top-tracks__track-name-link"
                             >
-                                {track.name}
+                                {track.title}
                             </a>
                             <a
                                 href={track.artistUrl || "#"}

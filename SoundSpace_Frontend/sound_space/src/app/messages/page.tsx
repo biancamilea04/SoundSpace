@@ -22,6 +22,8 @@ export default function MessagesPage() {
         setMessageInput,
         setSearchQuery,
         handleSendMessage,
+        handleDeleteMessage,
+        handleEditMessage,
         handleSelectConversation,
         handleBackToList,
     } = useMessages();
@@ -61,6 +63,8 @@ export default function MessagesPage() {
                                 <ChatMessages
                                     messages={activeConversation.messages}
                                     currentUserId={currentUserId}
+                                    onDeleteMessage={handleDeleteMessage}
+                                    onEditMessage={handleEditMessage}
                                 />
                                 <ChatInput
                                     value={messageInput}

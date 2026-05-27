@@ -13,5 +13,6 @@ public record MusicStatusChangedRequest(
     string? LastPlayedArtist,
     string? LastPlayedArtistUrl,
     string? LastPlayedUri,
-    string? LastPlayedCoverUrl
+    string? LastPlayedCoverUrl,
+    DateTime? MusicStatusUpdatedAt
 );

@@ -1,0 +1,19 @@
+.epp {
+    display: flex;
+    flex-direction: column;
+    padding-top: 8px;
+}
+
+.epp__feed {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.epp__empty {
+    font-size: 14px;
+    color: var(--text-tertiary);
+    text-align: center;
+    padding: 32px 0;
+    margin: 0;
+}

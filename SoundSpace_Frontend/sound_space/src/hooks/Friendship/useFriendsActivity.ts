@@ -41,6 +41,9 @@ export function useFriendsActivity() {
                 if (!cancelled) setLoading(false);
             });
 
+        const token = getAccessTokenCookie();
+        if (!token) return;
+
         const connection = new HubConnectionBuilder()
             .withUrl(HUB_URL, { accessTokenFactory: () => getAccessTokenCookie() ?? '' })
             .withAutomaticReconnect()
@@ -80,6 +83,7 @@ export function useFriendsActivity() {
                             lastPlayedArtistUrl: payload.lastPlayedArtistUrl ?? f.lastPlayedArtistUrl,
                             lastPlayedUri: payload.lastPlayedUri ?? f.lastPlayedUri,
                             lastPlayedCoverUrl: payload.lastPlayedCoverUrl ?? f.lastPlayedCoverUrl,
+                            musicStatusUpdatedAt: payload.musicStatusUpdatedAt ?? f.musicStatusUpdatedAt,
                           }
                         : f
                 )
@@ -102,12 +106,16 @@ export function useFriendsActivity() {
             }
         });
 
-        connection.start().catch(() => {});
+        let disposed = false;
+        const startPromise = connection.start().catch(() => {});
         connectionRef.current = connection;
 
         return () => {
             cancelled = true;
-            connection.stop();
+            disposed = true;
+            void startPromise.then(() => {
+                if (disposed) connection.stop().catch(() => {});
+            });
         };
     }, []);
 

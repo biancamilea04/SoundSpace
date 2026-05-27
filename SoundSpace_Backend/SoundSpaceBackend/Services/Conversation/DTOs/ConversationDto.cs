@@ -4,7 +4,7 @@ public record ParticipantDto(
     Guid UserId,
     string DisplayName,
     string? ProfileImageUrl,
-    DateTime LastSeen
+    DateTime? LastSeen
 );
 
 public record MessageDto(
@@ -15,7 +15,8 @@ public record MessageDto(
     DateTime CreatedAt,
     bool IsDeleted,
     bool IsRead,
-    DateTime? ReadAt
+    DateTime? ReadAt,
+    DateTime? EditedAt
 );
 
 public record ConversationSummaryDto(
@@ -23,5 +24,6 @@ public record ConversationSummaryDto(
     bool IsGroup,
     DateTime CreatedAt,
     List<ParticipantDto> Participants,
-    MessageDto? LastMessage
+    MessageDto? LastMessage,
+    int UnreadCount
 );

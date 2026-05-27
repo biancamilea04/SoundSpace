@@ -6,4 +6,8 @@ public record CreatePostDto(
     string? SpotifyName,
     string? SpotifyCoverUrl,
     string? SpotifySubtitle,
-    string? SpotifyMediaType);
+    string? SpotifyMediaType,
+    string? PreviewUrl,
+    int? PreviewStartSecond,
+    int? PreviewDuration,
+    Guid? EventId = null);

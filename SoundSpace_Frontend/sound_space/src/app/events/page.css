@@ -1,0 +1,146 @@
+.ep-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--black);
+}
+
+.ep-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.ep-main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 40px 60px 60px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.ep-main::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hero */
+.ep-hero {
+    margin-bottom: 32px;
+}
+
+.ep-hero__title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 900;
+    color: var(--text-primary);
+    letter-spacing: -1px;
+    margin: 0 0 8px;
+    line-height: 1.05;
+}
+
+.ep-hero__subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Filter bar */
+.ep-filterbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.ep-pills {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 2px;
+}
+
+.ep-pills::-webkit-scrollbar {
+    display: none;
+}
+
+.ep-pill {
+    flex-shrink: 0;
+    background-color: var(--bg-surface);
+    border: none;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    letter-spacing: 0.2px;
+}
+
+.ep-pill:hover:not(.ep-pill--active) {
+    background-color: var(--bg-elevated);
+    color: var(--text-secondary);
+}
+
+.ep-pill--active {
+    background-color: var(--primary-green);
+    color: #000;
+    font-weight: 700;
+}
+
+.ep-create-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--primary-green);
+    color: #000;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    letter-spacing: 0.3px;
+}
+
+.ep-create-btn:hover {
+    background-color: var(--primary-green-hover);
+    transform: scale(1.03);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .ep-main {
+        padding: 32px 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ep-layout {
+        flex-direction: column;
+    }
+
+    .ep-main {
+        padding: 20px 16px 80px 16px;
+    }
+
+    .ep-hero__title {
+        font-size: 26px;
+        letter-spacing: -0.5px;
+    }
+
+    .ep-filterbar {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .ep-create-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

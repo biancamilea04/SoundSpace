@@ -26,23 +26,23 @@ public class PostService(
             SpotifyCoverUrl = dto.SpotifyCoverUrl,
             SpotifySubtitle = dto.SpotifySubtitle,
             SpotifyMediaType = dto.SpotifyMediaType,
+            PreviewUrl = dto.PreviewUrl,
+            PreviewStartSecond = dto.PreviewStartSecond,
+            PreviewDuration = dto.PreviewDuration,
+            EventId = dto.EventId,
         };
 
         dbContext.Posts.Add(post);
         await dbContext.SaveChangesAsync();
 
-        return new GetPostDto(
-            post.Id,
-            post.UserId,
-            user.DisplayName,
-            user.ProfileImageUrl,
-            post.Content,
-            post.SpotifyUri,
-            post.SpotifyName,
-            post.SpotifyCoverUrl,
-            post.SpotifySubtitle,
-            post.SpotifyMediaType,
-            post.CreatedAt);
+        string? eventTitle = null;
+        if (dto.EventId.HasValue)
+        {
+            var ev = await dbContext.Events.FindAsync(dto.EventId.Value);
+            eventTitle = ev?.Title;
+        }
+
+        return ToDto(post, user.DisplayName, user.ProfileImageUrl, eventTitle);
     }
 
     public async Task<List<GetPostDto>> GetAllPostsAsync()
@@ -51,19 +51,14 @@ public class PostService(
 
         return await dbContext.Posts
             .Include(p => p.User)
+            .Where(p => p.EventId == null)
             .OrderByDescending(p => p.CreatedAt)
             .Select(p => new GetPostDto(
-                p.Id,
-                p.UserId,
-                p.User.DisplayName,
-                p.User.ProfileImageUrl,
-                p.Content,
-                p.SpotifyUri,
-                p.SpotifyName,
-                p.SpotifyCoverUrl,
-                p.SpotifySubtitle,
-                p.SpotifyMediaType,
-                p.CreatedAt))
+                p.Id, p.UserId, p.User.DisplayName, p.User.ProfileImageUrl,
+                p.Content, p.SpotifyUri, p.SpotifyName, p.SpotifyCoverUrl,
+                p.SpotifySubtitle, p.SpotifyMediaType, p.PreviewUrl,
+                p.PreviewStartSecond, p.PreviewDuration, p.CreatedAt,
+                null, null))
             .ToListAsync();
     }
 
@@ -74,6 +69,7 @@ public class PostService(
         var post = await dbContext.Posts
             .IgnoreQueryFilters()
             .Include(p => p.User)
+            .Include(p => p.Event)
             .FirstOrDefaultAsync(p => p.Id == postId)
             ?? throw new KeyNotFoundException($"Post {postId} not found");
 
@@ -92,22 +88,12 @@ public class PostService(
             post.SpotifyCoverUrl = null;
             post.SpotifySubtitle = null;
             post.SpotifyMediaType = null;
+            post.PreviewUrl = null;
         }
 
         await dbContext.SaveChangesAsync();
 
-        return new GetPostDto(
-            post.Id,
-            post.UserId,
-            post.User.DisplayName,
-            post.User.ProfileImageUrl,
-            post.Content,
-            post.SpotifyUri,
-            post.SpotifyName,
-            post.SpotifyCoverUrl,
-            post.SpotifySubtitle,
-            post.SpotifyMediaType,
-            post.CreatedAt);
+        return ToDto(post, post.User.DisplayName, post.User.ProfileImageUrl, post.Event?.Title);
     }
 
     public async Task DeletePostAsync(Guid postId, Guid userId)
@@ -137,20 +123,60 @@ public class PostService(
 
         return await dbContext.Posts
             .Include(p => p.User)
-            .Where(p => p.UserId == userId)
+            .Where(p => p.UserId == userId && p.EventId == null)
             .OrderByDescending(p => p.CreatedAt)
             .Select(p => new GetPostDto(
-                p.Id,
-                p.UserId,
-                p.User.DisplayName,
-                p.User.ProfileImageUrl,
-                p.Content,
-                p.SpotifyUri,
-                p.SpotifyName,
-                p.SpotifyCoverUrl,
-                p.SpotifySubtitle,
-                p.SpotifyMediaType,
-                p.CreatedAt))
+                p.Id, p.UserId, p.User.DisplayName, p.User.ProfileImageUrl,
+                p.Content, p.SpotifyUri, p.SpotifyName, p.SpotifyCoverUrl,
+                p.SpotifySubtitle, p.SpotifyMediaType, p.PreviewUrl,
+                p.PreviewStartSecond, p.PreviewDuration, p.CreatedAt,
+                null, null))
             .ToListAsync();
     }
+
+    public async Task<List<GetPostDto>> GetEventPostsAsync(Guid eventId)
+    {
+        logger.LogInformation("[Post] Fetching posts for EventId={EventId}", eventId);
+
+        return await dbContext.Posts
+            .Include(p => p.User)
+            .Include(p => p.Event)
+            .Where(p => p.EventId == eventId)
+            .OrderByDescending(p => p.CreatedAt)
+            .Select(p => new GetPostDto(
+                p.Id, p.UserId, p.User.DisplayName, p.User.ProfileImageUrl,
+                p.Content, p.SpotifyUri, p.SpotifyName, p.SpotifyCoverUrl,
+                p.SpotifySubtitle, p.SpotifyMediaType, p.PreviewUrl,
+                p.PreviewStartSecond, p.PreviewDuration, p.CreatedAt,
+                p.EventId, p.Event != null ? p.Event.Title : null))
+            .ToListAsync();
+    }
+
+    public async Task<List<GetPostDto>> GetEventFeedAsync(Guid userId, int page, int pageSize)
+    {
+        logger.LogInformation("[Post] Fetching event feed for UserId={UserId} Page={Page}", userId, page);
+
+        return await dbContext.Posts
+            .Include(p => p.User)
+            .Include(p => p.Event)
+            .Where(p => p.EventId != null &&
+                dbContext.EventAttendees.Any(ea => ea.EventId == p.EventId && ea.UserId == userId))
+            .OrderByDescending(p => p.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(p => new GetPostDto(
+                p.Id, p.UserId, p.User.DisplayName, p.User.ProfileImageUrl,
+                p.Content, p.SpotifyUri, p.SpotifyName, p.SpotifyCoverUrl,
+                p.SpotifySubtitle, p.SpotifyMediaType, p.PreviewUrl,
+                p.PreviewStartSecond, p.PreviewDuration, p.CreatedAt,
+                p.EventId, p.Event != null ? p.Event.Title : null))
+            .ToListAsync();
+    }
+
+    private static GetPostDto ToDto(PostEntity post, string displayName, string? profileImageUrl, string? eventTitle) =>
+        new(post.Id, post.UserId, displayName, profileImageUrl,
+            post.Content, post.SpotifyUri, post.SpotifyName, post.SpotifyCoverUrl,
+            post.SpotifySubtitle, post.SpotifyMediaType, post.PreviewUrl,
+            post.PreviewStartSecond, post.PreviewDuration, post.CreatedAt,
+            post.EventId, eventTitle);
 }

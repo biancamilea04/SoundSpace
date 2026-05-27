@@ -9,6 +9,17 @@ export interface UserProfile {
     lastSeen?: string;
 }
 
+export interface UserMusicStatus {
+    userId: string;
+    isListening: boolean;
+    currentlyPlayingTitle: string | null;
+    currentlyPlayingArtist: string | null;
+    currentlyPlayingArtistUrl: string | null;
+    currentlyPlayingCoverUrl: string | null;
+    currentlyPlayingUri: string | null;
+    currentlyPlayingProgressMs: number;
+}
+
 export interface UserSearchResultDto {
     id: string;
     displayName: string;

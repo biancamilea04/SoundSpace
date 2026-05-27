@@ -2,11 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
-import { Home, Search, MessageSquare } from 'lucide-react';
+import { Home, Search, MessageSquare, CalendarDays } from 'lucide-react';
 
 import SidebarItemProps from "@/types/sidebar/sidebarItemProps";
 import { useActiveSidebar } from "@/hooks/useActiveSidebar";
 import { useUserProfile } from "@/hooks/UserProfile/useUserProfile";
+import { useUnreadConversationCount } from "@/hooks/Conversations/useConversationsApi";
+import { useMessageStore } from "@/stores/messageStore";
 import ProfileMenu from "@/components/global/ProfileMenu/ProfileMenu";
 import './MenuSidebar.css';
 
@@ -23,6 +25,11 @@ const MenuSidebarItem = ({ icon: Icon, label, path, badge, isActive }: SidebarIt
 const MenuSidebar = () => {
     const { isActive } = useActiveSidebar();
     const { user } = useUserProfile();
+    const { data: apiUnreadCount = 0 } = useUnreadConversationCount();
+    const totalUnread = useMessageStore((s) => s.totalUnread);
+    const conversationsLoaded = useMessageStore((s) => s.conversationsLoaded);
+    const unreadCount = conversationsLoaded ? totalUnread : apiUnreadCount;
+    const unreadBadge = unreadCount === 0 ? "" : unreadCount > 9 ? "9+" : unreadCount;
 
     const userName = user?.displayName || 'Profile';
     const avatarSrc = user?.profileImageUrl || '/icons/SoundSpaceIcon.png';
@@ -53,8 +60,15 @@ const MenuSidebar = () => {
                         icon={MessageSquare}
                         label="Messages"
                         path="/messages"
-                        badge={3}
+                        badge={unreadBadge}
                         isActive={isActive("/messages")}
+                    />
+                    <MenuSidebarItem
+                        icon={CalendarDays}
+                        label="Events"
+                        path="/events"
+                        badge={""}
+                        isActive={isActive("/events")}
                     />
                 </div>
             </div>

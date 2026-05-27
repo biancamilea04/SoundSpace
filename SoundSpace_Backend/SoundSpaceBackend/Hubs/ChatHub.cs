@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using SoundSpaceBackend.Persistence;
 using SoundSpaceBackend.Services.Conversation.Abstractions;
+using SoundSpaceBackend.Services.EventChat.Abstractions;
 using SoundSpaceBackend.Services.Message.Abstractions;
 using SoundSpaceBackend.Services.User.Abstractions;
 
@@ -13,7 +14,8 @@ public class ChatHub(
     IConversationService conversationService,
     IMessageService messageService,
     IUserService userService,
-    PresenceTracker presenceTracker,
+    IEventChatService eventChatService,
+    ChatPresenceTracker presenceTracker,
     ApplicationContext db) : Hub
 {
     public override async Task OnConnectedAsync()
@@ -22,9 +24,10 @@ public class ChatHub(
         var user = await userService.GetUserEntityBySpotifyIdAsync(spotifyId);
         if (user is null) { Context.Abort(); return; }
 
-        var conversations = await conversationService.GetUserConversationsAsync(user.Id);
-        foreach (var conv in conversations)
-            await Groups.AddToGroupAsync(Context.ConnectionId, GroupName(conv.Id));
+        // Join ALL conversation groups (DMs + event group chats)
+        var allConvIds = await conversationService.GetAllConversationIdsAsync(user.Id);
+        foreach (var id in allConvIds)
+            await Groups.AddToGroupAsync(Context.ConnectionId, GroupName(id));
 
         await Groups.AddToGroupAsync(Context.ConnectionId, UserGroupName(user.Id));
 
@@ -84,11 +87,30 @@ public class ChatHub(
         }
     }
 
-    private async Task<Models.Entities.User> ResolveUserAsync()
+    public async Task EditMessage(Guid messageId, string newText)
     {
-        var spotifyId = Context.User!.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        return await userService.GetUserEntityBySpotifyIdAsync(spotifyId)
-            ?? throw new HubException("User not found.");
+        var user = await ResolveUserAsync();
+
+        if (string.IsNullOrWhiteSpace(newText))
+            throw new HubException("Message text cannot be empty.");
+
+        try
+        {
+            var dto = await messageService.EditMessageAsync(messageId, user.Id, newText.Trim());
+            await Clients.Group(GroupName(dto.ConversationId)).SendAsync("MessageEdited", dto);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            throw new HubException(ex.Message);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            throw new HubException(ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            throw new HubException(ex.Message);
+        }
     }
 
     public async Task MarkMessagesAsRead(Guid conversationId)
@@ -104,6 +126,27 @@ public class ChatHub(
 
         await Clients.Group(UserGroupName(senderId))
             .SendAsync("MessagesSeen", conversationId, messageIds);
+    }
+
+    public async Task JoinEventGroup(Guid eventId)
+    {
+        var convId = await eventChatService.GetConversationIdByEventAsync(eventId);
+        if (convId is null) return;
+        await Groups.AddToGroupAsync(Context.ConnectionId, GroupName(convId.Value));
+    }
+
+    public async Task LeaveEventGroup(Guid eventId)
+    {
+        var convId = await eventChatService.GetConversationIdByEventAsync(eventId);
+        if (convId is null) return;
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, GroupName(convId.Value));
+    }
+
+    private async Task<Models.Entities.User> ResolveUserAsync()
+    {
+        var spotifyId = Context.User!.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        return await userService.GetUserEntityBySpotifyIdAsync(spotifyId)
+            ?? throw new HubException("User not found.");
     }
 
     private static string GroupName(Guid conversationId) => $"conv-{conversationId}";

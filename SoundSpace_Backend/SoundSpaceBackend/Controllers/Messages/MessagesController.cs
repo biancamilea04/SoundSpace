@@ -65,7 +65,8 @@ public class MessagesController(
                 m.CreatedAt,
                 m.IsDeleted,
                 m.IsRead,
-                m.ReadAt))
+                m.ReadAt,
+                m.EditedAt))
             .ToListAsync();
 
         return Ok(messages);

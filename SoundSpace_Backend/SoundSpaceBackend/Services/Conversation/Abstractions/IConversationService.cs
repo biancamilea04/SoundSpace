@@ -11,4 +11,5 @@ public interface IConversationService
         GetOrCreateDirectConversationSlimAsync(Guid currentUserId, Guid targetUserId);
     Task<List<RecentContactDto>> GetRecentContactsAsync(Guid userId, int count = 15);
     Task<int> GetUnreadConversationCountAsync(Guid userId);
+    Task<List<Guid>> GetAllConversationIdsAsync(Guid userId);
 }

@@ -1,0 +1,129 @@
+.my-events__wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--black);
+}
+
+.my-events__layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.my-events__main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 40px 40px 60px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.my-events__main::-webkit-scrollbar {
+    display: none;
+}
+
+.my-events__topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.my-events__back {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.my-events__back:hover {
+    color: var(--text-primary);
+}
+
+.my-events__heading {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.my-events__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.my-events__skeleton {
+    border-radius: 8px;
+    aspect-ratio: 1 / 1.6;
+    background: linear-gradient(
+        90deg,
+        var(--bg-surface) 25%,
+        var(--bg-elevated) 50%,
+        var(--bg-surface) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.my-events__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 80px 20px;
+}
+
+.my-events__empty-text {
+    font-size: 16px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.my-events__browse-btn {
+    background-color: var(--primary-green);
+    color: #000;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 24px;
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.my-events__browse-btn:hover {
+    background-color: var(--primary-green-hover);
+    transform: scale(1.03);
+}
+
+@media (max-width: 1024px) {
+    .my-events__main {
+        padding: 32px 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .my-events__layout {
+        flex-direction: column;
+    }
+
+    .my-events__main {
+        padding: 16px 12px 80px 12px;
+    }
+
+    .my-events__grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+    }
+}

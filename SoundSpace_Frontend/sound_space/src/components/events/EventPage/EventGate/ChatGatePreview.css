@@ -1,0 +1,71 @@
+.cgp {
+    display: flex;
+    flex-direction: column;
+    height: 580px;
+    border-radius: 12px;
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+    background: var(--bg-surface);
+}
+
+.cgp__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+}
+
+.cgp__live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary-green);
+    flex-shrink: 0;
+}
+
+.cgp__live-text {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    color: var(--primary-green);
+    text-transform: uppercase;
+}
+
+.cgp__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-left: 4px;
+}
+
+.cgp__messages {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cgp__row {
+    display: flex;
+}
+
+.cgp__row--left  { justify-content: flex-start; }
+.cgp__row--right { justify-content: flex-end; }
+
+.cgp__bubble {
+    border-radius: 12px;
+}
+
+.cgp__bubble--received { background: var(--bg-elevated); }
+.cgp__bubble--sent     { background: rgba(30, 215, 96, 0.15); }
+
+/* Individual bubble sizes */
+.cgp__bubble--1 { width: 55%; height: 36px; }
+.cgp__bubble--2 { width: 42%; height: 36px; }
+.cgp__bubble--3 { width: 68%; height: 52px; }
+.cgp__bubble--4 { width: 38%; height: 36px; }
+.cgp__bubble--5 { width: 50%; height: 36px; }
+.cgp__bubble--6 { width: 60%; height: 52px; }

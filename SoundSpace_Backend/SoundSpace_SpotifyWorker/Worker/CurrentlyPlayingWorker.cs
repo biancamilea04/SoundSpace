@@ -12,7 +12,7 @@ public class CurrentlyPlayingWorker(
     IConfiguration configuration,
     ILogger<CurrentlyPlayingWorker> logger) : BackgroundService
 {
-    private static readonly TimeSpan Interval = TimeSpan.FromSeconds(60);
+    private static readonly TimeSpan Interval = TimeSpan.FromSeconds(30);
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -113,6 +113,7 @@ public class CurrentlyPlayingWorker(
             lastPlayedArtistUrl = entity.LastPlayedArtistUrl,
             lastPlayedUri = entity.LastPlayedUri,
             lastPlayedCoverUrl = entity.LastPlayedCoverUrl,
+            musicStatusUpdatedAt = entity.MusicStatusUpdatedAt,
         };
 
         var client = httpClientFactory.CreateClient();

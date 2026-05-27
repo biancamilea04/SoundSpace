@@ -28,6 +28,14 @@ using SoundSpaceBackend.Services.Friendship;
 using SoundSpaceBackend.Services.Friendship.Abstractions;
 using SoundSpaceBackend.Services.User;
 using SoundSpaceBackend.Services.User.Abstractions;
+using SoundSpaceBackend.Services.PreviewUrl;
+using SoundSpaceBackend.Services.PreviewUrl.Abstractions;
+using SoundSpaceBackend.Services.Event;
+using SoundSpaceBackend.Services.Event.Abstractions;
+using SoundSpaceBackend.Services.EventChat;
+using SoundSpaceBackend.Services.EventChat.Abstractions;
+using SoundSpaceBackend.Services.Photo;
+using SoundSpaceBackend.Services.Photo.Abstractions;
 
 Env.Load();
 var builder = WebApplication.CreateBuilder(args);
@@ -47,6 +55,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 // Service registrations
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
+builder.Services.AddMemoryCache();
 builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(cfg => { }, typeof(SoundSpaceBackend.Mapping.Profiles.UserProfile));
 
@@ -63,7 +72,12 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IFriendshipService, FriendshipService>();
 builder.Services.AddScoped<IConversationService, ConversationService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IPreviewUrlService, PreviewUrlService>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IEventChatService, EventChatService>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddSingleton<PresenceTracker>();
+builder.Services.AddSingleton<ChatPresenceTracker>();
 
 builder.Services.AddSwaggerGen(c =>
     {
@@ -160,6 +174,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseCors();
 
@@ -169,5 +184,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<ChatHub>("/hubs/chat");
 app.MapHub<PresenceHub>("/hubs/presence");
+app.MapHub<SpotifyHub>("/hubs/spotify");
 
 app.Run();
+

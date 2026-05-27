@@ -15,6 +15,7 @@ public class SpotifyPlayerService(
     ILogger<SpotifyPlayerService> logger) : ISpotifyPlayerService
 {
     private const string Bearer = "Bearer";
+
     private const string CurrentlyPlayingUrl =
         "https://api.spotify.com/v1/me/player/currently-playing";
 
@@ -29,6 +30,8 @@ public class SpotifyPlayerService(
 
     private const string RecentStreamsBaseUrl =
         "https://api.spotify.com/v1/me/player/recently-played";
+
+    private const string DevicesUrl = "https://api.spotify.com/v1/me/player/devices";
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
@@ -69,7 +72,8 @@ public class SpotifyPlayerService(
         var result = spotifyData.Items.Select(a => new TopArtistResponse(
             a.Name,
             a.Images?.FirstOrDefault()?.Url,
-            a.ExternalUrls?.Spotify
+            a.ExternalUrls?.Spotify,
+            a.Id
         )).ToList();
 
         return result;
@@ -89,6 +93,7 @@ public class SpotifyPlayerService(
             new AuthenticationHeaderValue(Bearer, accessToken);
 
         string[] timeRanges = ["medium_term", "short_term", "long_term"];
+        var allArtists = new Dictionary<string, SpotifyTopArtistItemDto>();
 
         foreach (var timeRange in timeRanges)
         {
@@ -97,7 +102,8 @@ public class SpotifyPlayerService(
             if (!response.IsSuccessStatusCode)
             {
                 var body = await response.Content.ReadAsStringAsync();
-                logger.LogError("[SpotifyPlayer] Top artists (genres) API error for time_range={TimeRange}. Status={Status} Body={Body}",
+                logger.LogError(
+                    "[SpotifyPlayer] Top artists API error for time_range={TimeRange}. Status={Status} Body={Body}",
                     timeRange, response.StatusCode, body);
                 continue;
             }
@@ -108,19 +114,22 @@ public class SpotifyPlayerService(
             if (spotifyData?.Items == null || spotifyData.Items.Count == 0)
                 continue;
 
-            var topGenres = spotifyData.Items
-                .SelectMany(a => a.Genres)
-                .GroupBy(g => g)
-                .OrderByDescending(g => g.Count())
-                .Take(maxGenres)
-                .Select(g => g.Key)
-                .ToList();
-
-            if (topGenres.Count > 0)
-                return topGenres;
+            foreach (var artist in spotifyData.Items)
+                allArtists.TryAdd(artist.Id ?? artist.Name, artist);
         }
 
-        return [];
+        var topGenres = allArtists.Values
+            .SelectMany(a => a.Genres)
+            .GroupBy(g => g)
+            .OrderByDescending(g => g.Count())
+            .Take(maxGenres)
+            .Select(g => g.Key)
+            .ToList();
+
+        logger.LogInformation("[SpotifyPlayer] Extracted top genres from {ArtistCount} unique artists: {Genres}",
+            allArtists.Count, string.Join(", ", topGenres));
+
+        return topGenres;
     }
 
     public async Task<List<TopTrackResponse>> GetTopTracksAsync(string spotifyId, int limit = 5)
@@ -159,10 +168,11 @@ public class SpotifyPlayerService(
             t.Artists.FirstOrDefault()?.Name ?? "Unknown Artist",
             t.Artists.FirstOrDefault()?.ExternalUrls?.Spotify,
             t.Album?.Images?.FirstOrDefault()?.Url,
-            t.ExternalUrls?.Spotify
+            t.ExternalUrls?.Spotify,
+            t.Id
         )).ToList();
 
-       return result;
+        return result;
     }
 
     public async Task<List<RecentStreamResponse>> GetRecentStreamsAsync(string spotifyId, int limit = 5)
@@ -193,7 +203,7 @@ public class SpotifyPlayerService(
 
         if (spotifyData?.Items == null || spotifyData.Items.Count == 0)
         {
-           return [];
+            return [];
         }
 
         var result = spotifyData.Items
@@ -203,9 +213,11 @@ public class SpotifyPlayerService(
                 s.Track!.Artists.FirstOrDefault()?.Name ?? "Unknown Artist",
                 s.Track!.Artists.FirstOrDefault()?.ExternalUrls?.Spotify,
                 s.Track!.Album?.Images?.FirstOrDefault()?.Url,
-                s.Track!.ExternalUrls?.Spotify
+                s.Track!.ExternalUrls?.Spotify,
+                s.Track!.Id,
+                s.PlayedAt
             )).ToList();
-        
+
         return result;
     }
 
@@ -285,7 +297,8 @@ public class SpotifyPlayerService(
         return result;
     }
 
-    public async Task<List<SpotifyMediaItemResponse>> GetRecentlyPlayedTracksAsync(string spotifyId, string type = "track")
+    public async Task<List<SpotifyMediaItemResponse>> GetRecentlyPlayedTracksAsync(string spotifyId,
+        string type = "track")
     {
         var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
         if (accessToken == null) return [];
@@ -432,9 +445,9 @@ public class SpotifyPlayerService(
 
         foreach (var track in data?.Tracks?.Items ?? [])
         {
-            if (track.Uri == null) 
+            if (track.Uri == null)
                 continue;
-            
+
             items.Add(new SpotifyMediaItemResponse(
                 track.Uri,
                 track.Name,
@@ -448,9 +461,9 @@ public class SpotifyPlayerService(
 
         foreach (var album in data?.Albums?.Items ?? [])
         {
-            if (album.Uri == null) 
+            if (album.Uri == null)
                 continue;
-            
+
             items.Add(new SpotifyMediaItemResponse(
                 album.Uri,
                 album.Name,
@@ -494,7 +507,7 @@ public class SpotifyPlayerService(
         var id = parts[2];
 
         var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
-        if (accessToken == null) 
+        if (accessToken == null)
             return null;
 
         var client = httpClientFactory.CreateClient();
@@ -568,5 +581,62 @@ public class SpotifyPlayerService(
             episode.ExternalUrls?.Spotify ?? string.Empty,
             episode.Show?.ExternalUrls?.Spotify ?? string.Empty
         );
+    }
+
+    public async Task<PlayTrackResultCode> PlayTrackAsync(string spotifyId, string trackUri, int positionMs = 0)
+    {
+        var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
+        if (accessToken == null) return PlayTrackResultCode.Error;
+
+        var client = httpClientFactory.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Bearer, accessToken);
+
+        var deviceId = await GetActiveDeviceIdAsync(client);
+        if (deviceId == null) return PlayTrackResultCode.NoActiveDevice;
+
+        var body = JsonSerializer.Serialize(new
+        {
+            uris = new[] { trackUri },
+            position_ms = positionMs
+        });
+
+        var response = await client.PutAsync(
+            $"https://api.spotify.com/v1/me/player/play?device_id={deviceId}",
+            new StringContent(body, System.Text.Encoding.UTF8, "application/json"));
+
+        if (response.IsSuccessStatusCode) return PlayTrackResultCode.Success;
+
+        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            return PlayTrackResultCode.NoActiveDevice;
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            return PlayTrackResultCode.PremiumRequired;
+
+        var errorBody = await response.Content.ReadAsStringAsync();
+        logger.LogError("[SpotifyPlayer] PlayTrack error. Status={Status} Body={Body}", response.StatusCode, errorBody);
+        return PlayTrackResultCode.Error;
+    }
+
+    private async Task<string?> GetActiveDeviceIdAsync(HttpClient client)
+    {
+        var response = await client.GetAsync(DevicesUrl);
+        if (!response.IsSuccessStatusCode) return null;
+
+        var json = await response.Content.ReadAsStringAsync();
+        using var doc = JsonDocument.Parse(json);
+        if (!doc.RootElement.TryGetProperty("devices", out var devicesEl)) return null;
+
+        string? firstId = null;
+        foreach (var device in devicesEl.EnumerateArray())
+        {
+            var id = device.TryGetProperty("id", out var idEl) ? idEl.GetString() : null;
+            if (id == null) continue;
+
+            firstId ??= id;
+            var isActive = device.TryGetProperty("is_active", out var activeEl) && activeEl.GetBoolean();
+            if (isActive) return id;
+        }
+
+        return firstId;
     }
 }

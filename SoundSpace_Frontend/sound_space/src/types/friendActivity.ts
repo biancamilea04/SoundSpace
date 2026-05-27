@@ -33,4 +33,5 @@ export interface UserStatusChangedPayload {
     lastPlayedArtistUrl: string | null;
     lastPlayedUri: string | null;
     lastPlayedCoverUrl: string | null;
+    musicStatusUpdatedAt: string | null;
 }

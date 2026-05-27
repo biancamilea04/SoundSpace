@@ -197,17 +197,13 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("character varying(2000)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasColumnType("boolean");
 
                     b.Property<Guid?>("ParentCommentId")
                         .HasColumnType("uuid");
@@ -222,8 +218,6 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ParentCommentId");
 
@@ -241,16 +235,18 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("EventId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsGroup")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EventId")
+                        .IsUnique();
 
                     b.ToTable("Conversations");
                 });
@@ -264,15 +260,138 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("JoinedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ConversationId", "UserId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("ConversationParticipants");
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Event", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ArtistImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("ArtistName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("ArtistProfileUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("ArtistSpotifyId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<DateTime>("EventDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<TimeSpan>("EventTime")
+                        .HasColumnType("interval");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<string>("TicketsUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.EventAttendee", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("JoinedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("EventId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EventAttendees");
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.EventPhoto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("UploaderId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UploaderId");
+
+                    b.ToTable("EventPhotos");
                 });
 
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Friendship", b =>
@@ -282,9 +401,7 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("ReceiverId")
                         .HasColumnType("uuid");
@@ -292,9 +409,8 @@ namespace SoundSpaceBackend.Migrations
                     b.Property<Guid>("SenderId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -304,8 +420,7 @@ namespace SoundSpaceBackend.Migrations
                     b.HasIndex("ReceiverId");
 
                     b.HasIndex("SenderId", "ReceiverId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Friendships_SenderId_ReceiverId");
+                        .IsUnique();
 
                     b.ToTable("Friendships");
                 });
@@ -317,9 +432,7 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("PostId")
                         .HasColumnType("uuid");
@@ -347,22 +460,19 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("EditedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsRead")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("ReadAt")
                         .HasColumnType("timestamp with time zone");
@@ -375,9 +485,9 @@ namespace SoundSpaceBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SenderId");
+                    b.HasIndex("ConversationId");
 
-                    b.HasIndex("ConversationId", "CreatedAt");
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
                 });
@@ -392,17 +502,14 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsResolved")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasColumnType("boolean");
 
                     b.Property<Guid>("MessageId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Reason")
                         .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("ReporterId")
                         .HasColumnType("uuid");
@@ -435,10 +542,23 @@ namespace SoundSpaceBackend.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("EventId")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
+
+                    b.Property<int?>("PreviewDuration")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PreviewStartSecond")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PreviewUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("SpotifyCoverUrl")
                         .HasMaxLength(500)
@@ -469,6 +589,9 @@ namespace SoundSpaceBackend.Migrations
 
                     b.HasIndex("UserId");
 
+                    b.HasIndex("EventId", "CreatedAt")
+                        .IsDescending(false, true);
+
                     b.ToTable("Posts");
                 });
 
@@ -480,16 +603,13 @@ namespace SoundSpaceBackend.Migrations
 
                     b.Property<string>("ArtistName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ArtistUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<string>("CoverUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("PlayedAt")
                         .HasColumnType("timestamp with time zone");
@@ -499,26 +619,21 @@ namespace SoundSpaceBackend.Migrations
 
                     b.Property<string>("SpotifyTrackId")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<string>("SpotifyUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId", "SpotifyTrackId", "PlayedAt")
-                        .IsUnique()
-                        .HasDatabaseName("IX_RecentStreams_UserId_SpotifyTrackId_PlayedAt");
+                    b.HasIndex("UserId");
 
                     b.ToTable("RecentStreams");
                 });
@@ -530,25 +645,21 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("ImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Rank")
                         .HasColumnType("integer");
 
                     b.Property<string>("SpotifyArtistId")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<string>("SpotifyUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -558,9 +669,7 @@ namespace SoundSpaceBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId", "SpotifyArtistId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_TopArtists_UserId_SpotifyArtistId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("TopArtists");
                 });
@@ -573,33 +682,27 @@ namespace SoundSpaceBackend.Migrations
 
                     b.Property<string>("ArtistName")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ArtistUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<string>("CoverUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Rank")
                         .HasColumnType("integer");
 
                     b.Property<string>("SpotifyTrackId")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("text");
 
                     b.Property<string>("SpotifyUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -609,9 +712,7 @@ namespace SoundSpaceBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId", "SpotifyTrackId", "Rank")
-                        .IsUnique()
-                        .HasDatabaseName("IX_TopTracks_UserId_SpotifyTrackId_Rank");
+                    b.HasIndex("UserId");
 
                     b.ToTable("TopTracks");
                 });
@@ -639,6 +740,9 @@ namespace SoundSpaceBackend.Migrations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("CurrentlyPlayingArtist")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CurrentlyPlayingArtistUrl")
                         .HasColumnType("text");
 
                     b.Property<string>("CurrentlyPlayingCoverUrl")
@@ -674,16 +778,20 @@ namespace SoundSpaceBackend.Migrations
                     b.Property<string>("LastPlayedArtist")
                         .HasColumnType("text");
 
+                    b.Property<string>("LastPlayedArtistUrl")
+                        .HasColumnType("text");
+
                     b.Property<string>("LastPlayedCoverUrl")
                         .HasColumnType("text");
 
                     b.Property<string>("LastPlayedTitle")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("LastSeen")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    b.Property<string>("LastPlayedUri")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastSeen")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -830,13 +938,13 @@ namespace SoundSpaceBackend.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SoundSpaceBackend.Models.Entities.Post", "Post")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -848,6 +956,16 @@ namespace SoundSpaceBackend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Conversation", b =>
+                {
+                    b.HasOne("SoundSpaceBackend.Models.Entities.Event", "Event")
+                        .WithOne("GroupConversation")
+                        .HasForeignKey("SoundSpaceBackend.Models.Entities.Conversation", "EventId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.ConversationParticipant", b =>
                 {
                     b.HasOne("SoundSpaceBackend.Models.Entities.Conversation", "Conversation")
@@ -857,7 +975,7 @@ namespace SoundSpaceBackend.Migrations
                         .IsRequired();
 
                     b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
-                        .WithMany("ConversationParticipants")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -867,16 +985,65 @@ namespace SoundSpaceBackend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Event", b =>
+                {
+                    b.HasOne("SoundSpaceBackend.Models.Entities.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.EventAttendee", b =>
+                {
+                    b.HasOne("SoundSpaceBackend.Models.Entities.Event", "Event")
+                        .WithMany("Attendees")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.EventPhoto", b =>
+                {
+                    b.HasOne("SoundSpaceBackend.Models.Entities.Event", "Event")
+                        .WithMany("Photos")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SoundSpaceBackend.Models.Entities.User", "Uploader")
+                        .WithMany()
+                        .HasForeignKey("UploaderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Uploader");
+                });
+
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Friendship", b =>
                 {
                     b.HasOne("SoundSpaceBackend.Models.Entities.User", "Receiver")
-                        .WithMany("ReceivedFriendRequests")
+                        .WithMany()
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SoundSpaceBackend.Models.Entities.User", "Sender")
-                        .WithMany("SentFriendRequests")
+                        .WithMany()
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -889,13 +1056,13 @@ namespace SoundSpaceBackend.Migrations
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Like", b =>
                 {
                     b.HasOne("SoundSpaceBackend.Models.Entities.Post", "Post")
-                        .WithMany("Likes")
+                        .WithMany()
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
-                        .WithMany("Likes")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -914,7 +1081,7 @@ namespace SoundSpaceBackend.Migrations
                         .IsRequired();
 
                     b.HasOne("SoundSpaceBackend.Models.Entities.User", "Sender")
-                        .WithMany("SentMessages")
+                        .WithMany()
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -945,11 +1112,18 @@ namespace SoundSpaceBackend.Migrations
 
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Post", b =>
                 {
+                    b.HasOne("SoundSpaceBackend.Models.Entities.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Event");
 
                     b.Navigation("User");
                 });
@@ -957,7 +1131,7 @@ namespace SoundSpaceBackend.Migrations
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.RecentStreamEntry", b =>
                 {
                     b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
-                        .WithMany("RecentStreams")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -968,7 +1142,7 @@ namespace SoundSpaceBackend.Migrations
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.TopArtistEntry", b =>
                 {
                     b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
-                        .WithMany("TopArtists")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -979,7 +1153,7 @@ namespace SoundSpaceBackend.Migrations
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.TopTrackEntry", b =>
                 {
                     b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
-                        .WithMany("TopTracks")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -999,36 +1173,20 @@ namespace SoundSpaceBackend.Migrations
                     b.Navigation("Participants");
                 });
 
-            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Post", b =>
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Event", b =>
                 {
-                    b.Navigation("Comments");
+                    b.Navigation("Attendees");
 
-                    b.Navigation("Likes");
+                    b.Navigation("GroupConversation");
+
+                    b.Navigation("Photos");
                 });
 
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.User", b =>
                 {
-                    b.Navigation("Comments");
-
-                    b.Navigation("ConversationParticipants");
-
-                    b.Navigation("Likes");
-
                     b.Navigation("Posts");
 
-                    b.Navigation("ReceivedFriendRequests");
-
-                    b.Navigation("RecentStreams");
-
                     b.Navigation("RefreshTokens");
-
-                    b.Navigation("SentFriendRequests");
-
-                    b.Navigation("SentMessages");
-
-                    b.Navigation("TopArtists");
-
-                    b.Navigation("TopTracks");
                 });
 #pragma warning restore 612, 618
         }

@@ -72,3 +72,26 @@ export const fetchPostsBySpotifyId = async (spotifyId: string): Promise<PostData
 
     return response.json() as Promise<PostData[]>;
 };
+
+export const createEventPost = async (eventId: string, payload: CreatePostPayload): Promise<PostData> => {
+    const response = await apiFetch(`${BACKEND_URL}/api/Events/${encodeURIComponent(eventId)}/posts`, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to create event post (status ${response.status})`);
+    }
+
+    return response.json() as Promise<PostData>;
+};
+
+export const fetchEventPosts = async (eventId: string): Promise<PostData[]> => {
+    const response = await apiFetch(`${BACKEND_URL}/api/Events/${encodeURIComponent(eventId)}/posts`);
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch event posts (status ${response.status})`);
+    }
+
+    return response.json() as Promise<PostData[]>;
+};

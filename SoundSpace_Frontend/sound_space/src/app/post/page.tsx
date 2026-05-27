@@ -19,11 +19,14 @@ export default function PostPage() {
         likeCount,
         comments,
         replyToName,
+        currentUserId,
         currentUserAvatar,
         handleToggleLike,
         handleStartReply,
         handleCancelReply,
         handleAddComment,
+        handleEditComment,
+        handleDeleteComment,
     } = useSinglePostPage();
 
     return (
@@ -34,7 +37,7 @@ export default function PostPage() {
                 <div className="feed-main">
                     <div className="post-page">
                         <header className="post-page__header">
-                            <Link href="/feed" className="post-page__back-btn" aria-label="Back to Feed">
+                            <Link href="/" className="post-page__back-btn" aria-label="Back to Feed">
                                 <ArrowLeft size={20} />
                                 <span>Back to Feed</span>
                             </Link>
@@ -53,7 +56,13 @@ export default function PostPage() {
 
                             <div className="post-page__divider" />
 
-                            <PostComments comments={comments} onReply={handleStartReply} />
+                            <PostComments
+                                    comments={comments}
+                                    currentUserId={currentUserId}
+                                    onReply={handleStartReply}
+                                    onEdit={handleEditComment}
+                                    onDelete={handleDeleteComment}
+                                />
 
                             <footer className="post-page__content-footer">
                                 <CommentInput

@@ -1,6 +1,7 @@
 "use client";
 
 import { Users, Heart, Music, Mail, Globe } from "lucide-react";
+import type { ReactNode } from "react";
 import "./ProfileHeader.css";
 
 interface ProfileHeaderProps {
@@ -10,8 +11,7 @@ interface ProfileHeaderProps {
     following: number;
     playlists: number;
     avatarUrl?: string;
-    email?: string;
-    country?: string;
+    action?: ReactNode;
 }
 
 export const ProfileHeader = ({
@@ -21,8 +21,7 @@ export const ProfileHeader = ({
     following,
     playlists,
     avatarUrl,
-    email,
-    country,
+    action
 }: ProfileHeaderProps) => {
     return (
         <div className="profile-header">
@@ -79,21 +78,7 @@ export const ProfileHeader = ({
                         <strong className="profile-header__stat-value">{playlists}</strong> playlists
                     </span>
                 </div>
-
-                <div className="profile-header__details">
-                    {email && (
-                        <span className="profile-header__detail">
-                            <Mail className="profile-header__detail-icon" />
-                            <span className="profile-header__detail-value">{email}</span>
-                        </span>
-                    )}
-                    {country && (
-                        <span className="profile-header__detail">
-                            <Globe className="profile-header__detail-icon" />
-                            <span className="profile-header__detail-value">{country}</span>
-                        </span>
-                    )}
-                </div>
+                {action && <div className="profile-header__action">{action}</div>}
             </div>
         </div>
     );

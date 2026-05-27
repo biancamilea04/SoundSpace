@@ -36,12 +36,8 @@ export const FeedPost = ({ post, onPostUpdated, onPostDeleted }: FeedPostProps) 
     const avatarFallback = `https://eu.ui-avatars.com/api/?name=${encodeURIComponent(post.displayName)}&size=250&background=1ed760&color=000`;
 
     const handleDeletePost = async () => {
-        if (isDeleting) {
-            return;
-        }
-
+        if (isDeleting) return;
         setIsDeleting(true);
-
         try {
             await deletePost(post.id);
             setShowDeleteModal(false);
@@ -56,6 +52,7 @@ export const FeedPost = ({ post, onPostUpdated, onPostDeleted }: FeedPostProps) 
     return (
         <div className="feed-post">
             <Post
+                postId={post.id}
                 user={{
                     name: post.displayName,
                     avatarUrl: post.profileImageUrl || avatarFallback,
@@ -64,7 +61,12 @@ export const FeedPost = ({ post, onPostUpdated, onPostDeleted }: FeedPostProps) 
                 timeAgo={timeAgo(post.createdAt)}
                 content={post.content}
                 spotifyUri={post.spotifyUri ?? undefined}
-                stats={{ likes: 0, comments: 0 }}
+                spotifyName={post.spotifyName ?? undefined}
+                spotifyCoverUrl={post.spotifyCoverUrl ?? undefined}
+                spotifySubtitle={post.spotifySubtitle ?? undefined}
+                spotifyMediaType={post.spotifyMediaType ?? undefined}
+                previewUrl={post.previewUrl ?? undefined}
+                stats={{ likes: post.likeCount, comments: 0, isLikedByCurrentUser: post.isLikedByCurrentUser }}
                 isOwner={isOwner}
                 onEditPost={() => setShowEditModal(true)}
                 onDeletePost={() => setShowDeleteModal(true)}

@@ -66,6 +66,8 @@ public class LikeService(ApplicationContext db) : ILikeService
             .Where(l => l.UserId == userId && !l.Post.IsDeleted)
             .Include(l => l.Post)
             .ThenInclude(p => p.User)
+            .Include(l => l.Post)
+            .ThenInclude(p => p.Event)
             .OrderByDescending(l => l.CreatedAt)
             .Select(l => new GetPostDto(
                 l.Post.Id,
@@ -78,7 +80,12 @@ public class LikeService(ApplicationContext db) : ILikeService
                 l.Post.SpotifyCoverUrl,
                 l.Post.SpotifySubtitle,
                 l.Post.SpotifyMediaType,
-                l.Post.CreatedAt))
+                l.Post.PreviewUrl,
+                l.Post.PreviewStartSecond,
+                l.Post.PreviewDuration,
+                l.Post.CreatedAt,
+                l.Post.EventId,
+                l.Post.Event != null ? l.Post.Event.Title : null))
             .ToListAsync();
     }
 }

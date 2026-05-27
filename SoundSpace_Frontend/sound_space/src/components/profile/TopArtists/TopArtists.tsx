@@ -44,7 +44,7 @@ export const TopArtists = ({ artists, isLoading }: TopArtistsProps) => {
                             />
                         ) : (
                             <div className="top-artists__avatar top-artists__avatar--fallback">
-                                {artist.name.charAt(0)}
+                                {artist.name?.charAt(0) ?? '?'}
                             </div>
                         )}
                         <a

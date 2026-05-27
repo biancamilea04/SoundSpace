@@ -13,7 +13,7 @@ interface NotificationBellProps {
 }
 
 const NotificationBell = ({ isOpen, onToggle, onClose }: NotificationBellProps) => {
-    const pendingCount = useNotificationStore((s) => s.pendingRequests.length);
+    const pendingCount = useNotificationStore().pendingRequests.length;
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {

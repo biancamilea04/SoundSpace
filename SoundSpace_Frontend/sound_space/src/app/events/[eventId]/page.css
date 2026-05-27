@@ -1,0 +1,103 @@
+.edp-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #0d0d0d;
+}
+
+.edp-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.edp-main {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.edp-main::-webkit-scrollbar {
+    display: none;
+}
+
+/* Sentinel sits at the very bottom of the hero */
+.edp-sentinel {
+    height: 0;
+    pointer-events: none;
+}
+
+/* ── Two-column layout ────────────── */
+
+.edp-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 24px 80px;
+}
+
+@media (min-width: 768px) {
+    .edp-content {
+        padding: 28px 40px 80px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .edp-content {
+        grid-template-columns: 1fr 300px;
+        align-items: start;
+        gap: 32px;
+    }
+}
+
+.edp-content__left {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+/* Tab cross-fade animation */
+.edp-tab-content {
+    animation: edp-fadein 0.2s ease;
+}
+
+@keyframes edp-fadein {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── States ───────────────────────── */
+
+.edp-not-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-muted);
+    font-size: 16px;
+}
+
+.edp-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+@keyframes edp-spin {
+    to { transform: rotate(360deg); }
+}
+
+.edp-loading__spinner {
+    animation: edp-spin 0.8s linear infinite;
+}

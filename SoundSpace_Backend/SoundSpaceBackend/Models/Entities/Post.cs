@@ -33,9 +33,19 @@ public class Post
     [MaxLength(50)]
     public string? SpotifyMediaType { get; set; }
 
+    [MaxLength(500)]
+    public string? PreviewUrl { get; set; }
+
+    public int? PreviewStartSecond { get; set; }
+
+    public int? PreviewDuration { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public bool IsDeleted { get; set; }
 
     public DateTime? DeletedAt { get; set; }
+
+    public Guid? EventId { get; set; }
+    public Event? Event { get; set; }
 }

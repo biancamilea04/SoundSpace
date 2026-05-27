@@ -7,6 +7,7 @@ using SoundSpaceBackend.Services.Like.Abstractions;
 using SoundSpaceBackend.Services.Like.DTOs;
 using SoundSpaceBackend.Services.Post.Abstractions;
 using SoundSpaceBackend.Services.Post.DTOs;
+using SoundSpaceBackend.Services.PreviewUrl.Abstractions;
 using SoundSpaceBackend.Services.User.Abstractions;
 
 namespace SoundSpaceBackend.Controllers.Posts;
@@ -18,27 +19,31 @@ public class PostsController(
     IPostService postService,
     IUserService userService,
     ILikeService likeService,
+    IPreviewUrlService previewUrlService,
     ILogger<PostsController> logger) : ControllerBase
 {
     private readonly ILogger<PostsController> _logger = logger;
 
-    private async Task<Guid?> GetDbUserIdAsync()
+    private async Task<(Guid? DbUserId, string? SpotifyId)> GetCallerAsync()
     {
         var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (spotifyId == null)
         {
             _logger.LogWarning("[Posts] Spotify ID claim missing in token");
-            return null;
+            return (null, null);
         }
 
         var entity = await userService.GetUserEntityBySpotifyIdAsync(spotifyId);
-        return entity?.Id;
+        return (entity?.Id, spotifyId);
     }
 
     private static PostResponse ToResponse(GetPostDto post, LikeStatusDto likes) =>
         new(post.Id, post.UserId, post.DisplayName, post.ProfileImageUrl,
-            post.Content, post.SpotifyUri, post.CreatedAt,
-            likes.LikeCount, likes.IsLikedByCurrentUser);
+            post.Content, post.SpotifyUri, post.SpotifyName, post.SpotifyCoverUrl,
+            post.SpotifySubtitle, post.SpotifyMediaType, post.PreviewUrl,
+            post.PreviewStartSecond, post.PreviewDuration,
+            post.CreatedAt, likes.LikeCount, likes.IsLikedByCurrentUser,
+            post.EventId, post.EventTitle);
 
     [HttpPost]
     public async Task<IActionResult> CreatePost([FromBody] CreatePostRequest request)
@@ -46,8 +51,19 @@ public class PostsController(
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var userId = await GetDbUserIdAsync();
-        if (userId is null) return Unauthorized();
+        var (userId, spotifyId) = await GetCallerAsync();
+        if (userId is null || spotifyId is null) return Unauthorized();
+
+        var previewUrl = request.PreviewUrl;
+
+        // Resolve preview URL for tracks: first try Spotify, then fall back to iTunes
+        if (previewUrl == null
+            && string.Equals(request.SpotifyMediaType, "track", StringComparison.OrdinalIgnoreCase)
+            && request.SpotifyUri != null)
+        {
+            previewUrl = await previewUrlService.ResolveAsync(
+                spotifyId, request.SpotifyUri, request.SpotifySubtitle, request.SpotifyName);
+        }
 
         var dto = new CreatePostDto(
             request.Content,
@@ -55,7 +71,10 @@ public class PostsController(
             request.SpotifyName,
             request.SpotifyCoverUrl,
             request.SpotifySubtitle,
-            request.SpotifyMediaType);
+            request.SpotifyMediaType,
+            previewUrl,
+            request.PreviewStartSecond,
+            request.PreviewDuration);
 
         var post = await postService.CreatePostAsync(userId.Value, dto);
         var likes = await likeService.GetLikeStatusAsync(post.Id, userId.Value);
@@ -69,7 +88,7 @@ public class PostsController(
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var userId = await GetDbUserIdAsync();
+        var (userId, _) = await GetCallerAsync();
         if (userId is null) return Unauthorized();
 
         try
@@ -91,7 +110,7 @@ public class PostsController(
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeletePost(Guid id)
     {
-        var userId = await GetDbUserIdAsync();
+        var (userId, _) = await GetCallerAsync();
         if (userId is null) return Unauthorized();
 
         try
@@ -112,7 +131,7 @@ public class PostsController(
     [HttpGet]
     public async Task<IActionResult> GetAllPosts()
     {
-        var userId = await GetDbUserIdAsync();
+        var (userId, _) = await GetCallerAsync();
         if (userId is null) return Unauthorized();
 
         var posts = await postService.GetAllPostsAsync();
@@ -124,7 +143,7 @@ public class PostsController(
     [HttpGet("user/{userId:guid}")]
     public async Task<IActionResult> GetPostsByUserId(Guid userId)
     {
-        var currentUserId = await GetDbUserIdAsync();
+        var (currentUserId, _) = await GetCallerAsync();
         if (currentUserId is null) return Unauthorized();
 
         var posts = await postService.GetPostsByUserIdAsync(userId);
@@ -136,7 +155,7 @@ public class PostsController(
     [HttpGet("user/spotify/{spotifyId}")]
     public async Task<IActionResult> GetPostsBySpotifyId(string spotifyId)
     {
-        var currentUserId = await GetDbUserIdAsync();
+        var (currentUserId, _) = await GetCallerAsync();
         if (currentUserId is null) return Unauthorized();
 
         try
@@ -158,7 +177,7 @@ public class PostsController(
     [HttpPost("{postId:guid}/like")]
     public async Task<IActionResult> ToggleLike(Guid postId)
     {
-        var userId = await GetDbUserIdAsync();
+        var (userId, _) = await GetCallerAsync();
         if (userId is null) return Unauthorized();
 
         try
@@ -175,10 +194,22 @@ public class PostsController(
     [HttpGet("{postId:guid}/likes")]
     public async Task<IActionResult> GetLikeStatus(Guid postId)
     {
-        var userId = await GetDbUserIdAsync();
+        var (userId, _) = await GetCallerAsync();
         if (userId is null) return Unauthorized();
 
         var result = await likeService.GetLikeStatusAsync(postId, userId.Value);
         return Ok(result);
+    }
+
+    [HttpGet("event-feed")]
+    public async Task<IActionResult> GetEventFeed([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        var (userId, _) = await GetCallerAsync();
+        if (userId is null) return Unauthorized();
+
+        var posts = await postService.GetEventFeedAsync(userId.Value, page, pageSize);
+        var likeMap = await likeService.GetLikeStatusBatchAsync(posts.Select(p => p.Id), userId.Value);
+
+        return Ok(posts.Select(p => ToResponse(p, likeMap[p.Id])));
     }
 }

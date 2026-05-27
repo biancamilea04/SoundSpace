@@ -7,6 +7,15 @@ public record PostResponse(
     string? ProfileImageUrl,
     string Content,
     string? SpotifyUri,
+    string? SpotifyName,
+    string? SpotifyCoverUrl,
+    string? SpotifySubtitle,
+    string? SpotifyMediaType,
+    string? PreviewUrl,
+    int? PreviewStartSecond,
+    int? PreviewDuration,
     DateTime CreatedAt,
     int LikeCount,
-    bool IsLikedByCurrentUser);
+    bool IsLikedByCurrentUser,
+    Guid? EventId = null,
+    string? EventTitle = null);

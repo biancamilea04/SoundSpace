@@ -1,4 +1,6 @@
 using SoundSpaceBackend.Controllers.Auth.Responses;
+using SoundSpaceBackend.Controllers.Users.Responses;
+using SoundSpaceBackend.Services.SpotifyPlayer.DTOs;
 using SoundSpaceBackend.Services.User.DTOs;
 using UserEntity = SoundSpaceBackend.Models.Entities.User;
 
@@ -10,4 +12,9 @@ public interface IUserService
     public Task<UserEntity> GetUserEntityBySpotifyIdAsync(string spotifyId);
     public Task<GetUserDto> GetUserByDisplayNameAsync(string displayName);
     public Task<UserEntity> CreateOrUpdateUserAsync(SpotifyAuthResponseDto spotifyProfileAuthResponse);
+    public Task<List<UserSearchResultDto>> SearchUsersAsync(string query, Guid excludeUserId);
+    public Task<List<TopArtistResponse>> GetTopArtistsByUserIdAsync(Guid userId);
+    public Task<List<TopTrackResponse>> GetTopTracksByUserIdAsync(Guid userId);
+    public Task<List<RecentStreamResponse>> GetRecentStreamsByUserIdAsync(Guid userId, int limit);
+    public Task<UserMusicStatusResponse?> GetUserMusicStatusByDisplayNameAsync(string displayName);
 }

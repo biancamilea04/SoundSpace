@@ -3,6 +3,6 @@ export interface TopTrack {
     title: string;
     artistName: string;
     artistUrl: string | null;
-    coverUrl: string | null;
+    imageUrl: string | null;
     spotifyUrl: string | null;
 }

@@ -33,18 +33,18 @@ export const RecentStreams = ({ streams, isLoading }: RecentStreamsProps) => {
             <h3 className="recent-streams__title">Recent Streams</h3>
             <div className="recent-streams__list">
                 {streams.map((stream, idx) => (
-                    <div key={`${stream.name}-${idx}`} className="recent-streams__item">
+                    <div key={`${stream.title}-${idx}`} className="recent-streams__item">
                         {stream.imageUrl ? (
                             <Image
                                 src={stream.imageUrl}
-                                alt={`${stream.name} album art`}
+                                alt={`${stream.title} album art`}
                                 width={40}
                                 height={40}
                                 className="recent-streams__album-art"
                             />
                         ) : (
                             <div className="recent-streams__album-art recent-streams__album-art--fallback">
-                                {stream.name.charAt(0)}
+                                {stream.title?.charAt(0) ?? '?'}
                             </div>
                         )}
                         <div className="recent-streams__info">
@@ -54,7 +54,7 @@ export const RecentStreams = ({ streams, isLoading }: RecentStreamsProps) => {
                                 rel="noopener noreferrer"
                                 className="recent-streams__track-name-link"
                             >
-                                {stream.name}
+                                {stream.title}
                             </a>
                             <a
                                 href={stream.artistUrl || "#"}
