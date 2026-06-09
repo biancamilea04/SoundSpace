@@ -18,7 +18,7 @@
 
 @media (max-width: 768px) {
     .main-header__title {
-        display: none; /* Hide 'SoundSpace' text, leave the logo icon */
+        display: none; 
     }
 }
 
