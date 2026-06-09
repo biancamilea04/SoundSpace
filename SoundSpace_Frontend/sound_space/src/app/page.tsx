@@ -27,7 +27,7 @@ function PageContent() {
 						onPostCreated={refresh} 
 					/>
 
-					{isLoading && posts.length === 0 && <p style={{ color: "var(--text-muted)", marginBottom: "16px" }}>Loading feed...</p>}
+					{isLoading && posts.length === 0 && <p className="feed-status">Loading feed...</p>}
 
 					{posts.map((post) => (
 						<FeedPost key={post.id} post={post} onPostUpdated={refresh} onPostDeleted={removePost} />

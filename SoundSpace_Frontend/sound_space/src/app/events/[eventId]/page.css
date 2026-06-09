@@ -23,13 +23,10 @@
     display: none;
 }
 
-/* Sentinel sits at the very bottom of the hero */
 .edp-sentinel {
     height: 0;
     pointer-events: none;
 }
-
-/* ── Two-column layout ────────────── */
 
 .edp-content {
     display: grid;
@@ -58,23 +55,8 @@
     min-width: 0;
 }
 
-/* Tab cross-fade animation */
 .edp-tab-content {
-    animation: edp-fadein 0.2s ease;
 }
-
-@keyframes edp-fadein {
-    from {
-        opacity: 0;
-        transform: translateY(5px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ── States ───────────────────────── */
 
 .edp-not-found {
     display: flex;

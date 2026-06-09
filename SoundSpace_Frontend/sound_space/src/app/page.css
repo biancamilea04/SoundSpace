@@ -29,6 +29,11 @@
     display: none; 
 }
 
+.feed-status {
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
 @media (max-width: 1024px) {
     .feed-main {
         padding: 40px 20px;

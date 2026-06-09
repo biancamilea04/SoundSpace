@@ -21,7 +21,6 @@ export default function LandingPage() {
 
       {/* Main Content */}
       <main className="home-main">
-        {/* Typography */}
         <h1 className="home-heading">
           <span className="home-heading__line1">Your music.</span>
           <span className="home-heading__line2">
@@ -33,7 +32,6 @@ export default function LandingPage() {
           Connect with friends through music. Share playlists, discover new tracks, and see what everyone's listening to.
         </p>
 
-        {/* CTA Button Wrapper with Glow */}
         <div className="home-cta-wrapper">
           <div className="home-cta-glow"></div>
           <div className="home-cta-button">

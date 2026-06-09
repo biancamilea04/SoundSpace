@@ -14,9 +14,12 @@ function DiscoveryContent() {
         activeFilter,
         profiles,
         isLoading,
+        locationDenied,
+        isFeedCountryFallback,
         handleFilterChange,
         handleConnect,
         handleSkip,
+        handleExpand,
     } = useDiscovery();
 
     return (
@@ -34,7 +37,9 @@ function DiscoveryContent() {
                         profiles={profiles}
                         onConnect={handleConnect}
                         onSkip={handleSkip}
+                        onExpand={handleExpand}
                         isLoading={isLoading}
+                        isCountryFallback={isFeedCountryFallback}
                     />
                 </div>
                 <FriendSidebar />

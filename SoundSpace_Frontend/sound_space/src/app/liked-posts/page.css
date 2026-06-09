@@ -1,0 +1,4 @@
+.liked-posts__status {
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}

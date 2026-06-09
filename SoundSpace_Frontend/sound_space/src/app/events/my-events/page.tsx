@@ -5,12 +5,12 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import Header from "@/components/global/Header/Header";
 import MenuSidebar from "@/components/global/MenuSidebar/MenuSidebar";
-import EventCard from "@/components/events/EventCard/EventCard";
-import { useMyEvents } from "@/hooks/Event/useEvents";
+import ManageEventCard from "@/components/events/ManageEventCard/ManageEventCard";
+import { useCreatedEvents } from "@/hooks/Event/useEvents";
 import "./page.css";
 
 function MyEventsContent() {
-    const { events, isLoading, updateEvent } = useMyEvents();
+    const { events, isLoading, removeEvent } = useCreatedEvents();
 
     return (
         <div className="my-events__wrapper">
@@ -36,9 +36,9 @@ function MyEventsContent() {
 
                     {!isLoading && events.length === 0 && (
                         <div className="my-events__empty">
-                            <p className="my-events__empty-text">You haven&apos;t joined any events yet.</p>
-                            <Link href="/events" className="my-events__browse-btn">
-                                Browse Events
+                            <p className="my-events__empty-text">You haven&apos;t created any events yet.</p>
+                            <Link href="/events/create" className="my-events__browse-btn">
+                                Create Event
                             </Link>
                         </div>
                     )}
@@ -46,10 +46,10 @@ function MyEventsContent() {
                     {!isLoading && events.length > 0 && (
                         <div className="my-events__grid">
                             {events.map((event) => (
-                                <EventCard
+                                <ManageEventCard
                                     key={event.id}
                                     event={event}
-                                    onEventUpdated={updateEvent}
+                                    onEventRemoved={removeEvent}
                                 />
                             ))}
                         </div>

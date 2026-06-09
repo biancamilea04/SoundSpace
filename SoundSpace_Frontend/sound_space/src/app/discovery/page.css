@@ -1,4 +1,3 @@
-/* Discovery Page Styles */
 .page-wrapper {
     display: flex;
     flex-direction: column;
@@ -24,26 +23,21 @@
     max-width: 100vw;
 }
 
-/* Responsive Design */
-
-/* Large tablets and small desktops */
 @media (max-width: 1200px) {
     .discovery-main {
         padding: 20px 16px 20px 90px;
     }
 }
 
-/* Tablets */
 @media (max-width: 1024px) {
     .discovery-main {
         padding: 20px;
     }
 }
 
-/* Small tablets and large phones */
 @media (max-width: 768px) {
     .page-wrapper {
-        height: 100dvh; /* Use dynamic viewport height on mobile */
+        height: 100dvh;
     }
 
     .discovery-container {
@@ -56,25 +50,22 @@
         width: 100%;
         order: 2;
         flex: 1;
-        min-height: 0; /* Allow flex shrinking */
+        min-height: 0;
     }
 }
 
-/* Mobile phones */
 @media (max-width: 480px) {
     .discovery-main {
         padding: 12px 8px 60px 8px;
     }
 }
 
-/* Very small screens */
 @media (max-width: 375px) {
     .discovery-main {
         padding: 10px 6px 50px 6px;
     }
 }
 
-/* Landscape orientation on mobile */
 @media (max-width: 768px) and (orientation: landscape) {
     .discovery-main {
         padding: 8px 12px 40px 12px;

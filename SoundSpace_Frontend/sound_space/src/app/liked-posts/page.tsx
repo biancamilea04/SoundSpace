@@ -7,6 +7,7 @@ import FriendSidebar from "@/components/global/FriendSidebar/FriendSidebar";
 import FeedPost from "@/components/global/FeedPost/FeedPost";
 import { fetchLikedPosts } from "@/services/post/likeService";
 import type { PostData } from "@/types/post";
+import "./page.css";
 
 export default function LikedPostsPage() {
     const [posts, setPosts] = useState<PostData[]>([]);
@@ -28,10 +29,10 @@ export default function LikedPostsPage() {
             <div className="feed-container">
                 <MenuSidebar />
                 <div className="feed-main">
-                    {isLoading && <p style={{ color: "var(--text-muted)", marginBottom: "16px" }}>Loading liked posts..</p>}
+                    {isLoading && <p className="liked-posts__status">Loading liked posts..</p>}
 
                     {!isLoading && posts.length === 0 && (
-                        <p style={{ color: "var(--text-muted)", marginBottom: "16px" }}>No liked posts yet</p>
+                        <p className="liked-posts__status">No liked posts yet</p>
                     )}
 
                     {posts.map((post) => (
