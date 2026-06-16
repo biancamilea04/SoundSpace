@@ -17,4 +17,5 @@ public interface IUserService
     public Task<List<TopTrackResponse>> GetTopTracksByUserIdAsync(Guid userId);
     public Task<List<RecentStreamResponse>> GetRecentStreamsByUserIdAsync(Guid userId, int limit);
     public Task<UserMusicStatusResponse?> GetUserMusicStatusByDisplayNameAsync(string displayName);
+    public Task UpdateLocationAsync(Guid userId, double latitude, double longitude);
 }

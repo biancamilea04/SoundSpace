@@ -28,7 +28,9 @@ public class PollingWorker(IServiceScopeFactory scopeFactory, ILogger<PollingWor
         var player = scope.ServiceProvider.GetRequiredService<ISpotifyPlayerService>();
 
         var users = db.Users
-            .Where(u => u.SpotifyRefreshToken != null && !u.SpotifyRefreshToken.StartsWith("mock_"))
+            .Where(u => u.SpotifyRefreshToken != null
+                     && !u.SpotifyRefreshToken.StartsWith("mock_")
+                     && !u.SpotifyId.StartsWith("mock_"))
             .Select(u => new { u.Id, u.SpotifyId })
             .ToList();
 
@@ -59,22 +61,36 @@ public class PollingWorker(IServiceScopeFactory scopeFactory, ILogger<PollingWor
     {
         var now = DateTime.UtcNow;
 
-        var artists = await player.GetTopArtistsAsync(spotifyId, 5);
+        var artists = await player.GetTopArtistsAsync(spotifyId, 20);
         if (artists.Count > 0)
         {
-            db.TopArtists.RemoveRange(db.TopArtists.Where(a => a.UserId == userId));
+            var existingArtists = db.TopArtists
+                .Where(a => a.UserId == userId)
+                .ToDictionary(a => a.SpotifyArtistId, StringComparer.OrdinalIgnoreCase);
+
             for (int i = 0; i < artists.Count; i++)
             {
-                db.TopArtists.Add(new TopArtistEntry
+                var artistId = artists[i].SpotifyId ?? $"unk_{i}";
+                var rank = i + 1;
+
+                if (existingArtists.TryGetValue(artistId, out var existing))
                 {
-                    UserId = userId,
-                    SpotifyArtistId = artists[i].SpotifyId ?? $"unk_{i}",
-                    Name = artists[i].Name,
-                    ImageUrl = artists[i].ImageUrl,
-                    SpotifyUrl = artists[i].SpotifyUrl,
-                    Rank = i + 1,
-                    UpdatedAt = now
-                });
+                    existing.Rank      = rank;
+                    existing.UpdatedAt = now;
+                }
+                else
+                {
+                    db.TopArtists.Add(new TopArtistEntry
+                    {
+                        UserId          = userId,
+                        SpotifyArtistId = artistId,
+                        Name            = artists[i].Name,
+                        ImageUrl        = artists[i].ImageUrl,
+                        SpotifyUrl      = artists[i].SpotifyUrl,
+                        Rank            = rank,
+                        UpdatedAt       = now
+                    });
+                }
             }
         }
 

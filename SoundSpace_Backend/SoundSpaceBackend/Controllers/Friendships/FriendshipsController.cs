@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SoundSpaceBackend.Controllers.Friendships.Requests;
 using SoundSpaceBackend.Controllers.Friendships.Responses;
 using SoundSpaceBackend.Hubs;
+
 using SoundSpaceBackend.Services.Friendship.Abstractions;
 using SoundSpaceBackend.Services.Friendship.DTOs;
 using SoundSpaceBackend.Services.User.Abstractions;
@@ -181,6 +182,41 @@ public class FriendshipsController(
             d.LastPlayedTitle, d.LastPlayedArtist, d.LastPlayedArtistUrl, d.LastPlayedUri,
             d.LastPlayedCoverUrl,
             d.MusicStatusUpdatedAt, d.LastSeen)));
+    }
+
+    [HttpGet("friends/list/{profileUserId:guid}")]
+    public async Task<IActionResult> GetFriendsList(Guid profileUserId)
+    {
+        var userId = await ResolveUserIdAsync();
+        if (userId is null)
+        {
+            _logger.LogWarning("[Friendships] Spotify ID claim missing in token");
+            return Unauthorized();
+        }
+
+        var friends = await friendshipService.GetFriendsListAsync(profileUserId);
+        return Ok(friends.Select(f => new FriendListItemResponse(f.UserId, f.DisplayName, f.ProfileImageUrl)));
+    }
+
+    [HttpDelete("friends/{targetUserId:guid}")]
+    public async Task<IActionResult> RemoveFriend(Guid targetUserId)
+    {
+        var userId = await ResolveUserIdAsync();
+        if (userId is null)
+        {
+            _logger.LogWarning("[Friendships] Spotify ID claim missing in token");
+            return Unauthorized();
+        }
+
+        try
+        {
+            await friendshipService.RemoveFriendAsync(userId.Value, targetUserId);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     private static FriendshipResponse ToResponse(GetFriendshipDto dto) =>

@@ -79,6 +79,7 @@ public class LikeService(ApplicationContext db) : ILikeService
                 l.Post.SpotifyName,
                 l.Post.SpotifyCoverUrl,
                 l.Post.SpotifySubtitle,
+                l.Post.SpotifySubtitleUrl,
                 l.Post.SpotifyMediaType,
                 l.Post.PreviewUrl,
                 l.Post.PreviewStartSecond,

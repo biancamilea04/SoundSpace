@@ -20,14 +20,14 @@ public class SpotifyPlayHistoryDto
     public SpotifyContextDto? Context { get; set; }
 }
 
-public class SpotifySavedEpisodesDto
+public class SpotifySavedShowsDto
 {
     [JsonPropertyName("items")]
-    public List<SpotifySavedEpisodeItemDto> Items { get; set; } = [];
+    public List<SpotifySavedShowItemDto> Items { get; set; } = [];
 }
 
-public class SpotifySavedEpisodeItemDto
+public class SpotifySavedShowItemDto
 {
-    [JsonPropertyName("episode")]
-    public SpotifyEpisodeDto? Episode { get; set; }
+    [JsonPropertyName("show")]
+    public SpotifyShowDto? Show { get; set; }
 }

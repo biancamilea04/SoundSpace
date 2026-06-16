@@ -25,6 +25,7 @@ public class PostService(
             SpotifyName = dto.SpotifyName,
             SpotifyCoverUrl = dto.SpotifyCoverUrl,
             SpotifySubtitle = dto.SpotifySubtitle,
+            SpotifySubtitleUrl = dto.SpotifySubtitleUrl,
             SpotifyMediaType = dto.SpotifyMediaType,
             PreviewUrl = dto.PreviewUrl,
             PreviewStartSecond = dto.PreviewStartSecond,
@@ -56,7 +57,7 @@ public class PostService(
             .Select(p => new GetPostDto(
                 p.Id, p.UserId, p.User.DisplayName, p.User.ProfileImageUrl,
                 p.Content, p.SpotifyUri, p.SpotifyName, p.SpotifyCoverUrl,
-                p.SpotifySubtitle, p.SpotifyMediaType, p.PreviewUrl,
+                p.SpotifySubtitle, p.SpotifySubtitleUrl, p.SpotifyMediaType, p.PreviewUrl,
                 p.PreviewStartSecond, p.PreviewDuration, p.CreatedAt,
                 null, null))
             .ToListAsync();
@@ -128,7 +129,7 @@ public class PostService(
             .Select(p => new GetPostDto(
                 p.Id, p.UserId, p.User.DisplayName, p.User.ProfileImageUrl,
                 p.Content, p.SpotifyUri, p.SpotifyName, p.SpotifyCoverUrl,
-                p.SpotifySubtitle, p.SpotifyMediaType, p.PreviewUrl,
+                p.SpotifySubtitle, p.SpotifySubtitleUrl, p.SpotifyMediaType, p.PreviewUrl,
                 p.PreviewStartSecond, p.PreviewDuration, p.CreatedAt,
                 null, null))
             .ToListAsync();
@@ -146,7 +147,7 @@ public class PostService(
             .Select(p => new GetPostDto(
                 p.Id, p.UserId, p.User.DisplayName, p.User.ProfileImageUrl,
                 p.Content, p.SpotifyUri, p.SpotifyName, p.SpotifyCoverUrl,
-                p.SpotifySubtitle, p.SpotifyMediaType, p.PreviewUrl,
+                p.SpotifySubtitle, p.SpotifySubtitleUrl, p.SpotifyMediaType, p.PreviewUrl,
                 p.PreviewStartSecond, p.PreviewDuration, p.CreatedAt,
                 p.EventId, p.Event != null ? p.Event.Title : null))
             .ToListAsync();
@@ -167,7 +168,7 @@ public class PostService(
             .Select(p => new GetPostDto(
                 p.Id, p.UserId, p.User.DisplayName, p.User.ProfileImageUrl,
                 p.Content, p.SpotifyUri, p.SpotifyName, p.SpotifyCoverUrl,
-                p.SpotifySubtitle, p.SpotifyMediaType, p.PreviewUrl,
+                p.SpotifySubtitle, p.SpotifySubtitleUrl, p.SpotifyMediaType, p.PreviewUrl,
                 p.PreviewStartSecond, p.PreviewDuration, p.CreatedAt,
                 p.EventId, p.Event != null ? p.Event.Title : null))
             .ToListAsync();
@@ -176,7 +177,7 @@ public class PostService(
     private static GetPostDto ToDto(PostEntity post, string displayName, string? profileImageUrl, string? eventTitle) =>
         new(post.Id, post.UserId, displayName, profileImageUrl,
             post.Content, post.SpotifyUri, post.SpotifyName, post.SpotifyCoverUrl,
-            post.SpotifySubtitle, post.SpotifyMediaType, post.PreviewUrl,
+            post.SpotifySubtitle, post.SpotifySubtitleUrl, post.SpotifyMediaType, post.PreviewUrl,
             post.PreviewStartSecond, post.PreviewDuration, post.CreatedAt,
             post.EventId, eventTitle);
 }

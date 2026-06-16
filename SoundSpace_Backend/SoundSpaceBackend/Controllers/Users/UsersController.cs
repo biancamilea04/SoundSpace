@@ -3,7 +3,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SoundSpaceBackend.Controllers.Posts.Responses;
+using SoundSpaceBackend.Controllers.Users.Requests;
 using SoundSpaceBackend.Controllers.Users.Responses;
+using SoundSpaceBackend.Services.Discovery.Abstractions;
 using SoundSpaceBackend.Services.Like.Abstractions;
 using SoundSpaceBackend.Services.SpotifyPlayer.Abstractions;
 using SoundSpaceBackend.Services.User.Abstractions;
@@ -17,6 +19,7 @@ public class UsersController(
     IUserService _userService,
     ISpotifyPlayerService _spotifyPlayerService,
     ILikeService _likeService,
+    IDiscoveryService _discoveryService,
     ILogger<UsersController> _logger) : ControllerBase
 {
     private async Task<Guid?> GetDbUserIdAsync()
@@ -199,6 +202,31 @@ public class UsersController(
         }
     }
 
+    [HttpPut("location")]
+    public async Task<IActionResult> UpdateLocation([FromBody] UpdateLocationRequest request)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var userId = await GetDbUserIdAsync();
+        if (userId is null) return Unauthorized();
+
+        await _userService.UpdateLocationAsync(userId.Value, request.Latitude, request.Longitude);
+
+        return Ok();
+    }
+
+    [HttpGet("discovery")]
+    public async Task<IActionResult> GetDiscovery([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (spotifyId is null) return Unauthorized();
+
+        var user = await _userService.GetUserEntityBySpotifyIdAsync(spotifyId);
+
+        var feed = await _discoveryService.GetFeedAsync(user.Id, page, pageSize);
+        return Ok(feed);
+    }
+
     [HttpGet("search")]
     public async Task<IActionResult> SearchUsers([FromQuery] string q)
     {
@@ -228,7 +256,7 @@ public class UsersController(
             var likes = likeMap[p.Id];
             return new PostResponse(p.Id, p.UserId, p.DisplayName, p.ProfileImageUrl,
                 p.Content, p.SpotifyUri, p.SpotifyName, p.SpotifyCoverUrl,
-                p.SpotifySubtitle, p.SpotifyMediaType, p.PreviewUrl,
+                p.SpotifySubtitle, p.SpotifySubtitleUrl, p.SpotifyMediaType, p.PreviewUrl,
                 p.PreviewStartSecond, p.PreviewDuration,
                 p.CreatedAt, likes.LikeCount, likes.IsLikedByCurrentUser);
         });

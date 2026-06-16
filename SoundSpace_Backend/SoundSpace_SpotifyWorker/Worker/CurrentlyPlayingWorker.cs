@@ -31,7 +31,9 @@ public class CurrentlyPlayingWorker(
         var player = scope.ServiceProvider.GetRequiredService<ISpotifyPlayerService>();
 
         var users = await db.Users
-            .Where(u => u.SpotifyRefreshToken != null && !u.SpotifyRefreshToken.StartsWith("mock_"))
+            .Where(u => u.SpotifyRefreshToken != null
+                     && !u.SpotifyRefreshToken.StartsWith("mock_")
+                     && !u.SpotifyId.StartsWith("mock_"))
             .Select(u => new { u.Id, u.SpotifyId, u.IsListening, u.CurrentlyPlayingTitle })
             .ToListAsync(ct);
 

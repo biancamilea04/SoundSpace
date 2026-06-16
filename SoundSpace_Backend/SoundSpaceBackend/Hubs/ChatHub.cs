@@ -24,7 +24,6 @@ public class ChatHub(
         var user = await userService.GetUserEntityBySpotifyIdAsync(spotifyId);
         if (user is null) { Context.Abort(); return; }
 
-        // Join ALL conversation groups (DMs + event group chats)
         var allConvIds = await conversationService.GetAllConversationIdsAsync(user.Id);
         foreach (var id in allConvIds)
             await Groups.AddToGroupAsync(Context.ConnectionId, GroupName(id));

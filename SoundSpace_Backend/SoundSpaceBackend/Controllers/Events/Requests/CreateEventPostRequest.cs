@@ -8,6 +8,7 @@ public record CreateEventPostRequest(
     [MaxLength(500)] string? SpotifyName,
     [MaxLength(500)] string? SpotifyCoverUrl,
     [MaxLength(500)] string? SpotifySubtitle,
+    [MaxLength(500)] string? SpotifySubtitleUrl,
     [MaxLength(50)] string? SpotifyMediaType,
     [MaxLength(500)] string? PreviewUrl,
     int? PreviewStartSecond,

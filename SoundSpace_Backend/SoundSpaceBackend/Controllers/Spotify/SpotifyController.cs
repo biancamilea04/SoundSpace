@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SoundSpaceBackend.Services.PreviewUrl.Abstractions;
 using SoundSpaceBackend.Services.SpotifyPlayer.Abstractions;
 
 namespace SoundSpaceBackend.Controllers.Spotify;
@@ -10,6 +11,7 @@ namespace SoundSpaceBackend.Controllers.Spotify;
 [Authorize]
 public class SpotifyController(
     ISpotifyPlayerService spotifyPlayerService,
+    IPreviewUrlService previewUrlService,
     ILogger<SpotifyController> logger) : ControllerBase
 {
     [HttpGet("recently-played")]
@@ -63,11 +65,23 @@ public class SpotifyController(
         }
 
         var item = await spotifyPlayerService.LookupByUriAsync(spotifyId, uri);
-        if (item == null) 
+        if (item == null)
         {
             return NotFound();
         }
 
         return Ok(item);
+    }
+
+    [HttpGet("preview")]
+    public async Task<IActionResult> GetPreview([FromQuery] string uri, [FromQuery] string? artist, [FromQuery] string? track)
+    {
+        if (string.IsNullOrWhiteSpace(uri)) return BadRequest("URI is required.");
+
+        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (spotifyId == null) return Unauthorized();
+
+        var previewUrl = await previewUrlService.ResolveAsync(spotifyId, uri, artist, track);
+        return Ok(new { previewUrl });
     }
 }

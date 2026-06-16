@@ -92,11 +92,12 @@ public class EventsController(
         try
         {
             var dto = new CreateEventDto(
-                request.Title, request.ImageUrl, request.ArtistName,
-                request.ArtistSpotifyId, request.ArtistImageUrl,
+                request.Title, request.ImageUrl, request.CoverImageUrl,
+                request.ArtistName, request.ArtistSpotifyId, request.ArtistImageUrl,
                 request.Location, request.City, request.Country,
                 request.EventDate, request.EventTime,
-                request.Description, request.TicketsUrl, request.ArtistProfileUrl);
+                request.Genre, request.Description, request.TicketsUrl, request.ArtistProfileUrl,
+                request.Latitude, request.Longitude);
 
             var ev = await eventService.CreateEventAsync(userId.Value, dto);
             return Created($"/api/events/{ev.Id}", ToResponse(ev));
@@ -122,6 +123,13 @@ public class EventsController(
         {
             return NotFound(ex.Message);
         }
+    }
+
+    [HttpGet("{id:guid}/attendees")]
+    public async Task<IActionResult> GetAttendees(Guid id, [FromQuery] int limit = 10)
+    {
+        var attendees = await eventService.GetAttendeesAsync(id, Math.Min(limit, 50));
+        return Ok(attendees.Select(a => new { a.UserId, a.DisplayName, a.ProfileImageUrl }));
     }
 
     [HttpGet("{id:guid}/conversation")]
@@ -157,6 +165,7 @@ public class EventsController(
                 request.SpotifyName,
                 request.SpotifyCoverUrl,
                 request.SpotifySubtitle,
+                request.SpotifySubtitleUrl,
                 request.SpotifyMediaType,
                 request.PreviewUrl,
                 request.PreviewStartSecond,
@@ -189,17 +198,69 @@ public class EventsController(
         return Ok(posts.Select(p => ToPostResponse(p, likeMap[p.Id])));
     }
 
+    [HttpGet("created")]
+    public async Task<IActionResult> GetCreatedEvents()
+    {
+        var userId = await GetCallerDbIdAsync();
+        if (userId is null) return Unauthorized();
+
+        var events = await eventService.GetCreatedEventsAsync(userId.Value);
+        return Ok(events.Select(ToResponse));
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateEvent(Guid id, [FromBody] UpdateEventRequest request)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var userId = await GetCallerDbIdAsync();
+        if (userId is null) return Unauthorized();
+
+        try
+        {
+            var dto = new UpdateEventDto(
+                request.Title, request.ImageUrl, request.CoverImageUrl,
+                request.ArtistName, request.ArtistSpotifyId, request.ArtistImageUrl,
+                request.Location, request.City, request.Country,
+                request.EventDate, request.EventTime,
+                request.Genre, request.Description, request.TicketsUrl, request.ArtistProfileUrl,
+                request.Latitude, request.Longitude);
+
+            var ev = await eventService.UpdateEventAsync(id, userId.Value, dto);
+            return Ok(ToResponse(ev));
+        }
+        catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
+        catch (UnauthorizedAccessException) { return Forbid(); }
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteEvent(Guid id)
+    {
+        var userId = await GetCallerDbIdAsync();
+        if (userId is null) return Unauthorized();
+
+        try
+        {
+            await eventService.DeleteEventAsync(id, userId.Value);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
+        catch (UnauthorizedAccessException) { return Forbid(); }
+    }
+
     private static EventResponse ToResponse(EventDto dto) =>
-        new(dto.Id, dto.Title, dto.ImageUrl, dto.ArtistName, dto.ArtistSpotifyId, dto.ArtistImageUrl,
+        new(dto.Id, dto.Title, dto.ImageUrl, dto.CoverImageUrl,
+            dto.ArtistName, dto.ArtistSpotifyId, dto.ArtistImageUrl,
             dto.Location, dto.City, dto.Country, dto.EventDate, dto.EventTime,
-            dto.Description, dto.TicketsUrl, dto.ArtistProfileUrl,
+            dto.Genre, dto.Description, dto.TicketsUrl, dto.ArtistProfileUrl,
+            dto.Latitude, dto.Longitude,
             dto.CreatedByUserId, dto.CreatedByDisplayName, dto.CreatedAt,
             dto.AttendeeCount, dto.IsAttendedByCurrentUser);
 
     private static PostResponse ToPostResponse(GetPostDto post, LikeStatusDto likes) =>
         new(post.Id, post.UserId, post.DisplayName, post.ProfileImageUrl,
             post.Content, post.SpotifyUri, post.SpotifyName, post.SpotifyCoverUrl,
-            post.SpotifySubtitle, post.SpotifyMediaType, post.PreviewUrl,
+            post.SpotifySubtitle, post.SpotifySubtitleUrl, post.SpotifyMediaType, post.PreviewUrl,
             post.PreviewStartSecond, post.PreviewDuration,
             post.CreatedAt, likes.LikeCount, likes.IsLikedByCurrentUser,
             post.EventId, post.EventTitle);

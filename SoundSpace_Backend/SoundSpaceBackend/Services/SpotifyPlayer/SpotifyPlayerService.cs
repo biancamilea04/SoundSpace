@@ -2,6 +2,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using SoundSpaceBackend.Controllers.Artists.Responses;
 using SoundSpaceBackend.Services.SpotifyPlayer.Abstractions;
 using SoundSpaceBackend.Services.SpotifyPlayer.DTOs;
 using SoundSpaceBackend.Services.SpotifyToken.Abstractions;
@@ -239,7 +240,7 @@ public class SpotifyPlayerService(
         if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
         {
             logger.LogInformation(
-                "[SpotifyPlayer] Nothing currently playing for SpotifyId={SpotifyId}. Falling back to recently played.",
+                "[SpotifyPlayer] Nothing currently playing for SpotifyId={SpotifyId}. Falling back to recently played",
                 spotifyId);
             return await GetRecentlyPlayedTrackAsync(spotifyId, accessToken);
         }
@@ -258,7 +259,7 @@ public class SpotifyPlayerService(
         if (spotifyData?.Item == null)
         {
             logger.LogInformation(
-                "[SpotifyPlayer] Response had no track item for SpotifyId={SpotifyId}. Falling back to recently played.",
+                "[SpotifyPlayer] Response had no track item for SpotifyId={SpotifyId}. Falling back to recently played",
                 spotifyId);
             return await GetRecentlyPlayedTrackAsync(spotifyId, accessToken);
         }
@@ -344,35 +345,35 @@ public class SpotifyPlayerService(
             return items;
         }
 
-        if (type == "episode")
+        if (type == "show")
         {
             var response = await client.GetAsync(
-                "https://api.spotify.com/v1/me/episodes?limit=10");
+                "https://api.spotify.com/v1/me/shows?limit=10");
 
             if (!response.IsSuccessStatusCode)
             {
-                logger.LogError("[SpotifyPlayer] saved episodes failed. Status={Status}", response.StatusCode);
+                logger.LogError("[SpotifyPlayer] saved shows failed. Status={Status}", response.StatusCode);
                 return [];
             }
 
             var json = await response.Content.ReadAsStringAsync();
-            var data = JsonSerializer.Deserialize<SpotifySavedEpisodesDto>(json, JsonOptions);
+            var data = JsonSerializer.Deserialize<SpotifySavedShowsDto>(json, JsonOptions);
 
             var items = new List<SpotifyMediaItemResponse>();
 
             foreach (var item in data?.Items ?? [])
             {
-                var episode = item.Episode;
-                if (episode?.Uri == null) continue;
+                var show = item.Show;
+                if (show?.Uri == null) continue;
 
                 items.Add(new SpotifyMediaItemResponse(
-                    episode.Uri,
-                    episode.Name,
-                    "episode",
-                    episode.Images.FirstOrDefault()?.Url ?? string.Empty,
-                    episode.Show?.Name ?? string.Empty,
-                    episode.ExternalUrls?.Spotify ?? string.Empty,
-                    episode.Show?.ExternalUrls?.Spotify ?? string.Empty
+                    show.Uri,
+                    show.Name,
+                    "show",
+                    show.Images.FirstOrDefault()?.Url ?? string.Empty,
+                    show.Publisher,
+                    show.ExternalUrls?.Spotify ?? string.Empty,
+                    string.Empty
                 ));
             }
 
@@ -399,6 +400,9 @@ public class SpotifyPlayerService(
             var track = item.Track;
             if (track?.Uri == null || !seenTracks.Add(track.Uri)) continue;
 
+            logger.LogInformation("[SpotifyPlayer] RecentlyPlayed track={Name} uri={Uri} preview_url={PreviewUrl}",
+                track.Name, track.Uri, track.PreviewUrl);
+
             trackItems.Add(new SpotifyMediaItemResponse(
                 track.Uri,
                 track.Name,
@@ -406,7 +410,8 @@ public class SpotifyPlayerService(
                 track.Album?.Images.FirstOrDefault()?.Url ?? string.Empty,
                 string.Join(", ", track.Artists.Select(a => a.Name)),
                 track.ExternalUrls?.Spotify ?? string.Empty,
-                track.Artists.FirstOrDefault()?.ExternalUrls?.Spotify ?? string.Empty
+                track.Artists.FirstOrDefault()?.ExternalUrls?.Spotify ?? string.Empty,
+                track.PreviewUrl
             ));
         }
 
@@ -427,7 +432,7 @@ public class SpotifyPlayerService(
 
         var encodedQuery = Uri.EscapeDataString(query);
         var response = await client.GetAsync(
-            $"https://api.spotify.com/v1/search?q={encodedQuery}&type=track,album,episode&limit=10");
+            $"https://api.spotify.com/v1/search?q={encodedQuery}&type=track,album,show&limit=10");
 
         if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
             throw new HttpRequestException("rate-limited", null, System.Net.HttpStatusCode.TooManyRequests);
@@ -455,7 +460,8 @@ public class SpotifyPlayerService(
                 track.Album?.Images.FirstOrDefault()?.Url ?? string.Empty,
                 string.Join(", ", track.Artists.Select(a => a.Name)),
                 track.ExternalUrls?.Spotify ?? string.Empty,
-                track.Artists.FirstOrDefault()?.ExternalUrls?.Spotify ?? string.Empty
+                track.Artists.FirstOrDefault()?.ExternalUrls?.Spotify ?? string.Empty,
+                track.PreviewUrl
             ));
         }
 
@@ -475,19 +481,19 @@ public class SpotifyPlayerService(
             ));
         }
 
-        foreach (var episode in data?.Episodes?.Items ?? [])
+        foreach (var show in data?.Shows?.Items ?? [])
         {
-            if (episode.Uri == null)
+            if (show.Uri == null)
                 continue;
 
             items.Add(new SpotifyMediaItemResponse(
-                episode.Uri,
-                episode.Name,
-                "episode",
-                episode.Images.FirstOrDefault()?.Url ?? string.Empty,
-                episode.Show?.Name ?? string.Empty,
-                episode.ExternalUrls?.Spotify ?? string.Empty,
-                episode.Show?.ExternalUrls?.Spotify ?? string.Empty
+                show.Uri,
+                show.Name,
+                "show",
+                show.Images.FirstOrDefault()?.Url ?? string.Empty,
+                show.Publisher,
+                show.ExternalUrls?.Spotify ?? string.Empty,
+                string.Empty
             ));
         }
 
@@ -518,7 +524,7 @@ public class SpotifyPlayerService(
         {
             "track" => await LookupTrackAsync(client, id, uri),
             "album" => await LookupAlbumAsync(client, id, uri),
-            "episode" => await LookupEpisodeAsync(client, id, uri),
+            "show" => await LookupShowAsync(client, id, uri),
             _ => null
         };
     }
@@ -563,24 +569,63 @@ public class SpotifyPlayerService(
         );
     }
 
-    private async Task<SpotifyMediaItemResponse?> LookupEpisodeAsync(HttpClient client, string id, string uri)
+    private async Task<SpotifyMediaItemResponse?> LookupShowAsync(HttpClient client, string id, string uri)
     {
-        var response = await client.GetAsync($"https://api.spotify.com/v1/episodes/{id}");
+        var response = await client.GetAsync($"https://api.spotify.com/v1/shows/{id}");
         if (!response.IsSuccessStatusCode) return null;
 
         var json = await response.Content.ReadAsStringAsync();
-        var episode = JsonSerializer.Deserialize<SpotifyEpisodeDto>(json, JsonOptions);
-        if (episode == null) return null;
+        var show = JsonSerializer.Deserialize<SpotifyShowDetailDto>(json, JsonOptions);
+        if (show == null) return null;
+
+        var previewUrl = show.Episodes?.Items
+            .FirstOrDefault(e => e.PreviewUrl != null)?.PreviewUrl;
 
         return new SpotifyMediaItemResponse(
             uri,
-            episode.Name,
-            "episode",
-            episode.Images.FirstOrDefault()?.Url ?? string.Empty,
-            episode.Show?.Name ?? string.Empty,
-            episode.ExternalUrls?.Spotify ?? string.Empty,
-            episode.Show?.ExternalUrls?.Spotify ?? string.Empty
+            show.Name,
+            "show",
+            show.Images.FirstOrDefault()?.Url ?? string.Empty,
+            show.Publisher,
+            show.ExternalUrls?.Spotify ?? string.Empty,
+            string.Empty,
+            previewUrl
         );
+    }
+
+    public async Task<List<ArtistSearchResult>> SearchArtistsAsync(string spotifyId, string query)
+    {
+        var accessToken = await spotifyTokenService.GetValidAccessTokenAsync(spotifyId);
+        if (accessToken == null) return [];
+
+        var client = httpClientFactory.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue(Bearer, accessToken);
+
+        var encodedQuery = Uri.EscapeDataString(query);
+        var response = await client.GetAsync(
+            $"https://api.spotify.com/v1/search?q={encodedQuery}&type=artist&limit=10");
+
+        if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            throw new HttpRequestException("rate-limited", null, System.Net.HttpStatusCode.TooManyRequests);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            logger.LogError("[SpotifyPlayer] Artist search failed. Status={Status}", response.StatusCode);
+            return [];
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+        var data = JsonSerializer.Deserialize<SpotifySearchResponseDto>(json, JsonOptions);
+
+        return (data?.Artists?.Items ?? [])
+            .Select(a => new ArtistSearchResult(
+                a.Name,
+                a.Id,
+                a.Images.FirstOrDefault()?.Url,
+                a.ExternalUrls?.Spotify,
+                a.Genres))
+            .ToList();
     }
 
     public async Task<PlayTrackResultCode> PlayTrackAsync(string spotifyId, string trackUri, int positionMs = 0)

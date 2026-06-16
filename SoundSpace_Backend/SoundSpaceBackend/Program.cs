@@ -34,25 +34,29 @@ using SoundSpaceBackend.Services.Event;
 using SoundSpaceBackend.Services.Event.Abstractions;
 using SoundSpaceBackend.Services.EventChat;
 using SoundSpaceBackend.Services.EventChat.Abstractions;
+using SoundSpaceBackend.Services.Discovery;
+using SoundSpaceBackend.Services.Discovery.Abstractions;
 using SoundSpaceBackend.Services.Photo;
 using SoundSpaceBackend.Services.Photo.Abstractions;
+using SoundSpaceBackend.Seed;
 
 Env.Load();
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    WebRootPath = "wwwroot",
+});
+Directory.CreateDirectory(Path.Combine(builder.Environment.ContentRootPath, "wwwroot"));
 
-// Configure logging
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-// CORS configuration
 var allowedOrigins = builder.Configuration["FRONTEND_URL"]?.Split(",") ?? [];
 
-// Database configuration
 var connectionString = Environment.GetEnvironmentVariable("SOUNDSPACE_DB");
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseNpgsql(connectionString));
 
-// Service registrations
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
@@ -76,6 +80,7 @@ builder.Services.AddScoped<IPreviewUrlService, PreviewUrlService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IEventChatService, EventChatService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
+builder.Services.AddScoped<IDiscoveryService, DiscoveryService>();
 builder.Services.AddSingleton<PresenceTracker>();
 builder.Services.AddSingleton<ChatPresenceTracker>();
 
@@ -158,8 +163,13 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<ApplicationContext>();
         
         await context.Database.MigrateAsync();
-        
+
         Console.WriteLine("Migration succeed");
+
+        if (app.Environment.IsDevelopment())
+        {
+            await DataSeeder.SeedAsync(context);
+        }
     }
     catch (Exception ex)
     {

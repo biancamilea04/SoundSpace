@@ -30,6 +30,9 @@ public class Post
     [MaxLength(500)]
     public string? SpotifySubtitle { get; set; }
 
+    [MaxLength(500)]
+    public string? SpotifySubtitleUrl { get; set; }
+
     [MaxLength(50)]
     public string? SpotifyMediaType { get; set; }
 

@@ -7,7 +7,6 @@ using SoundSpaceBackend.Services.Like.Abstractions;
 using SoundSpaceBackend.Services.Like.DTOs;
 using SoundSpaceBackend.Services.Post.Abstractions;
 using SoundSpaceBackend.Services.Post.DTOs;
-using SoundSpaceBackend.Services.PreviewUrl.Abstractions;
 using SoundSpaceBackend.Services.User.Abstractions;
 
 namespace SoundSpaceBackend.Controllers.Posts;
@@ -19,7 +18,6 @@ public class PostsController(
     IPostService postService,
     IUserService userService,
     ILikeService likeService,
-    IPreviewUrlService previewUrlService,
     ILogger<PostsController> logger) : ControllerBase
 {
     private readonly ILogger<PostsController> _logger = logger;
@@ -40,7 +38,7 @@ public class PostsController(
     private static PostResponse ToResponse(GetPostDto post, LikeStatusDto likes) =>
         new(post.Id, post.UserId, post.DisplayName, post.ProfileImageUrl,
             post.Content, post.SpotifyUri, post.SpotifyName, post.SpotifyCoverUrl,
-            post.SpotifySubtitle, post.SpotifyMediaType, post.PreviewUrl,
+            post.SpotifySubtitle, post.SpotifySubtitleUrl, post.SpotifyMediaType, post.PreviewUrl,
             post.PreviewStartSecond, post.PreviewDuration,
             post.CreatedAt, likes.LikeCount, likes.IsLikedByCurrentUser,
             post.EventId, post.EventTitle);
@@ -54,16 +52,7 @@ public class PostsController(
         var (userId, spotifyId) = await GetCallerAsync();
         if (userId is null || spotifyId is null) return Unauthorized();
 
-        var previewUrl = request.PreviewUrl;
-
-        // Resolve preview URL for tracks: first try Spotify, then fall back to iTunes
-        if (previewUrl == null
-            && string.Equals(request.SpotifyMediaType, "track", StringComparison.OrdinalIgnoreCase)
-            && request.SpotifyUri != null)
-        {
-            previewUrl = await previewUrlService.ResolveAsync(
-                spotifyId, request.SpotifyUri, request.SpotifySubtitle, request.SpotifyName);
-        }
+        var previewUrl = string.IsNullOrEmpty(request.PreviewUrl) ? null : request.PreviewUrl;
 
         var dto = new CreatePostDto(
             request.Content,
@@ -71,6 +60,7 @@ public class PostsController(
             request.SpotifyName,
             request.SpotifyCoverUrl,
             request.SpotifySubtitle,
+            request.SpotifySubtitleUrl,
             request.SpotifyMediaType,
             previewUrl,
             request.PreviewStartSecond,

@@ -8,25 +8,117 @@ public static class DataSeeder
 {
     private static readonly IPasswordHasher<User> Hasher = new PasswordHasher<User>();
 
+    private static readonly Dictionary<string, (double Lat, double Lon)> MockLocations = new()
+    {
+        ["mock_spotify_001"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_002"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_003"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_004"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_005"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_006"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_007"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_008"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_009"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_010"] = (47.17474360453262, 27.549144968755872),
+    };
+
+    private static readonly Dictionary<string, (string Id, string Name)[]> MockArtists = new()
+    {
+        ["mock_spotify_001"] = [
+            ("7Ln80lUS6He07XvHI8qqHH", "Arctic Monkeys"),
+            ("2n2RSaZqBuUUukhbLlpnE6", "Sleep Token"),
+            ("1Xyo4u8uXC1ZmMpatF05PJ", "The Weeknd"),
+            ("5INjqkS1o8h1imAzPqGZBb", "Tame Impala"),
+            ("6MwPCCR936cYfM1dLsGVnl", "Motionless In White"),
+        ],
+        ["mock_spotify_002"] = [
+            ("1Xyo4u8uXC1ZmMpatF05PJ", "The Weeknd"),
+            ("05qpk4JDcLSFNJSsPIZ8Ye", "The Motans"),
+            ("1n5LD9Ar3D6RK2X2ewGvXb", "Carla's Dreams"),
+            ("6qqNVTkY8uBg9cP3Jd7DAH", "Billie Eilish"),
+            ("06HL4z0CvFAxyc27GXpf02", "Taylor Swift"),
+        ],
+        ["mock_spotify_003"] = [
+            ("7Ln80lUS6He07XvHI8qqHH", "Arctic Monkeys"),
+            ("2n2RSaZqBuUUukhbLlpnE6", "Sleep Token"),
+            ("4Z8W4fKeB5YxbusRsdQVPb", "Radiohead"),
+            ("4gzpq5DPGxSnKTe4SA8HAU", "Coldplay"),
+            ("05qpk4JDcLSFNJSsPIZ8Ye", "The Motans"),
+        ],
+        ["mock_spotify_004"] = [
+            ("2n2RSaZqBuUUukhbLlpnE6", "Sleep Token"),
+            ("6MwPCCR936cYfM1dLsGVnl", "Motionless In White"),
+            ("2YZyLoL8N0Wb9xBt1NhZWg", "Kendrick Lamar"),
+            ("3TVXtAsR1Inumwj472S9r4", "Drake"),
+            ("0Y5tJX1MQlPlqiwlOH1tJY", "Travis Scott"),
+        ],
+        ["mock_spotify_005"] = [
+            ("05qpk4JDcLSFNJSsPIZ8Ye", "The Motans"),
+            ("1n5LD9Ar3D6RK2X2ewGvXb", "Carla's Dreams"),
+            ("2Bfpg6VC7SNEQKez2uXyuP", "Alternosfera"),
+            ("1OQa8VMULlbmbFmDcdfBZj", "Irina Rimes"),
+            ("5INjqkS1o8h1imAzPqGZBb", "Tame Impala"),
+        ],
+        ["mock_spotify_006"] = [
+            ("1Xyo4u8uXC1ZmMpatF05PJ", "The Weeknd"),
+            ("1n5LD9Ar3D6RK2X2ewGvXb", "Carla's Dreams"),
+            ("2Bfpg6VC7SNEQKez2uXyuP", "Alternosfera"),
+            ("1OQa8VMULlbmbFmDcdfBZj", "Irina Rimes"),
+            ("3TVXtAsR1Inumwj472S9r4", "Drake"),
+        ],
+        ["mock_spotify_007"] = [
+            ("06HL4z0CvFAxyc27GXpf02", "Taylor Swift"),
+            ("05qpk4JDcLSFNJSsPIZ8Ye", "The Motans"),
+            ("1n5LD9Ar3D6RK2X2ewGvXb", "Carla's Dreams"),
+            ("1McMsnEElThX1knmY4oliG", "Olivia Rodrigo"),
+            ("6qqNVTkY8uBg9cP3Jd7DAH", "Billie Eilish"),
+        ],
+        ["mock_spotify_008"] = [
+            ("2n2RSaZqBuUUukhbLlpnE6", "Sleep Token"),
+            ("7Ln80lUS6He07XvHI8qqHH", "Arctic Monkeys"),
+            ("1Xyo4u8uXC1ZmMpatF05PJ", "The Weeknd"),
+            ("5INjqkS1o8h1imAzPqGZBb", "Tame Impala"),
+            ("4gzpq5DPGxSnKTe4SA8HAU", "Coldplay"),
+        ],
+        ["mock_spotify_009"] = [
+            ("1OQa8VMULlbmbFmDcdfBZj", "Irina Rimes"),
+            ("4dpARuHxo51G3z768sgnrY", "Adele"),
+            ("00FQb4jTyendYWaN8pK0wa", "Lana Del Rey"),
+            ("0du5cEVh5yTK9QJze8zA0C", "Bruno Mars"),
+            ("6vWDO969PvNqNYHIOW5v0m", "Beyoncé"),
+        ],
+        ["mock_spotify_010"] = [
+            ("6MwPCCR936cYfM1dLsGVnl", "Motionless In White"),
+            ("4gzpq5DPGxSnKTe4SA8HAU", "Coldplay"),
+            ("53XhwfbYqKCa1cC15pYq2q", "Imagine Dragons"),
+            ("711MCceyCBcFnzjGY4Q7Un", "AC/DC"),
+            ("1dfeR4HaWDbWqFHLkxsg1d", "Queen"),
+        ],
+    };
+
     public static async Task SeedAsync(ApplicationContext db)
     {
         if (db.Users.Any(u => u.SpotifyId.StartsWith("mock_")))
+        {
+            await EnsureLocationsAsync(db);
+            await EnsureMockArtistsAsync(db);
             return;
+        }
 
         var now = DateTime.UtcNow;
 
         var users = new[]
         {
-            MakeUser("mock_spotify_001", "Alex Turner",    "alex.turner@soundspace.dev",    "GB", 1240, null),
-            MakeUser("mock_spotify_002", "Maya Chen",      "maya.chen@soundspace.dev",      "US", 843,  null),
-            MakeUser("mock_spotify_003", "Luca Rossi",     "luca.rossi@soundspace.dev",     "IT", 2105, null),
-            MakeUser("mock_spotify_004", "Yuki Tanaka",    "yuki.tanaka@soundspace.dev",    "JP", 390,  null),
-            MakeUser("mock_spotify_005", "Sofia Andrade",  "sofia.andrade@soundspace.dev",  "BR", 678,  null),
-            MakeUser("mock_spotify_006", "James Okafor",   "james.okafor@soundspace.dev",   "NG", 1502, null),
-            MakeUser("mock_spotify_007", "Elena Vasquez",  "elena.vasquez@soundspace.dev",  "MX", 921,  null),
-            MakeUser("mock_spotify_008", "Noah Schmidt",   "noah.schmidt@soundspace.dev",   "DE", 455,  null),
-            MakeUser("mock_spotify_009", "Priya Sharma",   "priya.sharma@soundspace.dev",   "IN", 317,  null),
-            MakeUser("mock_spotify_010", "Finn Larsen",    "finn.larsen@soundspace.dev",    "DK", 789,  null),
+            MakeUser("mock_spotify_001", "Alex Turner",    "alex.turner@soundspace.dev",    "RO", 1240, null, 47.17474360453262, 27.549144968755872),
+            MakeUser("mock_spotify_002", "Maya Chen",      "maya.chen@soundspace.dev",      "RO", 843,  null, 47.17474360453262, 27.549144968755872),
+            MakeUser("mock_spotify_003", "Luca Rossi",     "luca.rossi@soundspace.dev",     "RO", 2105, null, 47.17474360453262, 27.549144968755872),
+            MakeUser("mock_spotify_004", "Yuki Tanaka",    "yuki.tanaka@soundspace.dev",    "RO", 390,  null, 47.17474360453262, 27.549144968755872),
+            MakeUser("mock_spotify_005", "Sofia Andrade",  "sofia.andrade@soundspace.dev",  "RO", 678,  null, 47.17474360453262, 27.549144968755872),
+            MakeUser("mock_spotify_006", "James Okafor",   "james.okafor@soundspace.dev",   "RO", 1502, null, 47.17474360453262, 27.549144968755872),
+            MakeUser("mock_spotify_007", "Elena Vasquez",  "elena.vasquez@soundspace.dev",  "RO", 921,  null, 47.17474360453262, 27.549144968755872),
+            MakeUser("mock_spotify_008", "Noah Schmidt",   "noah.schmidt@soundspace.dev",   "RO", 455,  null, 47.17474360453262, 27.549144968755872),
+            MakeUser("mock_spotify_009", "Priya Sharma",   "priya.sharma@soundspace.dev",   "RO", 317,  null, 47.17474360453262, 27.549144968755872),
+            MakeUser("mock_spotify_010", "Finn Larsen",    "finn.larsen@soundspace.dev",    "RO", 789,  null, 47.17474360453262, 27.549144968755872),
         };
 
         foreach (var u in users)
@@ -44,7 +136,6 @@ public static class DataSeeder
         var elena = users[6];
         var noah  = users[7];
 
-        // --- Conversation 1: Alex ↔ Maya (DM) ---
         var conv1 = new Conversation { CreatedAt = now.AddDays(-3) };
         db.Conversations.Add(conv1);
 
@@ -64,7 +155,6 @@ public static class DataSeeder
             Msg(conv1.Id, alex.Id,  "Absolutely. Doors open at 8, I'll grab the tickets.",        now.AddDays(-2).AddHours(9).AddMinutes(5))
         );
 
-        // --- Conversation 2: Luca ↔ Yuki (DM) ---
         var conv2 = new Conversation { CreatedAt = now.AddDays(-7) };
         db.Conversations.Add(conv2);
 
@@ -85,7 +175,6 @@ public static class DataSeeder
             Msg(conv2.Id, luca.Id, "Sold. Let's meet there. I'll bring the Nujabes vinyl.",        now.AddDays(-6).AddHours(10).AddMinutes(14))
         );
 
-        // --- Conversation 3: Sofia, James, Elena, Noah (Group) ---
         var conv3 = new Conversation { IsGroup = true, CreatedAt = now.AddDays(-1) };
         db.Conversations.Add(conv3);
 
@@ -110,6 +199,57 @@ public static class DataSeeder
         );
 
         await db.SaveChangesAsync();
+
+        await EnsureMockArtistsAsync(db);
+    }
+
+    private static async Task EnsureMockArtistsAsync(ApplicationContext db)
+    {
+        var now = DateTime.UtcNow;
+        bool changed = false;
+
+        foreach (var (spotifyId, artists) in MockArtists)
+        {
+            var user = db.Users.FirstOrDefault(u => u.SpotifyId == spotifyId);
+            if (user == null) continue;
+
+            if (db.TopArtists.Any(a => a.UserId == user.Id)) continue;
+
+            for (int i = 0; i < artists.Length; i++)
+            {
+                db.TopArtists.Add(new TopArtistEntry
+                {
+                    UserId          = user.Id,
+                    SpotifyArtistId = artists[i].Id,
+                    Name            = artists[i].Name,
+                    Rank            = i + 1,
+                    UpdatedAt       = now,
+                });
+            }
+            changed = true;
+        }
+
+        if (changed)
+            await db.SaveChangesAsync();
+    }
+
+    private static async Task EnsureLocationsAsync(ApplicationContext db)
+    {
+        var mockUsers = db.Users.Where(u => u.SpotifyId.StartsWith("mock_")).ToList();
+        bool changed = false;
+
+        foreach (var user in mockUsers)
+        {
+            if (user.Latitude is null && MockLocations.TryGetValue(user.SpotifyId, out var loc))
+            {
+                user.Latitude  = loc.Lat;
+                user.Longitude = loc.Lon;
+                changed = true;
+            }
+        }
+
+        if (changed)
+            await db.SaveChangesAsync();
     }
 
     private static Message Msg(Guid conversationId, Guid senderId, string plaintext, DateTime createdAt) =>
@@ -123,7 +263,8 @@ public static class DataSeeder
 
     private static User MakeUser(
         string spotifyId, string displayName, string email,
-        string country, int followers, string? profileImageUrl)
+        string country, int followers, string? profileImageUrl,
+        double? latitude = null, double? longitude = null)
     {
         var id = Guid.NewGuid();
         return new User
@@ -138,6 +279,8 @@ public static class DataSeeder
             Country = country,
             Followers = followers,
             ProfileImageUrl = profileImageUrl,
+            Latitude = latitude,
+            Longitude = longitude,
             SpotifyAccessToken = "mock_access_token",
             SpotifyRefreshToken = "mock_refresh_token",
             SpotifyTokenExpiresIn = "3600",

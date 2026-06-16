@@ -11,4 +11,6 @@ public interface IFriendshipService
     Task<GetFriendshipDto> AcceptAsync(Guid requestId, Guid currentUserId);
     Task<GetFriendshipDto> RejectAsync(Guid requestId, Guid currentUserId);
     Task<List<FriendActivityDto>> GetFriendsActivityAsync(Guid userId, IReadOnlyList<Guid> onlineUserIds);
+    Task<List<FriendListItemDto>> GetFriendsListAsync(Guid profileUserId);
+    Task RemoveFriendAsync(Guid currentUserId, Guid targetUserId);
 }

@@ -8,7 +8,6 @@ public class MessageReport
     public string Reason { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public bool IsResolved { get; set; } = false;
-
     public Message Message { get; set; } = null!;
     public User Reporter { get; set; } = null!;
 }

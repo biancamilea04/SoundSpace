@@ -7,5 +7,6 @@ public record SpotifyMediaItemResponse(
     string CoverUrl,
     string Subtitle,
     string ExternalUrl,
-    string SubtitleUrl
+    string SubtitleUrl,
+    string? PreviewUrl = null
 );

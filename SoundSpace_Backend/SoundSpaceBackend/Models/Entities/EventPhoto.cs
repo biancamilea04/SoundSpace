@@ -15,6 +15,5 @@ public class EventPhoto
     [Required]
     [MaxLength(500)]
     public string FilePath { get; set; } = string.Empty;
-
     public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
 }

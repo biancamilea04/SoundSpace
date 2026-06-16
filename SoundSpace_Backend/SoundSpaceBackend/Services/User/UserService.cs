@@ -85,7 +85,9 @@ public class UserService(
     {
         return await dbContext.TopArtists
             .Where(a => a.UserId == userId)
-            .OrderBy(a => a.Rank)
+            .OrderByDescending(a => a.UpdatedAt)
+            .ThenBy(a => a.Rank)
+            .Take(5)
             .Select(a => new TopArtistResponse(a.Name, a.ImageUrl, a.SpotifyUrl, a.SpotifyArtistId))
             .ToListAsync();
     }
@@ -126,6 +128,20 @@ public class UserService(
             user.CurrentlyPlayingUri,
             user.CurrentlyPlayingProgressMs
         ));
+    }
+
+    public async Task UpdateLocationAsync(Guid userId, double latitude, double longitude)
+    {
+        var user = await dbContext.Users.FindAsync(userId);
+        if (user is null)
+        {
+            logger.LogWarning("[User] UpdateLocation: user {UserId} not found", userId);
+            return;
+        }
+        user.Latitude  = latitude;
+        user.Longitude = longitude;
+        await dbContext.SaveChangesAsync();
+        logger.LogInformation("[User] Updated location for userId={UserId}: ({Lat},{Lon})", userId, latitude, longitude);
     }
 
     public Task<UserEntity> CreateOrUpdateUserAsync(SpotifyAuthResponseDto spotifyProfileAuthResponse)

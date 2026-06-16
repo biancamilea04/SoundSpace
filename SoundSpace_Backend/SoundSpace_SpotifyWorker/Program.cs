@@ -2,6 +2,7 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using SoundSpaceBackend.Mapping.Profiles;
 using SoundSpaceBackend.Persistence;
+using SoundSpaceBackend.Seed;
 using SoundSpaceBackend.Services.SpotifyPlayer;
 using SoundSpaceBackend.Services.SpotifyPlayer.Abstractions;
 using SoundSpaceBackend.Services.SpotifyToken;
@@ -41,6 +42,7 @@ using (var scope = host.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
     if (host.Services.GetRequiredService<IHostEnvironment>().IsDevelopment())
     {
+        await DataSeeder.SeedAsync(db);
         await SpotifyDataSeeder.SeedAsync(db);
     }
 }

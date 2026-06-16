@@ -19,8 +19,6 @@ public class EventPhotosController(
     IUserService userService,
     ApplicationContext db) : ControllerBase
 {
-    // ── Helpers ────────────────────────────────────────────────────────────────
-
     private async Task<Guid?> GetCallerDbIdAsync()
     {
         var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -32,10 +30,7 @@ public class EventPhotosController(
     private static EventPhotoResponse ToResponse(EventPhoto p) =>
         new(p.Id, p.EventId, p.UploaderId, p.Uploader.DisplayName, p.FilePath, p.UploadedAt);
 
-    // ── Endpoints ──────────────────────────────────────────────────────────────
-
-    /// <summary>GET /api/events/{eventId}/photos — list all photos for an event.</summary>
-    [HttpGet]
+   [HttpGet]
     public async Task<IActionResult> GetPhotos(Guid eventId)
     {
         var exists = await db.Events.AnyAsync(e => e.Id == eventId);
@@ -50,10 +45,6 @@ public class EventPhotosController(
         return Ok(photos.Select(ToResponse));
     }
 
-    /// <summary>
-    /// POST /api/events/{eventId}/photos/file
-    /// Accepts multipart/form-data with a single field named "file".
-    /// </summary>
     [HttpPost("file")]
     public async Task<IActionResult> UploadFile(Guid eventId, IFormFile file)
     {
@@ -77,11 +68,6 @@ public class EventPhotosController(
         }
     }
 
-    /// <summary>
-    /// POST /api/events/{eventId}/photos/url
-    /// Accepts JSON body: { "url": "https://..." }
-    /// Downloads the image server-side, validates it, and saves it to disk.
-    /// </summary>
     [HttpPost("url")]
     public async Task<IActionResult> UploadFromUrl(
         Guid eventId,
@@ -109,9 +95,6 @@ public class EventPhotosController(
             return BadRequest($"Could not download the image: {ex.Message}");
         }
     }
-
-    // ── Shared helper ──────────────────────────────────────────────────────────
-
     private async Task<IActionResult> PersistPhotoAsync(Guid eventId, Guid uploaderId, string filePath)
     {
         var photo = new EventPhoto
@@ -123,7 +106,6 @@ public class EventPhotosController(
         db.EventPhotos.Add(photo);
         await db.SaveChangesAsync();
 
-        // Re-load so the Uploader navigation property is populated for the response.
         await db.Entry(photo).Reference(p => p.Uploader).LoadAsync();
 
         return Created(

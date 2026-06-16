@@ -19,9 +19,11 @@ public class MessageService(ApplicationContext db) : IMessageService
         db.Messages.Add(message);
         await db.SaveChangesAsync();
 
+        var sender = await db.Users.FindAsync(senderId);
         return new MessageDto(message.Id, message.ConversationId, message.SenderId,
             message.Text, message.CreatedAt, message.IsDeleted,
-            message.IsRead, message.ReadAt, message.EditedAt);
+            message.IsRead, message.ReadAt, message.EditedAt,
+            sender?.DisplayName ?? "", sender?.ProfileImageUrl);
     }
 
     public async Task<MessageDto> SoftDeleteMessageAsync(Guid messageId, Guid requestingUserId)
@@ -30,7 +32,7 @@ public class MessageService(ApplicationContext db) : IMessageService
             ?? throw new KeyNotFoundException($"Message {messageId} not found.");
 
         if (message.SenderId != requestingUserId)
-            throw new UnauthorizedAccessException("Only the sender can delete this message.");
+            throw new UnauthorizedAccessException("Only the sender can delete this message");
 
         message.IsDeleted = true;
         message.DeletedAt = DateTime.UtcNow;
@@ -45,6 +47,7 @@ public class MessageService(ApplicationContext db) : IMessageService
     public async Task<List<MessageDto>> GetConversationMessagesAsync(Guid conversationId, int page, int pageSize)
     {
         return await db.Messages
+            .Include(m => m.Sender)
             .Where(m => m.ConversationId == conversationId)
             .OrderBy(m => m.CreatedAt)
             .Skip((page - 1) * pageSize)
@@ -58,7 +61,9 @@ public class MessageService(ApplicationContext db) : IMessageService
                 m.IsDeleted,
                 m.IsRead,
                 m.ReadAt,
-                m.EditedAt
+                m.EditedAt,
+                m.Sender.DisplayName,
+                m.Sender.ProfileImageUrl
             ))
             .ToListAsync();
     }

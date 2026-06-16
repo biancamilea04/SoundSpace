@@ -45,12 +45,12 @@ public class MusicController(
             PlayTrackResultCode.NoActiveDevice => NotFound(new
             {
                 code = "no_device",
-                message = "No active Spotify device found. Please open Spotify on any device."
+                message = "No active Spotify device found. Please open Spotify on any device"
             }),
             PlayTrackResultCode.PremiumRequired => StatusCode(403, new
             {
                 code = "no_premium",
-                message = "Spotify Premium is required for remote playback control."
+                message = "Spotify Premium is required for remote playback control"
             }),
             _ => StatusCode(500, new { code = "error" })
         };

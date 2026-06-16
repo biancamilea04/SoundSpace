@@ -24,6 +24,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
     public DbSet<Event> Events { get; set; }
     public DbSet<EventAttendee> EventAttendees { get; set; }
     public DbSet<EventPhoto> EventPhotos { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -223,17 +224,31 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
             entity.Property(ep => ep.UploadedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-            // Many photos belong to one event; deleting an event cascades to its photos
             entity.HasOne(ep => ep.Event)
                 .WithMany(e => e.Photos)
                 .HasForeignKey(ep => ep.EventId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Uploader deletion is restricted — don't orphan uploaded content silently
             entity.HasOne(ep => ep.Uploader)
                 .WithMany()
                 .HasForeignKey(ep => ep.UploaderId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(n => n.Id);
+
+            entity.Property(n => n.Type).IsRequired().HasMaxLength(50);
+            entity.Property(n => n.Text).IsRequired().HasMaxLength(500);
+            entity.Property(n => n.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.HasOne(n => n.User)
+                .WithMany()
+                .HasForeignKey(n => n.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(n => new { n.UserId, n.IsRead, n.CreatedAt });
         });
     }
 }

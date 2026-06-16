@@ -5,45 +5,128 @@ namespace SoundSpace_SpotifyWorker.Seed;
 
 public static class SpotifyDataSeeder
 {
+    private const string ArcticMonkeys  = "7Ln80lUS6He07XvHI8qqHH";
+    private const string Radiohead      = "4Z8W4fKeB5YxbusRsdQVPb";
+    private const string TheWeeknd      = "1Xyo4u8uXC1ZmMpatF05PJ";
+    private const string TameImpala     = "5INjqkS1o8h1imAzPqGZBb";
+    private const string KendrickLamar  = "2YZyLoL8N0Wb9xBt1NhZWg";
+    private const string Coldplay       = "4gzpq5DPGxSnKTe4SA8HAU";
+    private const string BillieEilish   = "6qqNVTkY8uBg9cP3Jd7DAH";
+    private const string Drake          = "3TVXtAsR1Inumwj472S9r4";
+    private const string TaylorSwift    = "06HL4z0CvFAxyc27GXpf02";
+    private const string DuaLipa        = "6M2wZ9GZgrQXHCFfjv46we";
+    private const string ImagineDragons = "53XhwfbYqKCa1cC15pYq2q";
+    private const string EdSheeran      = "6eUKZXaKkcviH0Ku9w2n3V";
+    private const string ArianaGrande   = "66CXWjxzNUsdJxJ2JdwvnR";
+    private const string TravisScott    = "0Y5tJX1MQlPlqiwlOH1tJY";
+    private const string PostMalone     = "246dkjvS1zLTtiykXe5h60";
+    private const string JuiceWRLD      = "4MCBfE4596Uoi2O4DtmEMz";
+    private const string SZA            = "7tYKF4w9nC0nq9CsPZTHyP";
+    private const string Beyonce        = "6vWDO969PvNqNYHIOW5v0m";
+    private const string Rihanna        = "5pKCCKE2ajJHZ9KAiaK11H";
+    private const string HarryStyles    = "6KImCVD70vtIoJWnq6nGn3";
+    private const string Adele          = "4dpARuHxo51G3z768sgnrY";
+    private const string LanaDelRey     = "00FQb4jTyendYWaN8pK0wa";
+    private const string BrunoMars      = "0du5cEVh5yTK9QJze8zA0C";
+    private const string Queen          = "1dfeR4HaWDbWqFHLkxsg1d";
+    private const string LinkinPark     = "6XyY86QOPPrYVGvF9ch6wz";
+    private const string ACDC           = "711MCceyCBcFnzjGY4Q7Un";
+    private const string OliviaRodrigo     = "1McMsnEElThX1knmY4oliG";
+    private const string LadyGaga          = "1HY2Jd0NmPuamShAr6KMms";
+    private const string SleepToken        = "2n2RSaZqBuUUukhbLlpnE6";
+    private const string TheMotans         = "05qpk4JDcLSFNJSsPIZ8Ye";
+    private const string CarlasDreams      = "1n5LD9Ar3D6RK2X2ewGvXb";
+    private const string Alternosfera      = "2Bfpg6VC7SNEQKez2uXyuP";
+    private const string IrinaRimes        = "1OQa8VMULlbmbFmDcdfBZj";
+    private const string MotionlessInWhite = "6MwPCCR936cYfM1dLsGVnl";
+
+    private static readonly Dictionary<string, string[]> ArtistsByUser = new()
+    {
+        ["mock_spotify_001"] = [ArcticMonkeys, SleepToken, TheWeeknd, TameImpala, MotionlessInWhite],
+        ["mock_spotify_002"] = [TheWeeknd, TheMotans, CarlasDreams, BillieEilish, TaylorSwift],
+        ["mock_spotify_003"] = [ArcticMonkeys, SleepToken, Radiohead, Coldplay, TheMotans],
+        ["mock_spotify_004"] = [SleepToken, MotionlessInWhite, KendrickLamar, Drake, TravisScott],
+        ["mock_spotify_005"] = [TheMotans, CarlasDreams, Alternosfera, IrinaRimes, TameImpala],
+        ["mock_spotify_006"] = [TheWeeknd, CarlasDreams, Alternosfera, IrinaRimes, Drake],
+        ["mock_spotify_007"] = [TaylorSwift, TheMotans, CarlasDreams, OliviaRodrigo, BillieEilish],
+        ["mock_spotify_008"] = [SleepToken, ArcticMonkeys, TheWeeknd, TameImpala, Coldplay],
+        ["mock_spotify_009"] = [IrinaRimes, Adele, LanaDelRey, BrunoMars, Beyonce],
+        ["mock_spotify_010"] = [MotionlessInWhite, Coldplay, ImagineDragons, ACDC, Queen],
+    };
+
+    private static readonly Dictionary<string, string> ArtistNames = new()
+    {
+        [ArcticMonkeys]  = "Arctic Monkeys",
+        [Radiohead]      = "Radiohead",
+        [TheWeeknd]      = "The Weeknd",
+        [TameImpala]     = "Tame Impala",
+        [KendrickLamar]  = "Kendrick Lamar",
+        [Coldplay]       = "Coldplay",
+        [BillieEilish]   = "Billie Eilish",
+        [Drake]          = "Drake",
+        [TaylorSwift]    = "Taylor Swift",
+        [DuaLipa]        = "Dua Lipa",
+        [ImagineDragons] = "Imagine Dragons",
+        [EdSheeran]      = "Ed Sheeran",
+        [ArianaGrande]   = "Ariana Grande",
+        [TravisScott]    = "Travis Scott",
+        [PostMalone]     = "Post Malone",
+        [JuiceWRLD]      = "Juice WRLD",
+        [SZA]            = "SZA",
+        [Beyonce]        = "Beyoncé",
+        [Rihanna]        = "Rihanna",
+        [HarryStyles]    = "Harry Styles",
+        [Adele]          = "Adele",
+        [LanaDelRey]     = "Lana Del Rey",
+        [BrunoMars]      = "Bruno Mars",
+        [Queen]          = "Queen",
+        [LinkinPark]     = "Linkin Park",
+        [ACDC]           = "AC/DC",
+        [OliviaRodrigo]      = "Olivia Rodrigo",
+        [LadyGaga]           = "Lady Gaga",
+        [SleepToken]         = "Sleep Token",
+        [TheMotans]          = "The Motans",
+        [CarlasDreams]       = "Carla's Dreams",
+        [Alternosfera]       = "Alternosfera",
+        [IrinaRimes]         = "Irina Rimes",
+        [MotionlessInWhite]  = "Motionless In White",
+    };
+
     public static async Task SeedAsync(ApplicationContext db)
     {
-        if (db.TopArtists.Any(a => a.SpotifyArtistId == "seed_artist_001"))
-            return;
+        if (db.TopArtists.Any(a => a.SpotifyArtistId.StartsWith("seed_artist_")))
+        {
+            db.TopArtists.RemoveRange(
+                db.TopArtists.Where(a => a.SpotifyArtistId.StartsWith("seed_artist_")));
+            db.TopTracks.RemoveRange(
+                db.TopTracks.Where(t => t.SpotifyTrackId.StartsWith("seed_track_")));
+            db.RecentStreams.RemoveRange(
+                db.RecentStreams.Where(r => r.SpotifyTrackId.StartsWith("seed_track_")));
+            await db.SaveChangesAsync();
+        }
 
-        var user = db.Users.FirstOrDefault(u => u.SpotifyId == "mock_spotify_001");
-        if (user == null)
+        if (db.TopArtists.Any(a => a.SpotifyArtistId == ArcticMonkeys))
             return;
 
         var now = DateTime.UtcNow;
 
-        db.TopArtists.AddRange(
-            new TopArtistEntry { UserId = user.Id, SpotifyArtistId = "seed_artist_001", Name = "Arctic Monkeys",  Rank = 1, ImageUrl = "https://i.scdn.co/image/ab6761610000e5eb7da39dea0a72f581535fb11f", SpotifyUrl = "https://open.spotify.com/artist/7Ln80lUS6He07XvHI8qqHH", UpdatedAt = now },
-            new TopArtistEntry { UserId = user.Id, SpotifyArtistId = "seed_artist_002", Name = "Radiohead",        Rank = 2, ImageUrl = "https://i.scdn.co/image/ab6761610000e5eb3d9f55fdde1d8536c4dd1e14", SpotifyUrl = "https://open.spotify.com/artist/4Z8W4fKeB5YxbusRsdQVPb", UpdatedAt = now },
-            new TopArtistEntry { UserId = user.Id, SpotifyArtistId = "seed_artist_003", Name = "The Weeknd",       Rank = 3, ImageUrl = "https://i.scdn.co/image/ab6761610000e5eb214f3cf1cbe7139c1e26ffbb", SpotifyUrl = "https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ", UpdatedAt = now },
-            new TopArtistEntry { UserId = user.Id, SpotifyArtistId = "seed_artist_004", Name = "Tame Impala",      Rank = 4, ImageUrl = "https://i.scdn.co/image/ab6761610000e5eb999b4a75af49e7ae0a7d1a56", SpotifyUrl = "https://open.spotify.com/artist/5INjqkS1o8h1imAzPqGZBb", UpdatedAt = now },
-            new TopArtistEntry { UserId = user.Id, SpotifyArtistId = "seed_artist_005", Name = "Kendrick Lamar",   Rank = 5, ImageUrl = "https://i.scdn.co/image/ab6761610000e5eb437b9e2a82505b3d93ff1022", SpotifyUrl = "https://open.spotify.com/artist/2YZyLoL8N0Wb9xBt1NhZWg", UpdatedAt = now }
-        );
+        foreach (var (spotifyId, artistIds) in ArtistsByUser)
+        {
+            var user = db.Users.FirstOrDefault(u => u.SpotifyId == spotifyId);
+            if (user == null) continue;
 
-        db.TopTracks.AddRange(
-            new TopTrackEntry { UserId = user.Id, SpotifyTrackId = "seed_track_001", Title = "R U Mine?",           ArtistName = "Arctic Monkeys", Rank = 1, CoverUrl = "https://i.scdn.co/image/ab67616d0000b2732e4e8e360fa8d6871a0c2074", SpotifyUrl = "https://open.spotify.com/track/5WbHMQvNjCfDWBQJuijTyK", UpdatedAt = now },
-            new TopTrackEntry { UserId = user.Id, SpotifyTrackId = "seed_track_002", Title = "Creep",                ArtistName = "Radiohead",       Rank = 2, CoverUrl = "https://i.scdn.co/image/ab67616d0000b273de3c04b08cc7a69658a89f50", SpotifyUrl = "https://open.spotify.com/track/70LcF31zb1H0PyJoS1Sx1r", UpdatedAt = now },
-            new TopTrackEntry { UserId = user.Id, SpotifyTrackId = "seed_track_003", Title = "Blinding Lights",     ArtistName = "The Weeknd",      Rank = 3, CoverUrl = "https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36", SpotifyUrl = "https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b", UpdatedAt = now },
-            new TopTrackEntry { UserId = user.Id, SpotifyTrackId = "seed_track_004", Title = "The Less I Know",     ArtistName = "Tame Impala",     Rank = 4, CoverUrl = "https://i.scdn.co/image/ab67616d0000b273c08ac7bf41f7c9ccc538c3ea", SpotifyUrl = "https://open.spotify.com/track/6K4t31amVTZDgR3sKmwUJJ", UpdatedAt = now },
-            new TopTrackEntry { UserId = user.Id, SpotifyTrackId = "seed_track_005", Title = "HUMBLE.",             ArtistName = "Kendrick Lamar",  Rank = 5, CoverUrl = "https://i.scdn.co/image/ab67616d0000b2736dabb7f09c93b8c7a05d2957", SpotifyUrl = "https://open.spotify.com/track/7KXjTSCq5nL1LoYtL7XAwS", UpdatedAt = now }
-        );
-
-        db.RecentStreams.AddRange(
-            new RecentStreamEntry { UserId = user.Id, SpotifyTrackId = "seed_track_001", Title = "R U Mine?",       ArtistName = "Arctic Monkeys", CoverUrl = "https://i.scdn.co/image/ab67616d0000b2732e4e8e360fa8d6871a0c2074", SpotifyUrl = "https://open.spotify.com/track/5WbHMQvNjCfDWBQJuijTyK", PlayedAt = now.AddMinutes(-5),  PolledAt = now },
-            new RecentStreamEntry { UserId = user.Id, SpotifyTrackId = "seed_track_002", Title = "Creep",            ArtistName = "Radiohead",       CoverUrl = "https://i.scdn.co/image/ab67616d0000b273de3c04b08cc7a69658a89f50", SpotifyUrl = "https://open.spotify.com/track/70LcF31zb1H0PyJoS1Sx1r", PlayedAt = now.AddMinutes(-35), PolledAt = now },
-            new RecentStreamEntry { UserId = user.Id, SpotifyTrackId = "seed_track_003", Title = "Blinding Lights",  ArtistName = "The Weeknd",      CoverUrl = "https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36", SpotifyUrl = "https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b", PlayedAt = now.AddHours(-2),   PolledAt = now },
-            new RecentStreamEntry { UserId = user.Id, SpotifyTrackId = "seed_track_004", Title = "The Less I Know",  ArtistName = "Tame Impala",     CoverUrl = "https://i.scdn.co/image/ab67616d0000b273c08ac7bf41f7c9ccc538c3ea", SpotifyUrl = "https://open.spotify.com/track/6K4t31amVTZDgR3sKmwUJJ", PlayedAt = now.AddHours(-4),   PolledAt = now },
-            new RecentStreamEntry { UserId = user.Id, SpotifyTrackId = "seed_track_005", Title = "HUMBLE.",          ArtistName = "Kendrick Lamar",  CoverUrl = "https://i.scdn.co/image/ab67616d0000b2736dabb7f09c93b8c7a05d2957", SpotifyUrl = "https://open.spotify.com/track/7KXjTSCq5nL1LoYtL7XAwS", PlayedAt = now.AddHours(-6),   PolledAt = now },
-            new RecentStreamEntry { UserId = user.Id, SpotifyTrackId = "seed_track_006", Title = "Robbers",          ArtistName = "The 1975",        CoverUrl = "https://i.scdn.co/image/ab67616d0000b2731a2ba3b9f3d0d72dc65c7a2c", SpotifyUrl = "https://open.spotify.com/track/2374M0fQpWi3dLnB54qaLX", PlayedAt = now.AddHours(-8),   PolledAt = now },
-            new RecentStreamEntry { UserId = user.Id, SpotifyTrackId = "seed_track_007", Title = "505",              ArtistName = "Arctic Monkeys",  CoverUrl = "https://i.scdn.co/image/ab67616d0000b2731717be4d536a2d67d8b95070", SpotifyUrl = "https://open.spotify.com/track/0BxE4FqsDD1Ot4YuBXwAPp", PlayedAt = now.AddHours(-12),  PolledAt = now },
-            new RecentStreamEntry { UserId = user.Id, SpotifyTrackId = "seed_track_008", Title = "No Surprises",     ArtistName = "Radiohead",       CoverUrl = "https://i.scdn.co/image/ab67616d0000b273c8b444df094279e70d0ed856", SpotifyUrl = "https://open.spotify.com/track/10nyFdmSQFDl5wNrtc7bGn", PlayedAt = now.AddHours(-16),  PolledAt = now },
-            new RecentStreamEntry { UserId = user.Id, SpotifyTrackId = "seed_track_009", Title = "Save Your Tears",  ArtistName = "The Weeknd",      CoverUrl = "https://i.scdn.co/image/ab67616d0000b2739516b1b2c946cced7bac61d6", SpotifyUrl = "https://open.spotify.com/track/5QO79kh1waicV47BqGRL3g", PlayedAt = now.AddHours(-20),  PolledAt = now },
-            new RecentStreamEntry { UserId = user.Id, SpotifyTrackId = "seed_track_010", Title = "Eventually",       ArtistName = "Tame Impala",     CoverUrl = "https://i.scdn.co/image/ab67616d0000b2733e3b8b1319c6cdf77ffab69c", SpotifyUrl = "https://open.spotify.com/track/0OhLCu0nV1FfrHBMQRdUXv", PlayedAt = now.AddDays(-1),    PolledAt = now }
-        );
+            for (int i = 0; i < artistIds.Length; i++)
+            {
+                db.TopArtists.Add(new TopArtistEntry
+                {
+                    UserId          = user.Id,
+                    SpotifyArtistId = artistIds[i],
+                    Name            = ArtistNames[artistIds[i]],
+                    Rank            = i + 1,
+                    UpdatedAt       = now,
+                });
+            }
+        }
 
         await db.SaveChangesAsync();
     }

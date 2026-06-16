@@ -10,6 +10,7 @@ public record PostResponse(
     string? SpotifyName,
     string? SpotifyCoverUrl,
     string? SpotifySubtitle,
+    string? SpotifySubtitleUrl,
     string? SpotifyMediaType,
     string? PreviewUrl,
     int? PreviewStartSecond,

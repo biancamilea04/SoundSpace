@@ -16,7 +16,9 @@ public record MessageDto(
     bool IsDeleted,
     bool IsRead,
     DateTime? ReadAt,
-    DateTime? EditedAt
+    DateTime? EditedAt,
+    string SenderDisplayName = "",
+    string? SenderProfileImageUrl = null
 );
 
 public record ConversationSummaryDto(

@@ -11,4 +11,8 @@ public interface IEventService
     Task<List<EventDto>> GetFriendsEventsAsync(Guid currentUserId);
     Task<List<EventDto>> GetMyEventsAsync(Guid currentUserId);
     Task<bool> ToggleAttendanceAsync(Guid eventId, Guid userId);
+    Task<List<AttendeeDto>> GetAttendeesAsync(Guid eventId, int limit);
+    Task<List<EventDto>> GetCreatedEventsAsync(Guid userId);
+    Task<EventDto> UpdateEventAsync(Guid eventId, Guid userId, UpdateEventDto dto);
+    Task DeleteEventAsync(Guid eventId, Guid userId);
 }

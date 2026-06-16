@@ -35,6 +35,9 @@ public class User : IdentityUser<Guid>
 
     public DateTime? LastSeen { get; set; }
 
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
+
     public bool IsListening { get; set; } = false;
     public string? CurrentlyPlayingTitle { get; set; }
     public string? CurrentlyPlayingArtist { get; set; }

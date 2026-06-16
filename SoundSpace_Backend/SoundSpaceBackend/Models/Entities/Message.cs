@@ -12,7 +12,6 @@ public class Message
     public bool IsRead { get; set; } = false;
     public DateTime? ReadAt { get; set; }
     public DateTime? EditedAt { get; set; }
-
     public Conversation Conversation { get; set; } = null!;
     public User Sender { get; set; } = null!;
 }

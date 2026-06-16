@@ -280,7 +280,6 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("character varying(500)");
 
                     b.Property<string>("ArtistName")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
@@ -302,6 +301,10 @@ namespace SoundSpaceBackend.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("CoverImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
@@ -320,14 +323,24 @@ namespace SoundSpaceBackend.Migrations
                     b.Property<TimeSpan>("EventTime")
                         .HasColumnType("interval");
 
+                    b.Property<string>("Genre")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("TicketsUrl")
                         .HasMaxLength(500)
@@ -523,6 +536,43 @@ namespace SoundSpaceBackend.Migrations
                     b.ToTable("MessageReports");
                 });
 
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("ReferenceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "IsRead", "CreatedAt");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Post", b =>
                 {
                     b.Property<Guid>("Id")
@@ -573,6 +623,10 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("character varying(500)");
 
                     b.Property<string>("SpotifySubtitle")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("SpotifySubtitleUrl")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
@@ -793,11 +847,17 @@ namespace SoundSpaceBackend.Migrations
                     b.Property<DateTime?>("LastSeen")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("double precision");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("double precision");
 
                     b.Property<DateTime?>("MusicStatusUpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -1108,6 +1168,17 @@ namespace SoundSpaceBackend.Migrations
                     b.Navigation("Message");
 
                     b.Navigation("Reporter");
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Notification", b =>
+                {
+                    b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Post", b =>

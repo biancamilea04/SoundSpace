@@ -13,8 +13,11 @@ public class Event
     [MaxLength(500)]
     public string? ImageUrl { get; set; }
 
+    [MaxLength(500)]
+    public string? CoverImageUrl { get; set; }
+
     [MaxLength(200)]
-    public string ArtistName { get; set; } = string.Empty;
+    public string? ArtistName { get; set; }
 
     [MaxLength(100)]
     public string? ArtistSpotifyId { get; set; }
@@ -38,11 +41,17 @@ public class Event
     [MaxLength(2000)]
     public string? Description { get; set; }
 
+    [MaxLength(100)]
+    public string? Genre { get; set; }
+
     [MaxLength(500)]
     public string? TicketsUrl { get; set; }
 
     [MaxLength(500)]
     public string? ArtistProfileUrl { get; set; }
+
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
 
     public Guid CreatedByUserId { get; set; }
     public User CreatedByUser { get; set; } = null!;

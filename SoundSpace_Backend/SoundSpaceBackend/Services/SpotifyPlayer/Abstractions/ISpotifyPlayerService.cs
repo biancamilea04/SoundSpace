@@ -1,3 +1,4 @@
+using SoundSpaceBackend.Controllers.Artists.Responses;
 using SoundSpaceBackend.Services.SpotifyPlayer.DTOs;
 
 namespace SoundSpaceBackend.Services.SpotifyPlayer.Abstractions;
@@ -12,5 +13,6 @@ public interface ISpotifyPlayerService
     Task<List<TopTrackResponse>> GetTopTracksAsync(string spotifyId, int limit = 5);
     Task<List<RecentStreamResponse>> GetRecentStreamsAsync(string spotifyId, int limit = 5);
     Task<List<string>> GetTopGenresAsync(string spotifyId, int maxGenres = 10);
+    Task<List<ArtistSearchResult>> SearchArtistsAsync(string spotifyId, string query);
     Task<PlayTrackResultCode> PlayTrackAsync(string spotifyId, string trackUri, int positionMs = 0);
 }

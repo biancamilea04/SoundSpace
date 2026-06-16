@@ -19,20 +19,21 @@ public class FriendshipService(
         logger.LogInformation("[Friendship] SenderId={SenderId} sending request to ReceiverId={ReceiverId}", senderId, receiverId);
 
         if (senderId == receiverId)
-            throw new InvalidOperationException("Cannot send a friend request to yourself.");
+            throw new InvalidOperationException("Cannot send a friend request to yourself");
 
         var exists = await dbContext.Friendships.AnyAsync(f =>
-            (f.SenderId == senderId && f.ReceiverId == receiverId) ||
-            (f.SenderId == receiverId && f.ReceiverId == senderId));
+            ((f.SenderId == senderId && f.ReceiverId == receiverId) ||
+             (f.SenderId == receiverId && f.ReceiverId == senderId)) &&
+            f.Status != FriendshipStatus.Removed);
 
         if (exists)
-            throw new InvalidOperationException("A friendship or request already exists between these users.");
+            throw new InvalidOperationException("A friendship or request already exists between these users");
 
         var sender = await dbContext.Users.FindAsync(senderId)
-            ?? throw new KeyNotFoundException($"User {senderId} not found.");
+            ?? throw new KeyNotFoundException($"User {senderId} not found");
 
         var receiver = await dbContext.Users.FindAsync(receiverId)
-            ?? throw new KeyNotFoundException($"User {receiverId} not found.");
+            ?? throw new KeyNotFoundException($"User {receiverId} not found");
 
         var friendship = new Models.Entities.Friendship
         {
@@ -59,8 +60,9 @@ public class FriendshipService(
             .Include(f => f.Sender)
             .Include(f => f.Receiver)
             .FirstOrDefaultAsync(f =>
-                (f.SenderId == userId && f.ReceiverId == targetId) ||
-                (f.SenderId == targetId && f.ReceiverId == userId));
+                ((f.SenderId == userId && f.ReceiverId == targetId) ||
+                 (f.SenderId == targetId && f.ReceiverId == userId)) &&
+                f.Status != FriendshipStatus.Removed);
 
         return friendship is null ? null : MapToDto(friendship, friendship.Sender, friendship.Receiver);
     }
@@ -99,13 +101,13 @@ public class FriendshipService(
             .Include(f => f.Sender)
             .Include(f => f.Receiver)
             .FirstOrDefaultAsync(f => f.Id == requestId)
-            ?? throw new KeyNotFoundException($"Friend request {requestId} not found.");
+            ?? throw new KeyNotFoundException($"Friend request {requestId} not found");
 
         if (friendship.ReceiverId != currentUserId)
-            throw new UnauthorizedAccessException("Only the receiver can accept a friend request.");
+            throw new UnauthorizedAccessException("Only the receiver can accept a friend request");
 
         if (friendship.Status != FriendshipStatus.Pending)
-            throw new InvalidOperationException("Only pending requests can be accepted.");
+            throw new InvalidOperationException("Only pending requests can be accepted");
 
         friendship.Status = FriendshipStatus.Accepted;
         friendship.UpdatedAt = DateTime.UtcNow;
@@ -129,13 +131,13 @@ public class FriendshipService(
             .Include(f => f.Sender)
             .Include(f => f.Receiver)
             .FirstOrDefaultAsync(f => f.Id == requestId)
-            ?? throw new KeyNotFoundException($"Friend request {requestId} not found.");
+            ?? throw new KeyNotFoundException($"Friend request {requestId} not found");
 
         if (friendship.ReceiverId != currentUserId)
-            throw new UnauthorizedAccessException("Only the receiver can reject a friend request.");
+            throw new UnauthorizedAccessException("Only the receiver can reject a friend request");
 
         if (friendship.Status != FriendshipStatus.Pending)
-            throw new InvalidOperationException("Only pending requests can be rejected.");
+            throw new InvalidOperationException("Only pending requests can be rejected");
 
         friendship.Status = FriendshipStatus.Rejected;
         friendship.UpdatedAt = DateTime.UtcNow;
@@ -173,6 +175,43 @@ public class FriendshipService(
             .ThenByDescending(f => f.IsOnline)
             .ThenByDescending(f => f.LastSeen)
             .ToList();
+    }
+
+    public async Task<List<FriendListItemDto>> GetFriendsListAsync(Guid profileUserId)
+    {
+        var friendships = await dbContext.Friendships
+            .Where(f =>
+                (f.SenderId == profileUserId || f.ReceiverId == profileUserId) &&
+                f.Status == FriendshipStatus.Accepted)
+            .Include(f => f.Sender)
+            .Include(f => f.Receiver)
+            .ToListAsync();
+
+        return friendships
+            .Select(f =>
+            {
+                var friend = f.SenderId == profileUserId ? f.Receiver : f.Sender;
+                return new FriendListItemDto(friend.Id, friend.DisplayName, friend.ProfileImageUrl);
+            })
+            .OrderBy(f => f.DisplayName)
+            .ToList();
+    }
+
+    public async Task RemoveFriendAsync(Guid currentUserId, Guid targetUserId)
+    {
+        logger.LogInformation("[Friendship] UserId={CurrentUserId} removing friend UserId={TargetUserId}", currentUserId, targetUserId);
+
+        var friendship = await dbContext.Friendships
+            .FirstOrDefaultAsync(f =>
+                ((f.SenderId == currentUserId && f.ReceiverId == targetUserId) ||
+                 (f.SenderId == targetUserId && f.ReceiverId == currentUserId)) &&
+                f.Status == FriendshipStatus.Accepted)
+            ?? throw new KeyNotFoundException("Accepted friendship not found");
+
+        friendship.Status = FriendshipStatus.Removed;
+        friendship.UpdatedAt = DateTime.UtcNow;
+
+        await dbContext.SaveChangesAsync();
     }
 
     private static GetFriendshipDto MapToDto(Models.Entities.Friendship f, UserEntity sender, UserEntity receiver) =>
