@@ -1,3 +1,5 @@
+/* ── Base (vertical list, used in sidebar) ─────────────────── */
+
 .top-tracks {
     background: var(--bg-surface);
     border-radius: 12px;
@@ -31,6 +33,10 @@
     transition: background-color 0.2s ease;
 }
 
+.top-tracks__item:hover {
+    background-color: var(--bg-elevated);
+}
+
 .top-tracks__album-art {
     width: 40px;
     height: 40px;
@@ -47,7 +53,7 @@
 }
 
 .top-tracks__track-name {
-    display: none; /* Removed in favor of links but kept in case */
+    display: none;
 }
 
 .top-tracks__track-name-link {
@@ -90,4 +96,170 @@
     color: var(--text-muted);
     text-align: center;
     padding: 12px 0;
+}
+
+/* ── Carousel / slider variant ─────────────────────────────── */
+
+.top-tracks--slider .top-tracks__carousel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Scrollable track strip — hides scrollbar, clips overflow */
+.top-tracks--slider .top-tracks__list {
+    flex: 1;
+    min-width: 0;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-behavior: auto; /* instant: corrections must be glitch-free */
+    gap: 12px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.top-tracks--slider .top-tracks__list::-webkit-scrollbar {
+    display: none;
+}
+
+/* Card layout for carousel items */
+.top-tracks--slider .top-tracks__item {
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 112px;
+    max-width: 112px;
+    flex-shrink: 0;
+    gap: 6px;
+    padding: 0;
+    border-radius: 8px;
+}
+
+/* Art wrapper — holds image, overlay and play button */
+.top-tracks--slider .top-tracks__art-wrap {
+    position: relative;
+    width: 112px;
+    height: 112px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* Dark overlay on hover */
+.top-tracks--slider .top-tracks__art-wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.2s ease;
+    border-radius: 8px;
+}
+
+.top-tracks--slider .top-tracks__item:hover .top-tracks__art-wrap::after {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Green play button */
+.top-tracks__play-btn {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--primary-green);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+}
+
+.top-tracks--slider .top-tracks__item:hover .top-tracks__play-btn,
+.top-tracks--slider .top-tracks__play-btn--active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.top-tracks__play-btn--disabled {
+    background-color: var(--bg-highlight);
+    color: var(--text-muted);
+    box-shadow: none;
+}
+
+.top-tracks--slider .top-tracks__album-art {
+    width: 112px;
+    height: 112px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.top-tracks--slider .top-tracks__album-art--fallback {
+    width: 112px;
+    height: 112px;
+    border-radius: 8px;
+}
+
+.top-tracks--slider .top-tracks__info {
+    width: 100%;
+    padding: 0 2px;
+}
+
+.top-tracks--slider .top-tracks__track-name-link {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    width: 100%;
+}
+
+/* ── Arrow buttons ─────────────────────────────────────────── */
+
+.top-tracks__btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--primary-green);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.top-tracks__btn:hover {
+    background-color: var(--primary-green-hover);
+    transform: scale(1.08);
+}
+
+.top-tracks__btn:active {
+    transform: scale(0.95);
+}
+
+/* ── No-preview toast ──────────────────────────────────────── */
+
+.top-tracks__toast {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-strong);
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    animation: toast-in 0.2s ease;
+}
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
 }

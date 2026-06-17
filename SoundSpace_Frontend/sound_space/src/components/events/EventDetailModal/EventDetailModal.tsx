@@ -1,54 +1,42 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { X, MapPin, Clock, Ticket, Check, Upload, Camera } from "lucide-react";
-import { EventData } from "@/types/event";
-import { toggleAttendance } from "@/services/event/eventService";
+import { Pencil, Trash2, ExternalLink } from "lucide-react";
+import { EventAttendee, EventData } from "@/types/event";
+import { fetchEventAttendees, toggleAttendance, deleteEvent } from "@/services/event/eventService";
+import { fetchUserProfile } from "@/services/user/userService";
+import EventPageHero from "@/components/events/EventPage/EventPageHero/EventPageHero";
+import EventPageOverview from "@/components/events/EventPage/EventPageOverview/EventPageOverview";
+import EventPageSidebar from "@/components/events/EventPage/EventPageSidebar/EventPageSidebar";
 import "./EventDetailModal.css";
 
 interface EventDetailModalProps {
     event: EventData;
     onClose: () => void;
     onEventUpdated: (updated: EventData) => void;
+    onEventDeleted?: (eventId: string) => void;
 }
 
-function formatLongDate(dateStr: string): string {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-    });
-}
-
-function formatTime(timeStr: string): string {
-    const [h, m] = timeStr.split(":");
-    const d = new Date();
-    d.setHours(Number(h), Number(m));
-    return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-}
-
-const FRIEND_AVATARS = [
-    { initials: "AK", bg: "#e91e63" },
-    { initials: "JM", bg: "#9c27b0" },
-    { initials: "RS", bg: "#2196f3" },
-    { initials: "TL", bg: "#ff5722" },
-    { initials: "MP", bg: "#009688" },
-];
-
-const EventDetailModal = ({ event, onClose, onEventUpdated }: EventDetailModalProps) => {
+const EventDetailModal = ({ event, onClose, onEventUpdated, onEventDeleted }: EventDetailModalProps) => {
     const [isPending, setIsPending] = useState(false);
+    const [attendees, setAttendees] = useState<EventAttendee[]>([]);
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const overlayRef = useRef<HTMLDivElement>(null);
 
-    const fallbackImage = `https://eu.ui-avatars.com/api/?name=${encodeURIComponent(event.artistName)}&background=1ed760&color=000&size=400&bold=true`;
-    const imageSrc = event.imageUrl ?? event.artistImageUrl ?? fallbackImage;
+    const isOwner = !!currentUserId && currentUserId === event.createdByUserId;
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onClose();
+            if (e.key === "Escape") {
+                if (showDeleteConfirm) {
+                    setShowDeleteConfirm(false);
+                } else {
+                    onClose();
+                }
+            }
         };
         document.addEventListener("keydown", onKey);
         document.body.style.overflow = "hidden";
@@ -56,7 +44,18 @@ const EventDetailModal = ({ event, onClose, onEventUpdated }: EventDetailModalPr
             document.removeEventListener("keydown", onKey);
             document.body.style.overflow = "";
         };
-    }, [onClose]);
+    }, [onClose, showDeleteConfirm]);
+
+    useEffect(() => {
+        let cancelled = false;
+        fetchEventAttendees(event.id, 10)
+            .then((data) => { if (!cancelled) setAttendees(data); })
+            .catch(() => {});
+        fetchUserProfile()
+            .then((profile) => { if (!cancelled) setCurrentUserId(profile.id); })
+            .catch(() => {});
+        return () => { cancelled = true; };
+    }, [event.id]);
 
     const handleOverlayClick = (e: React.MouseEvent) => {
         if (e.target === overlayRef.current) onClose();
@@ -87,7 +86,16 @@ const EventDetailModal = ({ event, onClose, onEventUpdated }: EventDetailModalPr
         }
     };
 
-    const extraAttendees = Math.max(0, event.attendeeCount - FRIEND_AVATARS.length);
+    const handleDelete = async () => {
+        setIsDeleting(true);
+        try {
+            await deleteEvent(event.id);
+            onEventDeleted?.(event.id);
+            onClose();
+        } catch {
+            setIsDeleting(false);
+        }
+    };
 
     return (
         <div className="edm-overlay" ref={overlayRef} onClick={handleOverlayClick}>
@@ -95,180 +103,86 @@ const EventDetailModal = ({ event, onClose, onEventUpdated }: EventDetailModalPr
                 className="edm-modal"
                 role="dialog"
                 aria-modal="true"
-                aria-labelledby="edm-title"
+                aria-label={event.title}
             >
-                <button className="edm-close" onClick={onClose} aria-label="Close">
-                    <X size={18} />
-                </button>
+                <EventPageHero
+                    event={event}
+                    attendeeCount={event.attendeeCount}
+                    onClose={onClose}
+                />
 
-                {/* Hero */}
-                <div className="edm-hero">
-                    <Image
-                        src={imageSrc}
-                        alt={event.title}
-                        fill
-                        className="edm-hero__image"
-                        unoptimized
-                        priority
-                    />
-                    <div className="edm-hero__overlay" />
-                    <div className="edm-hero__content">
-                        <div className="edm-hero__thumb-wrapper">
-                            <Image
-                                src={imageSrc}
-                                alt=""
-                                width={80}
-                                height={80}
-                                className="edm-hero__thumb"
-                                unoptimized
-                            />
-                        </div>
-                        <div className="edm-hero__meta">
-                            <span className="edm-eyebrow">EVENT</span>
-                            <h2 className="edm-hero__title" id="edm-title">
-                                {event.title}
-                            </h2>
-                            <p className="edm-hero__sub">
-                                Hosted by {event.createdByDisplayName}
-                                {" · "}
-                                {formatLongDate(event.eventDate)}
-                                {" · "}
-                                {event.attendeeCount.toLocaleString()} attending
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Body */}
                 <div className="edm-body">
-                    {/* Left column */}
                     <div className="edm-left">
-                        <section className="edm-section">
-                            <span className="edm-eyebrow">ABOUT THIS EVENT</span>
-                            <p className="edm-about">
-                                {event.description ??
-                                    `Join us for ${event.title} featuring ${event.artistName} live at ${event.location}, ${event.city}. An unmissable night of music and energy.`}
-                            </p>
-                        </section>
+                        <EventPageOverview event={event} />
+                    </div>
 
-                        <section className="edm-section">
-                            <div className="edm-section__header">
-                                <span className="edm-eyebrow">CROWD PHOTOS</span>
-                                <button className="edm-upload-btn">
-                                    <Upload size={13} />
-                                    Upload
+                    <div className="edm-right">
+                        <EventPageSidebar
+                            event={event}
+                            isAttending={event.isAttendedByCurrentUser}
+                            attendeeCount={event.attendeeCount}
+                            attendees={attendees}
+                            onAttendToggle={handleAttend}
+                            isPending={isPending}
+                            isSticky={false}
+                        />
+                        <Link
+                                    href={`/events/${event.id}`}
+                                    className="edm-owner-btn edm-owner-btn--view"
+                                    onClick={onClose}
+                                >
+                                    <ExternalLink size={15} />
+                                    View Full Event
+                                </Link>
+
+                        {isOwner && (
+                            <div className="edm-owner-actions">                                
+                                <Link
+                                    href={`/events/${event.id}/edit`}
+                                    className="edm-owner-btn edm-owner-btn--edit"
+                                    onClick={onClose}
+                                >
+                                    <Pencil size={15} />
+                                    Edit Event
+                                </Link>
+                                <button
+                                    className="edm-owner-btn edm-owner-btn--delete"
+                                    onClick={() => setShowDeleteConfirm(true)}
+                                >
+                                    <Trash2 size={15} />
+                                    Delete Event
                                 </button>
                             </div>
-                            <div className="edm-photos">
-                                {Array.from({ length: 5 }).map((_, i) => (
-                                    <div key={i} className="edm-photo-placeholder">
-                                        <Camera size={20} />
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-
-                        <section className="edm-section">
-                            <span className="edm-eyebrow">FRIENDS GOING</span>
-                            <div className="edm-friends">
-                                <div className="edm-friends__avatars">
-                                    {FRIEND_AVATARS.map((f) => (
-                                        <span
-                                            key={f.initials}
-                                            className="edm-friends__avatar"
-                                            style={{ background: f.bg }}
-                                        >
-                                            {f.initials}
-                                        </span>
-                                    ))}
-                                </div>
-                                <span className="edm-friends__count">
-                                    {extraAttendees > 0
-                                        ? `+${extraAttendees.toLocaleString()} more attending`
-                                        : `${event.attendeeCount} attending`}
-                                </span>
-                            </div>
-                        </section>
-                    </div>
-
-                    {/* Right column */}
-                    <div className="edm-right">
-                        <div className="edm-info-card">
-                            <div className="edm-info-card__icon">
-                                <MapPin size={16} />
-                            </div>
-                            <div className="edm-info-card__content">
-                                <p className="edm-info-card__label">Venue</p>
-                                <p className="edm-info-card__value">{event.location}</p>
-                                <p className="edm-info-card__sub">
-                                    {event.city}, {event.country}
-                                </p>
-                                <div className="edm-map-placeholder" />
-                            </div>
-                        </div>
-
-                        <div className="edm-info-card">
-                            <div className="edm-info-card__icon">
-                                <Clock size={16} />
-                            </div>
-                            <div className="edm-info-card__content">
-                                <p className="edm-info-card__label">Date</p>
-                                <p className="edm-info-card__value">
-                                    {formatLongDate(event.eventDate)}
-                                </p>
-                                <p className="edm-info-card__sub">
-                                    Doors {formatTime(event.eventTime)}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="edm-info-card">
-                            <div className="edm-info-card__icon">
-                                <Ticket size={16} />
-                            </div>
-                            <div className="edm-info-card__content">
-                                <p className="edm-info-card__label">Tickets</p>
-                                <p className="edm-info-card__value">
-                                    {event.ticketsUrl ? "From $24 · limited" : "Free entry"}
-                                </p>
-                                {event.ticketsUrl && (
-                                    <a
-                                        href={event.ticketsUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="edm-tickets-link"
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        Get tickets →
-                                    </a>
-                                )}
-                            </div>
-                        </div>
-
-                        <button
-                            className={`edm-cta ${event.isAttendedByCurrentUser ? "edm-cta--attending" : "edm-cta--default"}`}
-                            onClick={handleAttend}
-                            disabled={isPending}
-                        >
-                            {event.isAttendedByCurrentUser ? (
-                                <>
-                                    <Check size={16} strokeWidth={3} />
-                                    Attending
-                                </>
-                            ) : (
-                                "Attend Event"
-                            )}
-                        </button>
-
-                        <Link
-                            href={`/events/${event.id}`}
-                            className="edm-see-more"
-                            onClick={onClose}
-                        >
-                            See More
-                        </Link>
+                        )}
                     </div>
                 </div>
+
+                {showDeleteConfirm && (
+                    <div className="edm-confirm-overlay">
+                        <div className="edm-confirm" role="alertdialog" aria-modal="true">
+                            <p className="edm-confirm__title">Delete Event</p>
+                            <p className="edm-confirm__body">
+                                Are you sure you want to delete this event? This action cannot be undone.
+                            </p>
+                            <div className="edm-confirm__actions">
+                                <button
+                                    className="edm-confirm__btn edm-confirm__btn--delete"
+                                    onClick={handleDelete}
+                                    disabled={isDeleting}
+                                >
+                                    {isDeleting ? "Deleting…" : "Delete"}
+                                </button>
+                                <button
+                                    className="edm-confirm__btn edm-confirm__btn--cancel"
+                                    onClick={() => setShowDeleteConfirm(false)}
+                                    disabled={isDeleting}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

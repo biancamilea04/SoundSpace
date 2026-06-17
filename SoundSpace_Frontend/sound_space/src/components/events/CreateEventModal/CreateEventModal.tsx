@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { X } from "lucide-react";
+import { X, Upload, Loader2 } from "lucide-react";
 import { createEvent } from "@/services/event/eventService";
+import { uploadCoverPhoto } from "@/services/event/eventPhotoService";
 import { EventData } from "@/types/event";
 import "./CreateEventModal.css";
 
@@ -26,6 +27,8 @@ interface FormFields {
     imageUrl: string;
 }
 
+type ImageMode = "url" | "upload";
+
 const EMPTY: FormFields = {
     title: "", artistName: "", artistSpotifyId: "",
     location: "", city: "", country: "",
@@ -37,6 +40,12 @@ const CreateEventModal = ({ onClose, onCreated }: CreateEventModalProps) => {
     const [fields, setFields] = useState<FormFields>(EMPTY);
     const [errors, setErrors] = useState<Partial<FormFields>>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [imageMode, setImageMode] = useState<ImageMode>("url");
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadError, setUploadError] = useState<string | null>(null);
+
     const overlayRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -45,9 +54,45 @@ const CreateEventModal = ({ onClose, onCreated }: CreateEventModalProps) => {
         return () => document.removeEventListener("keydown", onKey);
     }, [onClose]);
 
+    useEffect(() => {
+        return () => { if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl); };
+    }, [imagePreviewUrl]);
+
     const set = (field: keyof FormFields) =>
         (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
             setFields((prev) => ({ ...prev, [field]: e.target.value }));
+
+    const handleImageModeChange = (mode: ImageMode) => {
+        if (mode === imageMode) return;
+        if (mode === "url" && imagePreviewUrl) {
+            URL.revokeObjectURL(imagePreviewUrl);
+            setImagePreviewUrl(null);
+        }
+        setImageMode(mode);
+        setUploadError(null);
+    };
+
+    const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl);
+        setImagePreviewUrl(URL.createObjectURL(file));
+        setUploadError(null);
+        setIsUploading(true);
+        setFields((prev) => ({ ...prev, imageUrl: "" }));
+
+        try {
+            const filePath = await uploadCoverPhoto(file);
+            setFields((prev) => ({ ...prev, imageUrl: filePath }));
+        } catch (err) {
+            setUploadError(err instanceof Error ? err.message : "Upload failed.");
+            if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl);
+            setImagePreviewUrl(null);
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     function validate(): boolean {
         const next: Partial<FormFields> = {};
@@ -64,7 +109,7 @@ const CreateEventModal = ({ onClose, onCreated }: CreateEventModalProps) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!validate() || isSubmitting) return;
+        if (!validate() || isSubmitting || isUploading) return;
 
         setIsSubmitting(true);
         try {
@@ -95,6 +140,8 @@ const CreateEventModal = ({ onClose, onCreated }: CreateEventModalProps) => {
         if (e.target === overlayRef.current) onClose();
     };
 
+    const submitLabel = isUploading ? "Uploading image…" : isSubmitting ? "Creating…" : "Create Event";
+
     return (
         <div className="cem-overlay" ref={overlayRef} onClick={handleOverlayClick}>
             <div className="cem-modal" role="dialog" aria-modal="true" aria-label="Create Event">
@@ -122,7 +169,7 @@ const CreateEventModal = ({ onClose, onCreated }: CreateEventModalProps) => {
                     </div>
 
                     <div className="cem-row">
-                        <Field label="Venue / Location *" error={errors.location}>
+                        <Field label="Location *" error={errors.location}>
                             <input className="cem-input" placeholder="e.g. Madison Square Garden" value={fields.location} onChange={set("location")} />
                         </Field>
                     </div>
@@ -166,18 +213,79 @@ const CreateEventModal = ({ onClose, onCreated }: CreateEventModalProps) => {
                         </Field>
                     </div>
 
+                    {/* ── Cover image — URL or file upload ── */}
                     <div className="cem-row">
-                        <Field label="Event Image URL">
-                            <input className="cem-input" type="url" placeholder="https://..." value={fields.imageUrl} onChange={set("imageUrl")} />
-                        </Field>
+                        <div className="cem-field">
+                            <div className="cem-img-header">
+                                <span className="cem-label">Cover Image</span>
+                                <div className="cem-img-tabs" role="group">
+                                    <button
+                                        type="button"
+                                        className={`cem-img-tab${imageMode === "url" ? " cem-img-tab--active" : ""}`}
+                                        onClick={() => handleImageModeChange("url")}
+                                    >
+                                        URL
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`cem-img-tab${imageMode === "upload" ? " cem-img-tab--active" : ""}`}
+                                        onClick={() => handleImageModeChange("upload")}
+                                    >
+                                        Upload
+                                    </button>
+                                </div>
+                            </div>
+
+                            {imageMode === "url" ? (
+                                <input
+                                    className="cem-input"
+                                    type="url"
+                                    placeholder="https://example.com/cover.jpg"
+                                    value={fields.imageUrl}
+                                    onChange={set("imageUrl")}
+                                />
+                            ) : (
+                                <label className="cem-img-dropzone">
+                                    <input
+                                        type="file"
+                                        accept=".jpg,.jpeg,.png,.webp"
+                                        className="cem-file-input"
+                                        onChange={handleImageFileChange}
+                                        disabled={isUploading}
+                                    />
+
+                                    {imagePreviewUrl ? (
+                                        <img src={imagePreviewUrl} alt="Cover preview" className="cem-img-preview" />
+                                    ) : (
+                                        <div className="cem-img-placeholder">
+                                            <Upload size={20} className="cem-img-icon" />
+                                            <span>Click to choose a cover photo</span>
+                                            <span className="cem-img-sub">JPG, PNG or WEBP · max 5 MB</span>
+                                        </div>
+                                    )}
+
+                                    {isUploading && (
+                                        <div className="cem-img-overlay">
+                                            <Loader2 size={24} className="cem-img-spinner" />
+                                        </div>
+                                    )}
+                                </label>
+                            )}
+
+                            {uploadError && <span className="cem-error">{uploadError}</span>}
+                        </div>
                     </div>
 
                     <div className="cem-actions">
                         <button type="button" className="cem-btn cem-btn--cancel" onClick={onClose}>
                             Cancel
                         </button>
-                        <button type="submit" className="cem-btn cem-btn--submit" disabled={isSubmitting}>
-                            {isSubmitting ? "Creating…" : "Create Event"}
+                        <button
+                            type="submit"
+                            className="cem-btn cem-btn--submit"
+                            disabled={isSubmitting || isUploading}
+                        >
+                            {submitLabel}
                         </button>
                     </div>
                 </form>

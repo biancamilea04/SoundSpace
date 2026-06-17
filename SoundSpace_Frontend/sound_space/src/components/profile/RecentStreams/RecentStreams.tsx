@@ -4,12 +4,24 @@ import Image from "next/image";
 import { RecentStream } from "@/types/recentStream";
 import "./RecentStreams.css";
 
+function formatRelativeTime(iso: string): string {
+    const diff = Date.now() - new Date(iso).getTime();
+    const minutes = Math.floor(diff / 60_000);
+    if (minutes < 1) return "just now";
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+}
+
 interface RecentStreamsProps {
     streams: RecentStream[];
     isLoading?: boolean;
+    showTimestamp?: boolean;
 }
 
-export const RecentStreams = ({ streams, isLoading }: RecentStreamsProps) => {
+export const RecentStreams = ({ streams, isLoading, showTimestamp = false }: RecentStreamsProps) => {
     if (isLoading) {
         return (
             <div className="recent-streams">
@@ -65,6 +77,11 @@ export const RecentStreams = ({ streams, isLoading }: RecentStreamsProps) => {
                                 {stream.artistName}
                             </a>
                         </div>
+                        {showTimestamp && stream.playedAt && (
+                            <span className="recent-streams__timestamp">
+                                {formatRelativeTime(stream.playedAt)}
+                            </span>
+                        )}
                     </div>
                 ))}
             </div>

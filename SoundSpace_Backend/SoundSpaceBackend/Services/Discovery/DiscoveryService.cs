@@ -48,10 +48,10 @@ public sealed class DiscoveryService(
                 u.DisplayName,
                 u.ProfileImageUrl,
                 u.Country,
-                u.IsListening,
-                u.CurrentlyPlayingTitle,
-                u.CurrentlyPlayingArtist,
-                u.CurrentlyPlayingCoverUrl,
+                IsListening = u.CurrentlyPlaying != null && u.CurrentlyPlaying.IsListening,
+                CurrentlyPlayingTitle = u.CurrentlyPlaying != null ? u.CurrentlyPlaying.Title : null,
+                CurrentlyPlayingArtist = u.CurrentlyPlaying != null ? u.CurrentlyPlaying.Artist : null,
+                CurrentlyPlayingCoverUrl = u.CurrentlyPlaying != null ? u.CurrentlyPlaying.CoverUrl : null,
             })
             .ToDictionaryAsync(u => u.Id);
 

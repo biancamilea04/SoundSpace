@@ -14,6 +14,8 @@ interface BackendMessageDto {
     id: string;
     conversationId: string;
     senderId: string;
+    senderDisplayName?: string;
+    senderProfileImageUrl?: string | null;
     text: string | null;
     createdAt: string;
     isDeleted: boolean;
@@ -79,6 +81,8 @@ export function ChatHubProvider({ children }: { children: ReactNode }) {
             const message: Message = {
                 id: dto.id,
                 senderId: dto.senderId,
+                senderDisplayName: dto.senderDisplayName,
+                senderProfileImageUrl: dto.senderProfileImageUrl,
                 text: dto.isDeleted ? null : dto.text,
                 timestamp: new Date(dto.createdAt).toLocaleTimeString([], {
                     hour: "2-digit",
@@ -97,7 +101,6 @@ export function ChatHubProvider({ children }: { children: ReactNode }) {
                 storeRef.current.incrementUnread(dto.conversationId);
             }
 
-            // Notify event chat subscribers
             const subs = conversationSubscribers.current.get(dto.conversationId);
             if (subs) subs.onMessage.forEach((cb) => cb(message));
         });

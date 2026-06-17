@@ -1,6 +1,6 @@
 "use client";
 
-import { Users, Heart, Music, Mail, Globe } from "lucide-react";
+import { UserCheck, Calendar } from "lucide-react";
 import type { ReactNode } from "react";
 import "./ProfileHeader.css";
 
@@ -10,6 +10,10 @@ interface ProfileHeaderProps {
     followers: number;
     following: number;
     playlists: number;
+    friends?: number;
+    onFriendsClick?: () => void;
+    events?: number;
+    onEventsClick?: () => void;
     avatarUrl?: string;
     action?: ReactNode;
 }
@@ -20,6 +24,10 @@ export const ProfileHeader = ({
     followers,
     following,
     playlists,
+    friends,
+    onFriendsClick,
+    events,
+    onEventsClick,
     avatarUrl,
     action
 }: ProfileHeaderProps) => {
@@ -65,18 +73,26 @@ export const ProfileHeader = ({
                     {name}
                 </h1>
                 <div className="profile-header__stats">
-                    <span className="profile-header__stat">
-                        <Users className="profile-header__stat-icon" />
-                        <strong className="profile-header__stat-value">{followers.toLocaleString()}</strong> followers
-                    </span>
-                    <span className="profile-header__stat">
-                        <Heart className="profile-header__stat-icon" />
-                        <strong className="profile-header__stat-value">{following.toLocaleString()}</strong> following
-                    </span>
-                    <span className="profile-header__stat">
-                        <Music className="profile-header__stat-icon" />
-                        <strong className="profile-header__stat-value">{playlists}</strong> playlists
-                    </span>
+                    {friends !== undefined && (
+                        <button
+                            className={`profile-header__stat profile-header__stat--btn${onFriendsClick ? ' profile-header__stat--clickable' : ''}`}
+                            onClick={onFriendsClick}
+                            disabled={!onFriendsClick}
+                        >
+                            <UserCheck className="profile-header__stat-icon" />
+                            <strong className="profile-header__stat-value">{friends}</strong> friends
+                        </button>
+                    )}
+                    {events !== undefined && (
+                        <button
+                            className={`profile-header__stat profile-header__stat--btn${onEventsClick ? ' profile-header__stat--clickable' : ''}`}
+                            onClick={onEventsClick}
+                            disabled={!onEventsClick}
+                        >
+                            <Calendar className="profile-header__stat-icon" />
+                            <strong className="profile-header__stat-value">{events}</strong> events
+                        </button>
+                    )}
                 </div>
                 {action && <div className="profile-header__action">{action}</div>}
             </div>

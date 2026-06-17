@@ -25,7 +25,6 @@
     padding: 0 0.25rem;
 }
 
-/* ── Friend Item ── */
 .sidebar__friend-item {
     display: flex;
     align-items: center;
@@ -59,7 +58,6 @@
     background-color: rgba(30, 215, 96, 0.06);
 }
 
-/* ── Album Art ── */
 .sidebar__album-art-link {
     flex-shrink: 0;
     display: block;
@@ -87,7 +85,6 @@
     filter: grayscale(100%) brightness(55%);
 }
 
-/* Equalizer overlay on album art */
 .sidebar__equalizer-overlay {
     position: absolute;
     inset: 0;
@@ -123,7 +120,6 @@
 .sidebar__equalizer-bar:nth-child(9)  { animation-delay: 0.25s; animation-duration: 0.88s; }
 .sidebar__equalizer-bar:nth-child(10) { animation-delay: 0.45s; animation-duration: 0.73s; }
 
-/* Online dot */
 .sidebar__friend-status {
     position: absolute;
     bottom: -2px;
@@ -146,7 +142,6 @@
     display: none;
 }
 
-/* ── Info ── */
 .sidebar__friend-info {
     display: flex;
     flex-direction: column;
@@ -156,7 +151,6 @@
     min-width: 0;
 }
 
-/* Header row: name + time */
 .sidebar__friend-header {
     display: flex;
     align-items: baseline;
@@ -192,7 +186,6 @@
     flex-shrink: 0;
 }
 
-/* Track line */
 .sidebar__friend-track-line {
     margin-top: 1px;
     min-width: 0;
@@ -244,7 +237,6 @@ a.sidebar__friend-track-text.listening:hover {
     text-decoration: underline;
 }
 
-/* Synced badge */
 .sidebar__listen-along-label {
     font-size: 0.6875rem;
     font-weight: 700;
@@ -254,7 +246,6 @@ a.sidebar__friend-track-text.listening:hover {
     margin-top: 2px;
 }
 
-/* ── Listen Along button ── */
 .sidebar__listen-along-btn {
     width: 30px;
     height: 30px;
@@ -291,14 +282,12 @@ a.sidebar__friend-track-text.listening:hover {
     background-color: rgba(30, 215, 96, 0.12);
 }
 
-/* ── Empty ── */
 .friend-sidebar__empty {
     font-size: 0.875rem;
     color: var(--text-tertiary);
     padding: 0.5rem 0.75rem;
 }
 
-/* ── Toast ── */
 .friend-sidebar__toast {
     margin: 0.75rem;
     margin-top: auto;
@@ -318,7 +307,6 @@ a.sidebar__friend-track-text.listening:hover {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Responsive ── */
 @media (max-width: 1024px) {
     .friend-sidebar {
         display: none;

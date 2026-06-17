@@ -1,4 +1,3 @@
-// Common types for Discovery feature
 export interface CommonSong {
     id: string;
     albumImageUrl: string;
@@ -25,15 +24,16 @@ export interface DiscoveryUserProfile {
     commonSongsCount: number;
     commonSongs: CommonSong[];
     recentlyBumping?: RecentlyBumping;
+    isCountryFallback?: boolean;
 }
 
 export type FilterType = 'all' | 'genres' | 'songs';
 
-// Component Props
 export interface DiscoveryCardProps {
     profile: DiscoveryUserProfile;
     onConnect?: (profileId: string) => void;
     onSkip?: (profileId: string) => void;
+    onExpand?: (profile: DiscoveryUserProfile) => void;
 }
 
 export interface UserInfoProps {
@@ -69,5 +69,7 @@ export interface DiscoveryFeedProps {
     profiles: DiscoveryUserProfile[];
     onConnect?: (profileId: string) => void;
     onSkip?: (profileId: string) => void;
+    onExpand?: (profile: DiscoveryUserProfile) => void;
     isLoading?: boolean;
+    isCountryFallback?: boolean;
 }

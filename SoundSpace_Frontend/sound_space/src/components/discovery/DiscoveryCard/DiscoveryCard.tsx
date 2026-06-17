@@ -33,13 +33,15 @@ export const DiscoveryCard = ({ profile, onConnect, onSkip }: DiscoveryCardProps
         <article className="discovery-card">
             {/* Background Image with Neon Effect */}
             <div className="discovery-card__background">
-                <Image
-                    src={imageUrl}
-                    alt={`${name}'s profile`}
-                    fill
-                    className="discovery-card__background-image"
-                    priority
-                />
+                {imageUrl && (
+                    <Image
+                        src={imageUrl}
+                        alt={`${name}'s profile`}
+                        fill
+                        className="discovery-card__background-image"
+                        priority
+                    />
+                )}
                 <div className="discovery-card__neon-overlay" />
                 <div className="discovery-card__gradient-overlay" />
             </div>

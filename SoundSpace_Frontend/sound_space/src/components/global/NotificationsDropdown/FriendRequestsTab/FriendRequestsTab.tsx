@@ -29,7 +29,6 @@ const FriendRequestsTab = () => {
             removeRequest(id);
             await refresh();
         } catch {
-            // noop
         } finally {
             setProcessingId(null);
         }
@@ -42,7 +41,6 @@ const FriendRequestsTab = () => {
             removeRequest(id);
             await refresh();
         } catch {
-            // noop
         } finally {
             setProcessingId(null);
         }

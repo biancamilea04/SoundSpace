@@ -1,4 +1,3 @@
-/* ─── Comment Input Bar ─── */
 .comment-input {
     background: var(--bg-surface);
     padding: 12px 20px;
@@ -96,7 +95,6 @@
     cursor: not-allowed;
 }
 
-/* ─── Responsive ─── */
 @media (max-width: 768px) {
     .comment-input {
         padding: 10px 12px;

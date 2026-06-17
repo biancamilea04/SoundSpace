@@ -26,8 +26,6 @@
     margin: 0;
 }
 
-/* ── Stats grid ───────────────────── */
-
 .epo__stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -47,11 +45,6 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    transition: transform 0.2s ease;
-}
-
-.epo__stat:hover {
-    transform: translateY(-2px);
 }
 
 .epo__stat-value {
@@ -71,8 +64,6 @@
     text-transform: uppercase;
 }
 
-/* ── Photos mosaic ────────────────── */
-
 .epo__photos-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -85,6 +76,12 @@
     }
 }
 
+.epo__map-container {
+    height: 260px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
 .epo__photo-tile {
     position: relative;
     aspect-ratio: 1 / 1;
@@ -95,7 +92,10 @@
 }
 
 .epo__photo-img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    display: block;
     transition: transform 500ms ease;
 }
 

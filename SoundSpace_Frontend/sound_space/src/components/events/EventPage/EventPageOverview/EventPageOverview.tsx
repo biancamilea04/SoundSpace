@@ -1,82 +1,67 @@
 "use client";
 
-import Image from "next/image";
-import { EventData } from "@/types/event";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { EventData, EventPhoto } from "@/types/event";
+import { fetchEventPhotos } from "@/services/event/eventPhotoService";
 import "./EventPageOverview.css";
+
+const EventMap = dynamic(() => import("@/components/map/EventMap"), { ssr: false });
+
+const BACKEND = process.env.NEXT_PUBLIC_BACKEND_API_URL ?? "";
+const MOSAIC_COUNT = 8;
 
 interface EventPageOverviewProps {
     event: EventData;
-    attendeeCount: number;
 }
 
-function formatStatDate(dateStr: string): string {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }).toUpperCase();
-}
+const EventPageOverview = ({ event }: EventPageOverviewProps) => {
+    const [photos, setPhotos] = useState<EventPhoto[]>([]);
 
-function formatStatTime(timeStr: string): string {
-    const [h, m] = timeStr.split(":");
-    const d = new Date();
-    d.setHours(Number(h), Number(m));
-    return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-}
-
-const EventPageOverview = ({ event, attendeeCount }: EventPageOverviewProps) => {
-    const displayCount =
-        attendeeCount >= 1000
-            ? `${(attendeeCount / 1000).toFixed(1)}k`
-            : String(attendeeCount);
+    useEffect(() => {
+        let cancelled = false;
+        fetchEventPhotos(event.id)
+            .then((data) => { if (!cancelled) setPhotos(data); })
+            .catch(() => {});
+        return () => { cancelled = true; };
+    }, [event.id]);
 
     return (
         <div className="epo">
-            {/* Description */}
             <section className="epo__section">
                 <span className="epo__eyebrow">ABOUT THIS EVENT</span>
                 <p className="epo__description">
                     {event.description ??
-                        `Join us for an unforgettable night with ${event.artistName} at ${event.location} in ${event.city}. Be there for a night you won't forget.`}
+                        `Join us for ${event.title}${event.artistName ? ` featuring ${event.artistName}` : ""} live at ${event.location}, ${event.city}. An unmissable night of music and energy.`}
                 </p>
             </section>
 
-            {/* 4-up stat grid */}
-            <section className="epo__section">
-                <div className="epo__stats">
-                    <div className="epo__stat">
-                        <span className="epo__stat-value">{displayCount}</span>
-                        <span className="epo__stat-label">Attending</span>
+            {event.latitude !== null && event.longitude !== null && (
+                <section className="epo__section">
+                    <span className="epo__eyebrow">LOCATION</span>
+                    <div className="epo__map-container">
+                        <EventMap lat={event.latitude} lng={event.longitude} />
                     </div>
-                    <div className="epo__stat">
-                        <span className="epo__stat-value">{formatStatDate(event.eventDate)}</span>
-                        <span className="epo__stat-label">Date</span>
-                    </div>
-                    <div className="epo__stat">
-                        <span className="epo__stat-value">{formatStatTime(event.eventTime)}</span>
-                        <span className="epo__stat-label">Doors Open</span>
-                    </div>
-                    <div className="epo__stat">
-                        <span className="epo__stat-value">{event.city}</span>
-                        <span className="epo__stat-label">City</span>
-                    </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             {/* Featured photos mosaic */}
-            <section className="epo__section">
-                <span className="epo__eyebrow">FEATURED PHOTOS</span>
-                <div className="epo__photos-grid">
-                    {Array.from({ length: 8 }).map((_, i) => (
-                        <div key={i} className="epo__photo-tile">
-                            <Image
-                                src={`https://picsum.photos/seed/${event.id}-${i}/400/400`}
-                                alt=""
-                                fill
-                                unoptimized
-                                className="epo__photo-img"
-                            />
-                        </div>
-                    ))}
-                </div>
-            </section>
+            {photos.length > 0 && (
+                <section className="epo__section">
+                    <span className="epo__eyebrow">PHOTOS</span>
+                    <div className="epo__photos-grid">
+                        {photos.slice(0, MOSAIC_COUNT).map((photo) => (
+                            <div key={photo.id} className="epo__photo-tile">
+                                <img
+                                    src={`${BACKEND}${photo.filePath}`}
+                                    alt={`Photo by ${photo.uploaderDisplayName}`}
+                                    className="epo__photo-img"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
         </div>
     );
 };

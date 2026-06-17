@@ -62,6 +62,18 @@ const ChatMessages = ({ messages, currentUserId, onDeleteMessage, onEditMessage 
                         key={msg.id}
                         className={`chat-messages__bubble-row ${isMine ? "chat-messages__bubble-row--sent" : "chat-messages__bubble-row--received"}`}
                     >
+                        {!isMine && (
+                            <div className="chat-messages__avatar" title={msg.senderDisplayName}>
+                                {msg.senderProfileImageUrl ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={msg.senderProfileImageUrl} alt={msg.senderDisplayName} className="chat-messages__avatar-img" />
+                                ) : (
+                                    <span className="chat-messages__avatar-initials">
+                                        {(msg.senderDisplayName ?? "?").charAt(0).toUpperCase()}
+                                    </span>
+                                )}
+                            </div>
+                        )}
                         {isMine && !msg.isDeleted && (
                             <div className={`chat-messages__menu-wrap${isMenuOpen ? " chat-messages__menu-wrap--open" : ""}`}>
                                 <button

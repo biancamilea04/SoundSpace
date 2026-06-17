@@ -20,7 +20,6 @@
     gap: 12px;
 }
 
-/* Album art with equalizer overlay */
 .currently-listening__art-wrapper {
     position: relative;
     width: 48px;
@@ -71,7 +70,6 @@
     50%       { height: 14px; }
 }
 
-/* Track & artist info */
 .currently-listening__info {
     flex: 1;
     min-width: 0;

@@ -10,7 +10,6 @@
     }
 }
 
-/* Avatar */
 .profile-header__avatar-wrapper {
     position: relative;
     flex-shrink: 0;
@@ -65,7 +64,6 @@
     }
 }
 
-/* Info */
 .profile-header__info {
     display: flex;
     flex-direction: column;
@@ -73,7 +71,6 @@
     padding-top: 0.5rem;
 }
 
-/* Premium badge */
 .profile-header__premium-badge {
     display: inline-flex;
     align-items: center;
@@ -94,7 +91,6 @@
     height: 0.875rem;
 }
 
-/* Name */
 .profile-header__name {
     font-size: 1.875rem;
     font-weight: 900;
@@ -109,7 +105,6 @@
     }
 }
 
-/* Stats */
 .profile-header__stats {
     display: flex;
     align-items: center;
@@ -134,7 +129,23 @@
     color: var(--text-secondary);
 }
 
-/* Details (email/country) */
+.profile-header__stat--btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: default;
+}
+
+.profile-header__stat--clickable {
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.profile-header__stat--clickable:hover {
+    color: var(--text-primary);
+}
+
 .profile-header__details {
     display: flex;
     flex-direction: column;

@@ -228,7 +228,6 @@ export const useSinglePostPage = (): UseSinglePostPageResult => {
 
             setReplyTo(null);
         } catch {
-            // comment creation failed silently; user can retry
         }
     }, [selectedPost.postId, replyTo]);
 
@@ -239,7 +238,6 @@ export const useSinglePostPage = (): UseSinglePostPageResult => {
                 updateNodeInTree(prev, commentId, updated.content, updated.updatedAt ?? new Date().toISOString())
             );
         } catch {
-            // edit failed silently
         }
     }, []);
 
@@ -248,7 +246,6 @@ export const useSinglePostPage = (): UseSinglePostPageResult => {
             await deleteComment(commentId);
             setComments((prev) => removeNodeFromTree(prev, commentId));
         } catch {
-            // delete failed silently
         }
     }, []);
 

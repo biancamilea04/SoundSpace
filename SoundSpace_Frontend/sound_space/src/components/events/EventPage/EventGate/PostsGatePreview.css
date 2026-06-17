@@ -74,3 +74,6 @@
     border-radius: 6px;
     background: var(--bg-elevated);
 }
+
+.pgp__like--wide { width: 48px; }
+.pgp__like--narrow { width: 36px; }

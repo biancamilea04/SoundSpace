@@ -28,10 +28,6 @@ function DiscoveryContent() {
             <div className="discovery-container">
                 <MenuSidebar />
                 <div className="discovery-main">
-                    <FilterButtons
-                        activeFilter={activeFilter}
-                        onFilterChange={handleFilterChange}
-                    />
 
                     <DiscoveryFeed
                         profiles={profiles}

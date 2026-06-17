@@ -19,7 +19,6 @@
     background-color: rgba(30, 215, 96, 0.1);
 }
 
-/* Avatar */
 .conversation-item__avatar {
     position: relative;
     width: 48px;
@@ -50,7 +49,6 @@
     border-color: rgba(30, 215, 96, 0.1);
 }
 
-/* Info */
 .conversation-item__info {
     flex: 1;
     min-width: 0;

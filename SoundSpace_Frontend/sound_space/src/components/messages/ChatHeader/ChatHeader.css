@@ -64,7 +64,6 @@
     gap: 0.75rem;
 }
 
-/* Listening To */
 .chat-header__listening {
     display: flex;
     align-items: center;
@@ -108,7 +107,6 @@
     background-color: var(--primary-green-hover);
 }
 
-/* Actions Dropdown */
 .chat-header__actions {
     position: relative;
 }
@@ -175,7 +173,6 @@
     color: var(--destructive);
 }
 
-/* Back Button (mobile only) */
 .chat-header__back-btn {
     display: none;
     align-items: center;
@@ -195,7 +192,6 @@
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .chat-header__listening {
         display: none;

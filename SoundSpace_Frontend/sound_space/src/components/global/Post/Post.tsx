@@ -8,7 +8,8 @@ import './Post.css';
 
 export const Post = ({
     postId, user, timeAgo, content, song,
-    spotifyUri, spotifyName, spotifyCoverUrl, spotifySubtitle, spotifyMediaType, previewUrl,
+    spotifyUri, spotifyName, spotifyCoverUrl, spotifySubtitle, spotifySubtitleUrl, spotifyMediaType, previewUrl,
+    previewStartSecond, previewDuration,
     stats, isOwner, onEditPost, onDeletePost,
 }: PostProps) => {
     const postKey = `${user.name}|${timeAgo}|${content}`;
@@ -18,6 +19,7 @@ export const Post = ({
         likeCount,
         showShareMenu,
         showOptionsMenu,
+        copiedToast,
         shareMenuRef,
         optionsMenuRef,
         toggleLiked,
@@ -53,11 +55,15 @@ export const Post = ({
                 spotifyName={spotifyName}
                 spotifyCoverUrl={spotifyCoverUrl}
                 spotifySubtitle={spotifySubtitle}
+                spotifySubtitleUrl={spotifySubtitleUrl}
                 spotifyMediaType={spotifyMediaType}
                 previewUrl={previewUrl}
+                previewStartSecond={previewStartSecond}
+                previewDuration={previewDuration}
                 postId={postId}
             />
             <PostFooter
+                copiedToast={copiedToast}
                 stats={{ ...stats, likes: likeCount }}
                 postData={{
                     postId,
@@ -70,8 +76,11 @@ export const Post = ({
                     spotifyName,
                     spotifyCoverUrl,
                     spotifySubtitle,
+                    spotifySubtitleUrl,
                     spotifyMediaType,
                     previewUrl,
+                    previewStartSecond,
+                    previewDuration,
                     stats,
                     likeCount,
                     isLikedByCurrentUser: liked,

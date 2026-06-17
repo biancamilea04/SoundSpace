@@ -75,8 +75,11 @@ public class PollingWorker(IServiceScopeFactory scopeFactory, ILogger<PollingWor
 
                 if (existingArtists.TryGetValue(artistId, out var existing))
                 {
-                    existing.Rank      = rank;
-                    existing.UpdatedAt = now;
+                    existing.Name       = artists[i].Name;
+                    existing.ImageUrl   = artists[i].ImageUrl;
+                    existing.SpotifyUrl = artists[i].SpotifyUrl;
+                    existing.Rank       = rank;
+                    existing.UpdatedAt  = now;
                 }
                 else
                 {
@@ -109,6 +112,7 @@ public class PollingWorker(IServiceScopeFactory scopeFactory, ILogger<PollingWor
                     ArtistUrl = tracks[i].ArtistUrl,
                     CoverUrl = tracks[i].ImageUrl,
                     SpotifyUrl = tracks[i].SpotifyUrl,
+                    PreviewUrl = tracks[i].PreviewUrl,
                     Rank = i + 1,
                     UpdatedAt = now
                 });

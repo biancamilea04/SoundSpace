@@ -23,6 +23,8 @@ export const Song = ({
     progressPercent = 0,
     durationFormatted = ""
 }: SongProps) => {
+    const progressStyle = { "--song-progress": `${progressPercent}%` } as React.CSSProperties;
+
     return (
         <div className="song-component">
             <div className="song-component__image-container">
@@ -51,11 +53,11 @@ export const Song = ({
 
                 {showProgress && (
                     <div className="song-component__progress-container">
-                        <div className="song-component__progress-slider">
+                        <div className="song-component__progress-slider" style={progressStyle}>
                             <div className="song-component__progress-track">
-                                <div className="song-component__progress-fill" style={{width: `${progressPercent}%`}}></div>
+                                <div className="song-component__progress-fill"></div>
                             </div>
-                            <div className="song-component__progress-thumb" style={{left: `${progressPercent}%`}}></div>
+                            <div className="song-component__progress-thumb"></div>
                         </div>
                         <span className="song-component__progress-time">
                             {durationFormatted}

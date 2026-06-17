@@ -48,6 +48,28 @@
     position: relative;
 }
 
+.post__copied-toast {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: toast-fade 2s ease forwards;
+}
+
+@keyframes toast-fade {
+    0%   { opacity: 1; }
+    70%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+
 @media (max-width: 768px) {
     .post__action-btn {
         padding: 6px 10px;

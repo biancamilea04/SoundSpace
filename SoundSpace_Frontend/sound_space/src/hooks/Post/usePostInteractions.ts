@@ -16,6 +16,7 @@ interface UsePostInteractionsResult {
     likeCount: number;
     showShareMenu: boolean;
     showOptionsMenu: boolean;
+    copiedToast: boolean;
     shareMenuRef: React.RefObject<HTMLDivElement | null>;
     optionsMenuRef: React.RefObject<HTMLDivElement | null>;
     toggleLiked: () => void;
@@ -25,23 +26,12 @@ interface UsePostInteractionsResult {
     handleShare: (platform: SharePlatform) => void;
 }
 
-const getShareUrl = (platform: SharePlatform, currentUrl: string, shareText: string): string => {
-    if (platform === 'instagram') {
-        return 'https://www.instagram.com/';
-    }
-
-    if (platform === 'facebook') {
-        return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
-    }
-
-    return `https://x.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareText)}`;
-};
-
 export const usePostInteractions = ({ postId, userName, content, initialLiked, initialLikeCount }: UsePostInteractionsParams): UsePostInteractionsResult => {
     const [liked, setLiked] = useState(initialLiked);
     const [likeCount, setLikeCount] = useState(initialLikeCount);
     const [showShareMenu, setShowShareMenu] = useState(false);
     const [showOptionsMenu, setShowOptionsMenu] = useState(false);
+    const [copiedToast, setCopiedToast] = useState(false);
     const shareMenuRef = useRef<HTMLDivElement>(null);
     const optionsMenuRef = useRef<HTMLDivElement>(null);
 
@@ -105,17 +95,38 @@ export const usePostInteractions = ({ postId, userName, content, initialLiked, i
         setShowOptionsMenu(false);
     }, []);
 
-    const handleShare = useCallback((platform: SharePlatform) => {
-        if (typeof window === 'undefined') {
-            return;
-        }
+    const handleShare = useCallback(async (platform: SharePlatform) => {
+        if (typeof window === 'undefined') return;
 
         const currentUrl = window.location.href;
         const shareText = `${userName} shared on SoundSpace: ${content}`;
-        const shareUrl = getShareUrl(platform, currentUrl, shareText);
 
-        window.open(shareUrl, '_blank', 'noopener,noreferrer');
         setShowShareMenu(false);
+
+        if (platform === 'facebook') {
+            const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+            window.open(url, 'share-facebook', 'width=626,height=436,noopener,noreferrer');
+            return;
+        }
+
+        if (platform === 'x') {
+            const url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareText)}`;
+            window.open(url, 'share-x', 'width=550,height=420,noopener,noreferrer');
+            return;
+        }
+
+        // instagram: native share sheet on mobile, clipboard fallback on desktop
+        try {
+            if (typeof navigator !== 'undefined' && navigator.share) {
+                await navigator.share({ title: 'SoundSpace Post', text: shareText, url: currentUrl });
+            } else {
+                await navigator.clipboard.writeText(currentUrl);
+                setCopiedToast(true);
+                setTimeout(() => setCopiedToast(false), 2000);
+            }
+        } catch {
+            // user cancelled share or clipboard permission denied
+        }
     }, [content, userName]);
 
     return {
@@ -123,6 +134,7 @@ export const usePostInteractions = ({ postId, userName, content, initialLiked, i
         likeCount,
         showShareMenu,
         showOptionsMenu,
+        copiedToast,
         shareMenuRef,
         optionsMenuRef,
         toggleLiked,

@@ -32,7 +32,6 @@
     }
 }
 
-/* Album Art */
 .now-playing__album-art {
     flex-shrink: 0;
     width: 80px;
@@ -56,7 +55,6 @@
     object-fit: cover;
 }
 
-/* Song Info */
 .now-playing__song-info {
     flex: 1;
     min-width: 0;
@@ -86,7 +84,6 @@
     white-space: nowrap;
 }
 
-/* Progress Bar */
 .now-playing__progress-wrapper {
     margin-top: 1rem;
 }
@@ -120,7 +117,6 @@
     font-weight: 500;
 }
 
-/* Controls */
 .now-playing__controls {
     display: flex;
     align-items: center;

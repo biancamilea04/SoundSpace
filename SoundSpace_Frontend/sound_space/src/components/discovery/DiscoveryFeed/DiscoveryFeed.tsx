@@ -1,14 +1,27 @@
 import React from 'react';
+import { Music2 } from 'lucide-react';
 import DiscoveryCard from '../DiscoveryCard/DiscoveryCard';
-import type { DiscoveryFeedProps } from '@/types/discovery';
+import DiscoveryProfilePanel from '../DiscoveryProfilePanel/DiscoveryProfilePanel';
+import type { DiscoveryFeedProps, DiscoveryUserProfile } from '@/types/discovery';
 import './DiscoveryFeed.css';
 
 export const DiscoveryFeed = ({
     profiles,
     onConnect,
     onSkip,
-    isLoading = false
+    onExpand,
+    isLoading = false,
+    isCountryFallback = false,
 }: DiscoveryFeedProps) => {
+    const [panelProfile, setPanelProfile] = React.useState<DiscoveryUserProfile | null>(null);
+
+    const handleExpand = (profile: DiscoveryUserProfile) => {
+        onExpand?.(profile);
+        setPanelProfile(profile);
+    };
+
+    const handleClosePanel = () => setPanelProfile(null);
+
     if (isLoading) {
         return (
             <div className="discovery-feed">
@@ -24,28 +37,44 @@ export const DiscoveryFeed = ({
         return (
             <div className="discovery-feed">
                 <div className="discovery-feed__empty">
-                    <span className="discovery-feed__empty-icon">🎵</span>
+                    <div className="discovery-feed__empty-icon">
+                        <Music2 size={40} />
+                    </div>
                     <h3>No more profiles</h3>
-                    <p>Check back later for new music connections!</p>
+                    <p>
+                        {isCountryFallback
+                            ? 'No music matches found in your area. Check back later!'
+                            : 'Check back later for new music connections!'}
+                    </p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="discovery-feed">
-            <div className="discovery-feed__scroll-container">
-                {profiles.map((profile) => (
-                    <div key={profile.id} className="discovery-feed__card-wrapper">
-                        <DiscoveryCard
-                            profile={profile}
-                            onConnect={onConnect}
-                            onSkip={onSkip}
-                        />
-                    </div>
-                ))}
+        <>
+            <div className="discovery-feed">
+                <div className="discovery-feed__scroll-container">
+                    {profiles.map((profile) => (
+                        <div key={profile.id} className="discovery-feed__card-wrapper">
+                            <DiscoveryCard
+                                profile={profile}
+                                onConnect={onConnect}
+                                onSkip={onSkip}
+                                onExpand={handleExpand}
+                            />
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
+
+            {panelProfile && (
+                <DiscoveryProfilePanel
+                    profile={panelProfile}
+                    onClose={handleClosePanel}
+                />
+            )}
+        </>
     );
 };
 

@@ -153,8 +153,10 @@ public class FriendshipService(
             .Where(f =>
                 (f.SenderId == userId || f.ReceiverId == userId) &&
                 f.Status == FriendshipStatus.Accepted)
-            .Include(f => f.Sender)
-            .Include(f => f.Receiver)
+            .Include(f => f.Sender).ThenInclude(u => u.CurrentlyPlaying)
+            .Include(f => f.Sender).ThenInclude(u => u.LastPlayed)
+            .Include(f => f.Receiver).ThenInclude(u => u.CurrentlyPlaying)
+            .Include(f => f.Receiver).ThenInclude(u => u.LastPlayed)
             .ToListAsync();
 
         return friendships
@@ -164,12 +166,12 @@ public class FriendshipService(
                 var isOnline = onlineUserIds.Contains(friend.Id);
                 return new FriendActivityDto(
                     friend.Id, friend.DisplayName, friend.ProfileImageUrl,
-                    isOnline, friend.IsListening,
-                    friend.CurrentlyPlayingTitle, friend.CurrentlyPlayingArtist, friend.CurrentlyPlayingArtistUrl,
-                    friend.CurrentlyPlayingCoverUrl, friend.CurrentlyPlayingUri, friend.CurrentlyPlayingProgressMs,
-                    friend.LastPlayedTitle, friend.LastPlayedArtist, friend.LastPlayedArtistUrl, friend.LastPlayedUri,
-                    friend.LastPlayedCoverUrl,
-                    friend.MusicStatusUpdatedAt, friend.LastSeen);
+                    isOnline, friend.CurrentlyPlaying?.IsListening ?? false,
+                    friend.CurrentlyPlaying?.Title, friend.CurrentlyPlaying?.Artist, friend.CurrentlyPlaying?.ArtistUrl,
+                    friend.CurrentlyPlaying?.CoverUrl, friend.CurrentlyPlaying?.Uri, friend.CurrentlyPlaying?.ProgressMs ?? 0,
+                    friend.LastPlayed?.Title, friend.LastPlayed?.Artist, friend.LastPlayed?.ArtistUrl, friend.LastPlayed?.Uri,
+                    friend.LastPlayed?.CoverUrl,
+                    friend.CurrentlyPlaying?.UpdatedAt, friend.LastSeen);
             })
             .OrderByDescending(f => f.IsOnline && f.IsListening)
             .ThenByDescending(f => f.IsOnline)

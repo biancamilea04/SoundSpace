@@ -68,7 +68,6 @@ export const useMessages = (): UseMessagesResult => {
         };
     }, []);
 
-    // Lazy-load message history when a conversation is first opened
     useEffect(() => {
         if (!activeConversationId || loadedConvs.current.has(activeConversationId)) return;
         const { conversations, setConversationMessages } = useMessageStore.getState();
@@ -80,7 +79,6 @@ export const useMessages = (): UseMessagesResult => {
         });
     }, [activeConversationId]);
 
-    // Overlay live presence onto conversation user objects
     const conversations: Conversation[] = storeConversations.map((c) => ({
         ...c,
         user: { ...c.user, isOnline: onlineUserIds.has(c.user.id) },

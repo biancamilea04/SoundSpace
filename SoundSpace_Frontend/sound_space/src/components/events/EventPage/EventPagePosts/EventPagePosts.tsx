@@ -6,7 +6,6 @@ import { fetchEventPosts } from "@/services/post/postService";
 import { PostComposer } from "@/components/profile/PostComposer/PostComposer";
 import FeedPost from "@/components/global/FeedPost/FeedPost";
 import { useUserProfile } from "@/hooks/UserProfile/useUserProfile";
-import { isGuid } from "@/lib/idUtils";
 import "./EventPagePosts.css";
 
 interface EventPagePostsProps {
@@ -15,24 +14,18 @@ interface EventPagePostsProps {
 
 const EventPagePosts = ({ eventId }: EventPagePostsProps) => {
     const { user } = useUserProfile();
-    const isRealEvent = isGuid(eventId);
     const [posts, setPosts] = useState<PostData[]>([]);
-    const [isLoading, setIsLoading] = useState(isRealEvent);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         let cancelled = false;
-        if (!isRealEvent) {
-            setPosts([]);
-            setIsLoading(false);
-            return () => { cancelled = true; };
-        }
         setIsLoading(true);
         fetchEventPosts(eventId)
             .then((data) => { if (!cancelled) setPosts(data); })
             .catch(() => {})
             .finally(() => { if (!cancelled) setIsLoading(false); });
         return () => { cancelled = true; };
-    }, [eventId, isRealEvent]);
+    }, [eventId]);
 
     const handlePostCreated = (post?: PostData) => {
         if (post) setPosts((prev) => [post, ...prev]);
@@ -44,22 +37,17 @@ const EventPagePosts = ({ eventId }: EventPagePostsProps) => {
 
     return (
         <div className="epp">
-            {isRealEvent && (
-                <PostComposer
-                    avatarUrl={user?.profileImageUrl ?? undefined}
-                    username={user?.displayName}
-                    eventId={eventId}
-                    onPostCreated={handlePostCreated}
-                />
-            )}
+            <PostComposer
+                avatarUrl={user?.profileImageUrl ?? undefined}
+                username={user?.displayName}
+                eventId={eventId}
+                onPostCreated={handlePostCreated}
+            />
 
             <div className="epp__feed">
-                {!isRealEvent && (
-                    <p className="epp__empty">Posts are available for live events only.</p>
-                )}
                 {isLoading && <p className="epp__empty">Loading posts…</p>}
-                {!isLoading && isRealEvent && posts.length === 0 && (
-                    <p className="epp__empty">No posts yet. Be the first to share something!</p>
+                {!isLoading && posts.length === 0 && (
+                    <p className="epp__empty">No posts</p>
                 )}
                 {posts.map((post) => (
                     <FeedPost

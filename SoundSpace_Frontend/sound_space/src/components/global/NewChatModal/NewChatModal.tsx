@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useRecentContacts, useCreateDirectChat } from "@/hooks/Conversations/useConversationsApi";
+import { useRecentContacts } from "@/hooks/Conversations/useConversationsApi";
 import { useSearchUsers } from "@/hooks/Users/useSearchUsers";
 import { useNewChatModal } from "@/stores/newChatModalStore";
 import { useMessageStore } from "@/stores/messageStore";
@@ -27,8 +27,9 @@ export default function NewChatModal() {
     const { data: recentContacts, isLoading: loadingRecent } = useRecentContacts();
     const { data: searchResults, isLoading: loadingSearch, isError: searchError } = useSearchUsers(debouncedQuery);
 
-    const createChatMutation = useCreateDirectChat();
-    const store = useMessageStore();
+    const conversations = useMessageStore((s) => s.conversations);
+    const addConversationIfMissing = useMessageStore((s) => s.addConversationIfMissing);
+    const setActiveConversation = useMessageStore((s) => s.setActiveConversation);
 
     const panelRef = useRef<HTMLDivElement>(null);
 
@@ -41,35 +42,39 @@ export default function NewChatModal() {
         return () => document.removeEventListener("keydown", handleKey);
     }, [isOpen, closeModal]);
 
-    const handleUserSelect = async (user: UserSearchResultDto) => {
-        if (createChatMutation.isPending) return;
+    const handleUserSelect = (user: UserSearchResultDto) => {
+        const existing = conversations.find(
+            (c) => !c.isPending && c.user.id === user.id
+        );
 
-        try {
-            const result = await createChatMutation.mutateAsync(user.id);
-
-            const newConversation: Conversation = {
-                id: result.conversationId,
-                user: {
-                    id: user.id,
-                    name: user.displayName,
-                    avatarUrl: user.profileImageUrl ?? "",
-                    isOnline: false,
-                },
-                lastMessage: null,
-                lastMessageTime: "",
-                unreadCount: 0,
-                messages: [],
-            };
-            store.addConversationIfMissing(newConversation);
-
-            store.setActiveConversation(result.conversationId);
-
+        if (existing) {
+            setActiveConversation(existing.id);
             router.push("/messages");
-
             closeModal();
-        } catch (err) {
-            console.error("[NewChatModal] Failed to open chat:", err);
+            return;
         }
+
+        const tempId = `pending-${user.id}`;
+        const pendingConversation: Conversation = {
+            id: tempId,
+            user: {
+                id: user.id,
+                name: user.displayName,
+                avatarUrl: user.profileImageUrl ?? "",
+                isOnline: false,
+            },
+            lastMessage: null,
+            lastMessageTime: "",
+            unreadCount: 0,
+            messages: [],
+            isPending: true,
+            targetUserId: user.id,
+        };
+
+        addConversationIfMissing(pendingConversation);
+        setActiveConversation(tempId);
+        router.push("/messages");
+        closeModal();
     };
 
     const showSearch = isSearching;
@@ -154,7 +159,7 @@ export default function NewChatModal() {
                             key={user.id}
                             className="new-chat-modal__item"
                             onClick={() => void handleUserSelect(user)}
-                            disabled={createChatMutation.isPending}
+                            disabled={false}
                         >
                             <div className="new-chat-modal__avatar">
                                 {user.profileImageUrl

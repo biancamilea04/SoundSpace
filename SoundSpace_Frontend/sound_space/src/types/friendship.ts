@@ -1,4 +1,10 @@
-export type FriendshipStatus = 'Pending' | 'Accepted' | 'Rejected';
+export type FriendshipStatus = 'Pending' | 'Accepted' | 'Rejected' | 'Removed';
+
+export interface FriendListItem {
+    userId: string;
+    displayName: string;
+    profileImageUrl: string | null;
+}
 
 export interface Friendship {
     id: string;

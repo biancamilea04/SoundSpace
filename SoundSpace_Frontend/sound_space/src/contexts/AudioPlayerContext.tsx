@@ -11,7 +11,7 @@ import React, {
 interface AudioPlayerContextValue {
     playingPostId: string | null;
     audioRef: React.RefObject<HTMLAudioElement | null>;
-    startPlaying: (postId: string, previewUrl: string) => void;
+    startPlaying: (postId: string, previewUrl: string, startTime?: number, snippetDuration?: number) => void;
     stopPlaying: () => void;
 }
 
@@ -36,14 +36,12 @@ export const AudioPlayerProvider = ({ children }: { children: React.ReactNode })
     }, []);
 
     const startPlaying = useCallback(
-        (postId: string, previewUrl: string) => {
-            // Clicking the active post toggles it off
+        (postId: string, previewUrl: string, startTime?: number, snippetDuration?: number) => {
             if (playingPostId === postId) {
                 stopPlaying();
                 return;
             }
 
-            // Stop whatever was playing before
             if (audioRef.current) {
                 audioRef.current.pause();
                 audioRef.current.src = "";
@@ -53,7 +51,24 @@ export const AudioPlayerProvider = ({ children }: { children: React.ReactNode })
             audioRef.current = audio;
             setPlayingPostId(postId);
 
+            if (startTime != null && startTime > 0) {
+                audio.currentTime = startTime;
+            }
+
             audio.play().catch(() => {});
+
+            if (snippetDuration != null) {
+                const stopAt = (startTime ?? 0) + snippetDuration;
+                const onTimeUpdate = () => {
+                    if (audio.currentTime >= stopAt) {
+                        audio.pause();
+                        audio.removeEventListener("timeupdate", onTimeUpdate);
+                        audioRef.current = null;
+                        setPlayingPostId(null);
+                    }
+                };
+                audio.addEventListener("timeupdate", onTimeUpdate);
+            }
 
             audio.addEventListener("ended", () => {
                 audioRef.current = null;

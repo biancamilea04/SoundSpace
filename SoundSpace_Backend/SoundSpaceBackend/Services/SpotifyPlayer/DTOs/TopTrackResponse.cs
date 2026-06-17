@@ -8,5 +8,6 @@ public record TopTrackResponse(
     [property: JsonPropertyName("artistUrl")] string? ArtistUrl,
     [property: JsonPropertyName("imageUrl")] string? ImageUrl,
     [property: JsonPropertyName("spotifyUrl")] string? SpotifyUrl,
-    [property: JsonPropertyName("spotifyId")] string? SpotifyId
+    [property: JsonPropertyName("spotifyId")] string? SpotifyId,
+    [property: JsonPropertyName("previewUrl")] string? PreviewUrl
 );

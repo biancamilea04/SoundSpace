@@ -198,6 +198,16 @@ public class EventsController(
         return Ok(posts.Select(p => ToPostResponse(p, likeMap[p.Id])));
     }
 
+    [HttpGet("user/{userId:guid}")]
+    public async Task<IActionResult> GetUserEvents(Guid userId)
+    {
+        var callerId = await GetCallerDbIdAsync();
+        if (callerId is null) return Unauthorized();
+
+        var events = await eventService.GetUserEventsAsync(userId, callerId.Value);
+        return Ok(events.Select(ToResponse));
+    }
+
     [HttpGet("created")]
     public async Task<IActionResult> GetCreatedEvents()
     {

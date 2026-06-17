@@ -29,7 +29,13 @@
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    justify-content: space-between;
 }
+
+.recent-streams__item:hover {
+    background-color: var(--bg-elevated);
+}
+
 
 .recent-streams__track {
     display: none;
@@ -90,4 +96,13 @@
     color: var(--text-muted);
     text-align: center;
     padding: 12px 0;
+}
+
+.recent-streams__timestamp {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: auto;
+    padding-left: 8px;
 }

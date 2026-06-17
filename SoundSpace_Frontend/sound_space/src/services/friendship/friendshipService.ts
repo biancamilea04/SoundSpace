@@ -1,5 +1,5 @@
 import { apiFetch } from '@/lib/apiClient';
-import type { Friendship } from '@/types/friendship';
+import type { Friendship, FriendListItem } from '@/types/friendship';
 import type { FriendActivity } from '@/types/friendActivity';
 
 const BASE = `${process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://localhost:7050'}/api/friendships`;
@@ -48,4 +48,15 @@ export async function getFriendsActivity(): Promise<FriendActivity[]> {
     const res = await apiFetch(`${BASE}/friends/activity`);
     if (!res.ok) throw new Error(await res.text());
     return res.json();
+}
+
+export async function getFriendsList(profileUserId: string): Promise<FriendListItem[]> {
+    const res = await apiFetch(`${BASE}/friends/list/${profileUserId}`);
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+}
+
+export async function removeFriend(targetUserId: string): Promise<void> {
+    const res = await apiFetch(`${BASE}/friends/${targetUserId}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error(await res.text());
 }

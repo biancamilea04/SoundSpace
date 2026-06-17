@@ -20,7 +20,6 @@ export function useIncomingRequests() {
             setPendingRequests(incoming);
             setHistory(hist);
         } catch {
-            // silently fail — store keeps previous state
         } finally {
             setIsLoading(false);
         }

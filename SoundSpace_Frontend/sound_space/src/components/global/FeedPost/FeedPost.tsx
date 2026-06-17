@@ -64,8 +64,11 @@ export const FeedPost = ({ post, onPostUpdated, onPostDeleted }: FeedPostProps) 
                 spotifyName={post.spotifyName ?? undefined}
                 spotifyCoverUrl={post.spotifyCoverUrl ?? undefined}
                 spotifySubtitle={post.spotifySubtitle ?? undefined}
+                spotifySubtitleUrl={post.spotifySubtitleUrl}
                 spotifyMediaType={post.spotifyMediaType ?? undefined}
                 previewUrl={post.previewUrl ?? undefined}
+                previewStartSecond={post.previewStartSecond}
+                previewDuration={post.previewDuration}
                 stats={{ likes: post.likeCount, comments: 0, isLikedByCurrentUser: post.isLikedByCurrentUser }}
                 isOwner={isOwner}
                 onEditPost={() => setShowEditModal(true)}

@@ -5,7 +5,7 @@
     border: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
 .top-artists__title {
@@ -15,59 +15,87 @@
     margin: 0;
 }
 
-.top-artists__list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.top-artists__loading {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
 }
 
+/* ── Card grid ───────────────────────────────────────────────── */
+.top-artists__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+}
+
+/* ── Individual artist card ──────────────────────────────────── */
 .top-artists__item {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
-    padding: 6px 8px;
+    padding: 16px;
+    width: 280px;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    text-decoration: none;
+    background: transparent;
 }
 
 .top-artists__item:hover {
-    background-color: var(--bg-hover, rgba(255, 255, 255, 0.05));
+    background-color: var(--bg-elevated);
+}
+
+/* ── Avatar ──────────────────────────────────────────────────── */
+.top-artists__avatar-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
 .top-artists__avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
     object-fit: cover;
-    flex-shrink: 0;
+    border-radius: 50%;
 }
 
 .top-artists__avatar--fallback {
-    background-color: var(--border-subtle);
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
     color: var(--text-primary);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-size: 1.2rem;
+    font-weight: 700;
+    font-size: 2.5rem;
     text-transform: uppercase;
 }
 
-.top-artists__link {
-    font-size: 0.875rem;
-    font-weight: 500;
+/* ── Text ────────────────────────────────────────────────────── */
+.top-artists__name {
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 700;
     color: var(--text-primary);
-    text-decoration: none;
-    transition: color 0.2s ease;
+    text-align: center;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.top-artists__link:hover {
+.top-artists__name:hover {
     text-decoration: underline;
-    color: var(--accent, #1db954);
 }
 
-.top-artists__loading {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
+.top-artists__type {
+    font-size: 0.875rem;
+    color: #B3B3B3;
+    text-align: center;
+    margin: 4px 0 0;
 }

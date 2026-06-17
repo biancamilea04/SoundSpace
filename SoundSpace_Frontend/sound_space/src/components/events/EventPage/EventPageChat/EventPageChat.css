@@ -47,7 +47,6 @@
     margin-left: 4px;
 }
 
-/* Loading / error state fills the flex-1 space */
 .epc__state {
     flex: 1;
     display: flex;

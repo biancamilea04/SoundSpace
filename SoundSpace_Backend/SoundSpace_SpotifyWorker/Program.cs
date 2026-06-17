@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using SoundSpaceBackend.Mapping.Profiles;
 using SoundSpaceBackend.Persistence;
 using SoundSpaceBackend.Seed;
+using SoundSpaceBackend.Services.PreviewUrl;
+using SoundSpaceBackend.Services.PreviewUrl.Abstractions;
 using SoundSpaceBackend.Services.SpotifyPlayer;
 using SoundSpaceBackend.Services.SpotifyPlayer.Abstractions;
 using SoundSpaceBackend.Services.SpotifyToken;
@@ -29,6 +31,7 @@ var host = Host.CreateDefaultBuilder(args)
             typeof(UserProfile));
 
         services.AddScoped<ISpotifyTokenService, SpotifyTokenService>();
+        services.AddScoped<IPreviewUrlService, PreviewUrlService>();
         services.AddScoped<ISpotifyPlayerService, SpotifyPlayerService>();
 
         services.AddHostedService<PollingWorker>();

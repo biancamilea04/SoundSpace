@@ -10,6 +10,7 @@ interface PostFooterProps {
     postData: SelectedPostPayload;
     liked: boolean;
     showShareMenu: boolean;
+    copiedToast: boolean;
     shareMenuRef: React.RefObject<HTMLDivElement | null>;
     onToggleLike: () => void;
     onToggleShareMenu: () => void;
@@ -21,6 +22,7 @@ const PostFooter = ({
     postData,
     liked,
     showShareMenu,
+    copiedToast,
     shareMenuRef,
     onToggleLike,
     onToggleShareMenu,
@@ -66,6 +68,7 @@ const PostFooter = ({
                 </button>
 
                 {showShareMenu && <PostShareMenu onShare={onShare} />}
+                {copiedToast && <span className="post__copied-toast">Link copied!</span>}
             </div>
         </footer>
     );

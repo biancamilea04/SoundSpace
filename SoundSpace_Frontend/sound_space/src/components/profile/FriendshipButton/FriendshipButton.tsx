@@ -23,7 +23,6 @@ export const FriendshipButton = ({ currentUserId, profileUserId }: FriendshipBut
             const result = await sendFriendRequest(profileUserId);
             setFriendship(result);
         } catch {
-            // noop
         } finally {
             setIsPending(false);
         }
@@ -36,7 +35,6 @@ export const FriendshipButton = ({ currentUserId, profileUserId }: FriendshipBut
             const result = await acceptRequest(friendship.id);
             setFriendship(result);
         } catch {
-            // noop
         } finally {
             setIsPending(false);
         }
@@ -49,7 +47,6 @@ export const FriendshipButton = ({ currentUserId, profileUserId }: FriendshipBut
             const result = await rejectRequest(friendship.id);
             setFriendship(result);
         } catch {
-            // noop
         } finally {
             setIsPending(false);
         }

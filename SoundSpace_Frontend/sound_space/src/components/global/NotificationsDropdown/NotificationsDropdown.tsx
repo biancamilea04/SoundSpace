@@ -11,6 +11,7 @@ type Tab = 'General' | 'Friend Requests';
 const NotificationsDropdown = () => {
     const [activeTab, setActiveTab] = useState<Tab>('Friend Requests');
     const pendingCount = useNotificationStore((s) => s.pendingRequests.length);
+    const generalCount = useNotificationStore((s) => s.generalNotifications.length);
 
     return (
         <div className="notifications-dropdown" role="dialog" aria-label="Notifications">
@@ -30,6 +31,9 @@ const NotificationsDropdown = () => {
                         {tab}
                         {tab === 'Friend Requests' && pendingCount > 0 && (
                             <span className="notifications-dropdown__tab-badge">{pendingCount}</span>
+                        )}
+                        {tab === 'General' && generalCount > 0 && (
+                            <span className="notifications-dropdown__tab-badge">{generalCount}</span>
                         )}
                     </button>
                 ))}

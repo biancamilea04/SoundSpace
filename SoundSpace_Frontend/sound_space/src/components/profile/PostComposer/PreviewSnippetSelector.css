@@ -1,0 +1,130 @@
+.snippet-selector {
+    background-color: var(--bg-elevated);
+    border: 1px solid rgba(30, 215, 96, 0.18);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.snippet-selector__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.snippet-selector__icon {
+    color: var(--primary-green);
+    flex-shrink: 0;
+}
+
+.snippet-selector__label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    flex: 1;
+}
+
+.snippet-selector__duration {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary-green);
+    font-variant-numeric: tabular-nums;
+}
+
+.snippet-selector__waveform-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.snippet-selector__audition-btn {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--bg-highlight);
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.snippet-selector__audition-btn:hover:not(:disabled) {
+    background-color: var(--primary-green);
+    color: #000;
+}
+
+.snippet-selector__audition-btn--playing {
+    background-color: var(--primary-green);
+    color: #000;
+}
+
+.snippet-selector__audition-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.snippet-selector__canvas-wrap {
+    flex: 1;
+    position: relative;
+    height: 56px;
+    cursor: col-resize;
+    user-select: none;
+}
+
+.snippet-selector__skeleton {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(
+        90deg,
+        var(--bg-elevated) 25%,
+        var(--bg-highlight) 50%,
+        var(--bg-elevated) 75%
+    );
+    background-size: 200% 100%;
+    animation: snippet-shimmer 1.4s infinite;
+}
+
+@keyframes snippet-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.snippet-selector__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+}
+
+.snippet-selector__handle {
+    position: absolute;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--primary-green);
+    border-radius: 2px;
+    transform: translateX(-50%);
+    cursor: col-resize;
+    z-index: 2;
+}
+
+.snippet-selector__handle::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 20px;
+    background-color: var(--primary-green);
+    border-radius: 4px;
+}

@@ -35,6 +35,11 @@ const SpotifyMediaEmbed = ({ uri }: { uri: string }) => {
     return <SpotifyAlbumCard item={item} />;
 };
 
+const uriToExternalUrl = (uri: string): string => {
+    const parts = uri.split(':');
+    return parts.length === 3 ? `https://open.spotify.com/${parts[1]}/${parts[2]}` : '#';
+};
+
 const SinglePost = ({ post, liked, likeCount, commentCount, onToggleLike }: SinglePostProps) => {
     const isTrackWithPreview =
         post.spotifyUri &&
@@ -80,14 +85,17 @@ const SinglePost = ({ post, liked, likeCount, commentCount, onToggleLike }: Sing
                                 coverUrl={post.spotifyCoverUrl}
                                 title={post.spotifyName!}
                                 artist={post.spotifySubtitle ?? ''}
-                                externalUrl={null}
+                                externalUrl={post.spotifyUri ? uriToExternalUrl(post.spotifyUri) : null}
+                                subtitleUrl={post.spotifySubtitleUrl}
+                                previewStartSecond={post.previewStartSecond}
+                                previewDuration={post.previewDuration}
                             />
                         ) : post.spotifyName ? (
                             <SpotifyAlbumCard
                                 item={{
                                     uri: post.spotifyUri,
                                     name: post.spotifyName,
-                                    type: (post.spotifyMediaType as 'track' | 'album' | 'episode') ?? 'track',
+                                    type: (post.spotifyMediaType as 'track' | 'album' | 'show') ?? 'track',
                                     coverUrl: post.spotifyCoverUrl ?? '',
                                     subtitle: post.spotifySubtitle ?? '',
                                     externalUrl: '',

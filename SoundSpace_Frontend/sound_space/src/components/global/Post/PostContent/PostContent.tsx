@@ -15,8 +15,11 @@ interface PostContentProps {
     spotifyName?: string;
     spotifyCoverUrl?: string;
     spotifySubtitle?: string;
+    spotifySubtitleUrl?: string | null;
     spotifyMediaType?: string;
     previewUrl?: string;
+    previewStartSecond?: number | null;
+    previewDuration?: number | null;
 }
 
 const SpotifyMediaEmbed = ({ uri }: { uri: string }) => {
@@ -39,6 +42,11 @@ const SpotifyMediaEmbed = ({ uri }: { uri: string }) => {
     return <SpotifyAlbumCard item={item} />;
 };
 
+const uriToExternalUrl = (uri: string): string => {
+    const parts = uri.split(':');
+    return parts.length === 3 ? `https://open.spotify.com/${parts[1]}/${parts[2]}` : '#';
+};
+
 const PostContent = ({
     postId,
     content,
@@ -47,8 +55,11 @@ const PostContent = ({
     spotifyName,
     spotifyCoverUrl,
     spotifySubtitle,
+    spotifySubtitleUrl,
     spotifyMediaType,
     previewUrl,
+    previewStartSecond,
+    previewDuration,
 }: PostContentProps) => {
     const isTrackWithPreview =
         spotifyUri &&
@@ -75,23 +86,24 @@ const PostContent = ({
                             coverUrl={spotifyCoverUrl}
                             title={spotifyName!}
                             artist={spotifySubtitle ?? ''}
-                            externalUrl={null}
+                            externalUrl={spotifyUri ? uriToExternalUrl(spotifyUri) : null}
+                            subtitleUrl={spotifySubtitleUrl}
+                            previewStartSecond={previewStartSecond}
+                            previewDuration={previewDuration}
                         />
                     ) : spotifyName ? (
-                        // Metadata already in the post — no extra API call needed
                         <SpotifyAlbumCard
                             item={{
                                 uri: spotifyUri,
                                 name: spotifyName,
-                                type: (spotifyMediaType as 'track' | 'album' | 'episode') ?? 'track',
+                                type: (spotifyMediaType as 'track' | 'album' | 'show') ?? 'track',
                                 coverUrl: spotifyCoverUrl ?? '',
                                 subtitle: spotifySubtitle ?? '',
-                                externalUrl: '',
-                                subtitleUrl: '',
+                                externalUrl: uriToExternalUrl(spotifyUri),
+                                subtitleUrl: spotifySubtitleUrl ?? '',
                             }}
                         />
                     ) : (
-                        // Legacy posts that only have a URI — fall back to the API lookup
                         <SpotifyMediaEmbed uri={spotifyUri} />
                     )}
                 </div>

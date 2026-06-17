@@ -744,6 +744,9 @@ namespace SoundSpaceBackend.Migrations
                     b.Property<string>("CoverUrl")
                         .HasColumnType("text");
 
+                    b.Property<string>("PreviewUrl")
+                        .HasColumnType("text");
+
                     b.Property<int>("Rank")
                         .HasColumnType("integer");
 
@@ -793,24 +796,6 @@ namespace SoundSpaceBackend.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<string>("CurrentlyPlayingArtist")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CurrentlyPlayingArtistUrl")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CurrentlyPlayingCoverUrl")
-                        .HasColumnType("text");
-
-                    b.Property<int>("CurrentlyPlayingProgressMs")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("CurrentlyPlayingTitle")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CurrentlyPlayingUri")
-                        .HasColumnType("text");
-
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -826,24 +811,6 @@ namespace SoundSpaceBackend.Migrations
                     b.Property<int>("Followers")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsListening")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("LastPlayedArtist")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastPlayedArtistUrl")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastPlayedCoverUrl")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastPlayedTitle")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastPlayedUri")
-                        .HasColumnType("text");
-
                     b.Property<DateTime?>("LastSeen")
                         .HasColumnType("timestamp with time zone");
 
@@ -858,9 +825,6 @@ namespace SoundSpaceBackend.Migrations
 
                     b.Property<double?>("Longitude")
                         .HasColumnType("double precision");
-
-                    b.Property<DateTime?>("MusicStatusUpdatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -926,6 +890,65 @@ namespace SoundSpaceBackend.Migrations
                         .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.UserCurrentlyPlaying", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Artist")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArtistUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CoverUrl")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsListening")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("ProgressMs")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Uri")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("UserCurrentlyPlayings");
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.UserLastPlayed", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Artist")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ArtistUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CoverUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Uri")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("UserLastPlayeds");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1232,6 +1255,28 @@ namespace SoundSpaceBackend.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.UserCurrentlyPlaying", b =>
+                {
+                    b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
+                        .WithOne("CurrentlyPlaying")
+                        .HasForeignKey("SoundSpaceBackend.Models.Entities.UserCurrentlyPlaying", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.UserLastPlayed", b =>
+                {
+                    b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
+                        .WithOne("LastPlayed")
+                        .HasForeignKey("SoundSpaceBackend.Models.Entities.UserLastPlayed", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.Comment", b =>
                 {
                     b.Navigation("Replies");
@@ -1255,6 +1300,10 @@ namespace SoundSpaceBackend.Migrations
 
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.User", b =>
                 {
+                    b.Navigation("CurrentlyPlaying");
+
+                    b.Navigation("LastPlayed");
+
                     b.Navigation("Posts");
 
                     b.Navigation("RefreshTokens");

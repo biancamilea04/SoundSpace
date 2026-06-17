@@ -13,6 +13,9 @@ interface MusicPostCardProps {
     title: string;
     artist: string;
     externalUrl?: string | null;
+    subtitleUrl?: string | null;
+    previewStartSecond?: number | null;
+    previewDuration?: number | null;
 }
 
 const SpotifyLogo = () => (
@@ -21,7 +24,7 @@ const SpotifyLogo = () => (
     </svg>
 );
 
-const MusicPostCard = ({ postId, previewUrl, coverUrl, title, artist, externalUrl }: MusicPostCardProps) => {
+const MusicPostCard = ({ postId, previewUrl, coverUrl, title, artist, externalUrl, subtitleUrl, previewStartSecond, previewDuration }: MusicPostCardProps) => {
     const { playingPostId, audioRef, startPlaying, stopPlaying } = useAudioPlayer();
     const isPlaying = playingPostId === postId;
     const [progress, setProgress] = useState(0);
@@ -40,9 +43,12 @@ const MusicPostCard = ({ postId, previewUrl, coverUrl, title, artist, externalUr
         const audio = audioRef.current;
         if (!audio) return;
 
+        const startOffset = previewStartSecond ?? 0;
+        const totalDuration = previewDuration ?? audio.duration;
+
         const tick = () => {
-            if (audio.duration > 0) {
-                setProgress(audio.currentTime / audio.duration);
+            if (totalDuration > 0) {
+                setProgress(Math.min(1, (audio.currentTime - startOffset) / totalDuration));
             }
             animFrameRef.current = requestAnimationFrame(tick);
         };
@@ -55,13 +61,18 @@ const MusicPostCard = ({ postId, previewUrl, coverUrl, title, artist, externalUr
                 animFrameRef.current = null;
             }
         };
-    }, [isPlaying, audioRef]);
+    }, [isPlaying, audioRef, previewStartSecond, previewDuration]);
 
     const handleToggle = () => {
         if (isPlaying) {
             stopPlaying();
         } else {
-            startPlaying(postId, previewUrl);
+            startPlaying(
+                postId,
+                previewUrl,
+                previewStartSecond ?? undefined,
+                previewDuration ?? undefined,
+            );
         }
     };
 
@@ -83,16 +94,22 @@ const MusicPostCard = ({ postId, previewUrl, coverUrl, title, artist, externalUr
             <div className="music-post-card__meta">
                 <div className="music-post-card__badge-row">
                     <SpotifyLogo />
-                    <span className="music-post-card__type-label">TRACK PREVIEW</span>
+                    <span className="music-post-card__type-label">TRACK</span>
                 </div>
-                <p className="music-post-card__title" title={title}>
+                <h3 className="music-post-card__title" title={title}>
                     {externalUrl ? (
                         <a href={externalUrl} target="_blank" rel="noopener noreferrer">
                             {title}
                         </a>
                     ) : title}
+                </h3>
+                <p className="music-post-card__artist">
+                    {subtitleUrl ? (
+                        <a href={subtitleUrl} target="_blank" rel="noopener noreferrer">
+                            {artist}
+                        </a>
+                    ) : artist}
                 </p>
-                <p className="music-post-card__artist">{artist}</p>
             </div>
 
             <button

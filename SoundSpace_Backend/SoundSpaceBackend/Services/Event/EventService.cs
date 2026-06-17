@@ -196,6 +196,22 @@ public class EventService(
             .ToListAsync();
     }
 
+    public async Task<List<EventDto>> GetUserEventsAsync(Guid profileUserId, Guid currentUserId)
+    {
+        var attendedIds = await GetAttendedEventIdsAsync(currentUserId);
+
+        return await dbContext.Events
+            .Include(e => e.Attendees)
+            .Include(e => e.CreatedByUser)
+            .Where(e =>
+                e.Attendees.Any(a => a.UserId == profileUserId) ||
+                e.CreatedByUserId == profileUserId)
+            .OrderByDescending(e => e.EventDate)
+            .Take(50)
+            .Select(e => ToDto(e, e.CreatedByUser.DisplayName, e.Attendees.Count, attendedIds.Contains(e.Id)))
+            .ToListAsync();
+    }
+
     public async Task<List<EventDto>> GetCreatedEventsAsync(Guid userId)
     {
         return await dbContext.Events

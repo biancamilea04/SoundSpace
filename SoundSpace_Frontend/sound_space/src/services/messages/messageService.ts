@@ -30,6 +30,8 @@ interface BackendMessageDto {
     id: string;
     conversationId: string;
     senderId: string;
+    senderDisplayName?: string;
+    senderProfileImageUrl?: string | null;
     text: string | null;
     createdAt: string;
     isDeleted: boolean;
@@ -95,6 +97,8 @@ export const fetchConversationMessages = async (
     return dtos.map((dto) => ({
         id: dto.id,
         senderId: dto.senderId,
+        senderDisplayName: dto.senderDisplayName,
+        senderProfileImageUrl: dto.senderProfileImageUrl,
         text: dto.isDeleted ? null : dto.text,
         timestamp: new Date(dto.createdAt).toLocaleTimeString([], {
             hour: "2-digit",

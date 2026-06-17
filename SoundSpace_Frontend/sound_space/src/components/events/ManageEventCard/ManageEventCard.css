@@ -1,0 +1,196 @@
+.mec {
+    width: 200px;
+    flex-shrink: 0;
+    background-color: var(--bg-surface);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: background-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.mec:hover {
+    background-color: var(--bg-elevated);
+}
+
+.mec__image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.mec__image {
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.mec:hover .mec__image {
+    transform: scale(1.04);
+}
+
+.mec__body {
+    padding: 12px 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.mec__artist {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary-green);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mec__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mec__date {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.mec__location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mec__location-icon {
+    flex-shrink: 0;
+}
+
+.mec__actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+.mec__action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 7px 6px;
+    border-radius: 6px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.mec__action-btn:hover {
+    transform: scale(1.03);
+}
+
+.mec__action-btn--edit {
+    background-color: var(--bg-highlight);
+    color: var(--text-secondary);
+}
+
+.mec__action-btn--edit:hover {
+    background-color: var(--primary-green);
+    color: #000;
+}
+
+.mec__action-btn--delete {
+    background-color: var(--bg-highlight);
+    color: var(--text-muted);
+}
+
+.mec__action-btn--delete:hover {
+    background-color: rgba(229, 62, 62, 0.18);
+    color: #fc8181;
+}
+
+.mec__confirm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 8px 6px;
+    margin-top: auto;
+}
+
+.mec__confirm-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.mec__confirm-row {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+}
+
+.mec__confirm-cancel {
+    flex: 1;
+    padding: 7px 4px;
+    border-radius: 6px;
+    border: 1px solid var(--border-subtle);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.mec__confirm-cancel:hover {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.mec__confirm-delete {
+    flex: 1;
+    padding: 7px 4px;
+    border-radius: 6px;
+    border: none;
+    background-color: rgba(229, 62, 62, 0.18);
+    color: #fc8181;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.mec__confirm-delete:hover {
+    background-color: rgba(229, 62, 62, 0.32);
+}
+
+.mec__confirm-delete:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

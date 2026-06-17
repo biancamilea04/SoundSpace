@@ -19,7 +19,6 @@ const AttendButton = ({ event, onEventUpdated }: AttendButtonProps) => {
 
         const wasAttending = event.isAttendedByCurrentUser;
 
-        // Optimistic update
         onEventUpdated({
             ...event,
             isAttendedByCurrentUser: !wasAttending,
@@ -37,7 +36,6 @@ const AttendButton = ({ event, onEventUpdated }: AttendButtonProps) => {
                     : event.attendeeCount - 1,
             });
         } catch {
-            // Revert on failure
             onEventUpdated(event);
         } finally {
             setIsPending(false);

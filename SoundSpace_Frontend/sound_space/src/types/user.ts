@@ -18,6 +18,11 @@ export interface UserMusicStatus {
     currentlyPlayingCoverUrl: string | null;
     currentlyPlayingUri: string | null;
     currentlyPlayingProgressMs: number;
+    lastPlayedTitle: string | null;
+    lastPlayedArtist: string | null;
+    lastPlayedArtistUrl: string | null;
+    lastPlayedUri: string | null;
+    lastPlayedCoverUrl: string | null;
 }
 
 export interface UserSearchResultDto {

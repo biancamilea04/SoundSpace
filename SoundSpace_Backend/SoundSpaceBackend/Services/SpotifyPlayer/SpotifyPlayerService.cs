@@ -3,6 +3,7 @@ using System.Text.Json;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using SoundSpaceBackend.Controllers.Artists.Responses;
+using SoundSpaceBackend.Services.PreviewUrl.Abstractions;
 using SoundSpaceBackend.Services.SpotifyPlayer.Abstractions;
 using SoundSpaceBackend.Services.SpotifyPlayer.DTOs;
 using SoundSpaceBackend.Services.SpotifyToken.Abstractions;
@@ -13,6 +14,7 @@ public class SpotifyPlayerService(
     ISpotifyTokenService spotifyTokenService,
     IHttpClientFactory httpClientFactory,
     IMapper mapper,
+    IPreviewUrlService previewUrlService,
     ILogger<SpotifyPlayerService> logger) : ISpotifyPlayerService
 {
     private const string Bearer = "Bearer";
@@ -170,8 +172,22 @@ public class SpotifyPlayerService(
             t.Artists.FirstOrDefault()?.ExternalUrls?.Spotify,
             t.Album?.Images?.FirstOrDefault()?.Url,
             t.ExternalUrls?.Spotify,
-            t.Id
+            t.Id,
+            t.PreviewUrl
         )).ToList();
+
+       var resolveTasks = result
+            .Select((r, i) => new { r, i })
+            .Where(x => x.r.PreviewUrl == null && x.r.SpotifyId != null)
+            .Select(async x =>
+            {
+                var uri = $"spotify:track:{x.r.SpotifyId}";
+                var url = await previewUrlService.ResolveAsync(spotifyId, uri, x.r.ArtistName, x.r.Name);
+                return (index: x.i, url);
+            });
+
+        foreach (var (index, url) in await Task.WhenAll(resolveTasks))
+            result[index] = result[index] with { PreviewUrl = url };
 
         return result;
     }

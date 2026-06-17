@@ -28,8 +28,6 @@
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
 }
 
-/* ── Tabs ─────────────────────────── */
-
 .epab__tabs {
     display: flex;
     align-items: center;
@@ -70,8 +68,6 @@
     background-color: var(--bg-elevated);
     color: var(--text-secondary);
 }
-
-/* ── Actions ─────────────────────── */
 
 .epab__actions {
     display: flex;

@@ -4,18 +4,23 @@ import { useEffect, useRef } from 'react';
 import { HubConnectionBuilder, HubConnection } from '@microsoft/signalr';
 import { getAccessTokenCookie } from '@/services/auth/authService';
 import { useNotificationStore } from '@/stores/notificationStore';
+import { fetchUnreadNotifications } from '@/services/notifications/notificationsService';
+import type { GeneralNotification } from '@/services/notifications/notificationsService';
 import type { Friendship } from '@/types/friendship';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://localhost:7050';
 const HUB_URL = `${BACKEND_URL}/hubs/presence`;
 
 export function useNotificationHub() {
-    const { addRequest, removeRequest } = useNotificationStore();
+    const { addRequest, removeRequest, setGeneralNotifications, addGeneralNotification } =
+        useNotificationStore();
     const connectionRef = useRef<HubConnection | null>(null);
 
     useEffect(() => {
         const token = getAccessTokenCookie();
         if (!token) return;
+
+        fetchUnreadNotifications().then(setGeneralNotifications).catch(() => {});
 
         const connection = new HubConnectionBuilder()
             .withUrl(HUB_URL, { accessTokenFactory: () => getAccessTokenCookie() ?? '' })
@@ -30,6 +35,10 @@ export function useNotificationHub() {
             removeRequest(requestId);
         });
 
+        connection.on('EventAttendeeJoined', (notif: GeneralNotification) => {
+            addGeneralNotification(notif);
+        });
+
         let disposed = false;
         const startPromise = connection.start().catch(() => {});
         connectionRef.current = connection;
@@ -40,5 +49,5 @@ export function useNotificationHub() {
                 if (disposed) connection.stop().catch(() => {});
             });
         };
-    }, [addRequest, removeRequest]);
+    }, [addRequest, removeRequest, setGeneralNotifications, addGeneralNotification]);
 }

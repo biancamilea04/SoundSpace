@@ -1,4 +1,3 @@
-/* Discovery Feed - TikTok-style vertical scroll container */
 .discovery-feed {
     flex: 1;
     display: flex;
@@ -40,7 +39,6 @@
     box-sizing: border-box;
 }
 
-/* Loading State */
 .discovery-feed__loading {
     display: flex;
     flex-direction: column;
@@ -66,7 +64,6 @@
     }
 }
 
-/* Empty State */
 .discovery-feed__empty {
     display: flex;
     flex-direction: column;
@@ -77,11 +74,6 @@
     text-align: center;
     padding: 24px;
     max-width: 400px;
-}
-
-.discovery-feed__empty-icon {
-    font-size: 3rem;
-    margin-bottom: 8px;
 }
 
 .discovery-feed__empty h3 {
@@ -98,9 +90,6 @@
     line-height: 1.4;
 }
 
-/* Responsive Design */
-
-/* Large tablets */
 @media (max-width: 1024px) {
     .discovery-feed__scroll-container {
         padding: 18px 0;
@@ -112,7 +101,6 @@
     }
 }
 
-/* Small tablets */
 @media (max-width: 768px) {
     .discovery-feed__scroll-container {
         padding: 16px 0;
@@ -127,10 +115,6 @@
         padding: 20px;
     }
 
-    .discovery-feed__empty-icon {
-        font-size: 2.5rem;
-    }
-
     .discovery-feed__empty h3 {
         font-size: 1.1rem;
     }
@@ -140,7 +124,6 @@
     }
 }
 
-/* Mobile phones */
 @media (max-width: 480px) {
     .discovery-feed__scroll-container {
         padding: 12px 0;
@@ -162,11 +145,6 @@
         gap: 10px;
     }
 
-    .discovery-feed__empty-icon {
-        font-size: 2rem;
-        margin-bottom: 6px;
-    }
-
     .discovery-feed__empty h3 {
         font-size: 1rem;
     }
@@ -176,7 +154,6 @@
     }
 }
 
-/* Very small phones */
 @media (max-width: 375px) {
     .discovery-feed__scroll-container {
         padding: 10px 0;
@@ -190,13 +167,8 @@
     .discovery-feed__empty {
         padding: 12px;
     }
-
-    .discovery-feed__empty-icon {
-        font-size: 1.8rem;
-    }
 }
 
-/* Landscape orientation on mobile */
 @media (max-width: 768px) and (orientation: landscape) {
     .discovery-feed__scroll-container {
         padding: 8px 0;
@@ -210,10 +182,5 @@
     .discovery-feed__empty {
         padding: 12px;
         gap: 8px;
-    }
-
-    .discovery-feed__empty-icon {
-        font-size: 1.5rem;
-        margin-bottom: 4px;
     }
 }

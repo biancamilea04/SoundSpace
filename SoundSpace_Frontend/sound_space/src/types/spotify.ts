@@ -1,4 +1,4 @@
-export type SpotifyMediaType = 'track' | 'album' | 'episode';
+export type SpotifyMediaType = 'track' | 'album' | 'show';
 
 export interface SpotifyMediaItem {
     uri: string;
@@ -11,4 +11,7 @@ export interface SpotifyMediaItem {
     previewUrl?: string | null;
 }
 
-export type SpotifyMediaPayload = SpotifyMediaItem;
+export interface SpotifyMediaPayload extends SpotifyMediaItem {
+    previewStartSecond?: number;
+    previewDuration?: number;
+}

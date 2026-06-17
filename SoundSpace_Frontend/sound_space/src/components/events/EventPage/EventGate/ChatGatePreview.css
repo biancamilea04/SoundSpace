@@ -62,7 +62,6 @@
 .cgp__bubble--received { background: var(--bg-elevated); }
 .cgp__bubble--sent     { background: rgba(30, 215, 96, 0.15); }
 
-/* Individual bubble sizes */
 .cgp__bubble--1 { width: 55%; height: 36px; }
 .cgp__bubble--2 { width: 42%; height: 36px; }
 .cgp__bubble--3 { width: 68%; height: 52px; }

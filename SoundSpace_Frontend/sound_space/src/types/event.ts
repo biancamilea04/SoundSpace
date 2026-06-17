@@ -2,7 +2,8 @@ export interface EventData {
     id: string;
     title: string;
     imageUrl: string | null;
-    artistName: string;
+    coverImageUrl: string | null;
+    artistName: string | null;
     artistSpotifyId: string | null;
     artistImageUrl: string | null;
     location: string;
@@ -10,9 +11,12 @@ export interface EventData {
     country: string;
     eventDate: string;
     eventTime: string;
+    genre: string | null;
     description: string | null;
     ticketsUrl: string | null;
     artistProfileUrl: string | null;
+    latitude: number | null;
+    longitude: number | null;
     createdByUserId: string;
     createdByDisplayName: string;
     createdAt: string;
@@ -24,7 +28,8 @@ export interface EventData {
 export interface CreateEventPayload {
     title: string;
     imageUrl?: string;
-    artistName: string;
+    coverImageUrl?: string;
+    artistName?: string;
     artistSpotifyId?: string;
     artistImageUrl?: string;
     location: string;
@@ -32,13 +37,42 @@ export interface CreateEventPayload {
     country: string;
     eventDate: string;
     eventTime: string;
+    genre?: string;
     description?: string;
     ticketsUrl?: string;
     artistProfileUrl?: string;
+    latitude?: number;
+    longitude?: number;
+}
+
+export interface UpdateEventPayload {
+    title: string;
+    imageUrl?: string;
+    coverImageUrl?: string;
+    artistName?: string;
+    artistSpotifyId?: string;
+    artistImageUrl?: string;
+    location: string;
+    city: string;
+    country: string;
+    eventDate: string;
+    eventTime: string;
+    genre?: string;
+    description?: string;
+    ticketsUrl?: string;
+    artistProfileUrl?: string;
+    latitude?: number;
+    longitude?: number;
 }
 
 export interface ToggleAttendanceResponse {
     isAttending: boolean;
+}
+
+export interface EventAttendee {
+    userId: string;
+    displayName: string;
+    profileImageUrl: string | null;
 }
 
 export interface EventPhoto {
@@ -46,8 +80,6 @@ export interface EventPhoto {
     eventId: string;
     uploaderId: string;
     uploaderDisplayName: string;
-    /** Server-relative path, e.g. "/uploads/events/abc.jpg".
-     *  Prepend NEXT_PUBLIC_BACKEND_API_URL to build the full <img> src. */
     filePath: string;
     uploadedAt: string;
 }

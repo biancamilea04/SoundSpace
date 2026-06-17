@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Friendship } from '@/types/friendship';
+import type { GeneralNotification } from '@/services/notifications/notificationsService';
 
 export interface NotificationState {
     pendingRequests: Friendship[];
@@ -7,6 +8,11 @@ export interface NotificationState {
     addRequest: (request: Friendship) => void;
     removeRequest: (id: string) => void;
     updateRequest: (updated: Friendship) => void;
+
+    generalNotifications: GeneralNotification[];
+    setGeneralNotifications: (items: GeneralNotification[]) => void;
+    addGeneralNotification: (item: GeneralNotification) => void;
+    removeGeneralNotification: (id: string) => void;
 }
 
 export const useNotificationStore = create<NotificationState>((set) => ({
@@ -28,4 +34,18 @@ export const useNotificationStore = create<NotificationState>((set) => ({
         set((s) => ({
             pendingRequests: s.pendingRequests.map((r) => (r.id === updated.id ? updated : r)),
         })),
+
+    generalNotifications: [],
+
+    setGeneralNotifications: (items) => set({ generalNotifications: items }),
+
+    addGeneralNotification: (item) =>
+        set((s) => ({
+            generalNotifications: s.generalNotifications.some((n) => n.id === item.id)
+                ? s.generalNotifications
+                : [item, ...s.generalNotifications],
+        })),
+
+    removeGeneralNotification: (id) =>
+        set((s) => ({ generalNotifications: s.generalNotifications.filter((n) => n.id !== id) })),
 }));

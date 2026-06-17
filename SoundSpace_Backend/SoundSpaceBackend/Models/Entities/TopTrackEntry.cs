@@ -11,6 +11,7 @@ public class TopTrackEntry
     public string? ArtistUrl { get; set; }
     public string? CoverUrl { get; set; }
     public string? SpotifyUrl { get; set; }
+    public string? PreviewUrl { get; set; }
     public int Rank { get; set; }
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

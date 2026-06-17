@@ -97,7 +97,7 @@ public class UserService(
         return await dbContext.TopTracks
             .Where(t => t.UserId == userId)
             .OrderBy(t => t.Rank)
-            .Select(t => new TopTrackResponse(t.Title, t.ArtistName, t.ArtistUrl, t.CoverUrl, t.SpotifyUrl, t.SpotifyTrackId))
+            .Select(t => new TopTrackResponse(t.Title, t.ArtistName, t.ArtistUrl, t.CoverUrl, t.SpotifyUrl, t.SpotifyTrackId, t.PreviewUrl))
             .ToListAsync();
     }
 
@@ -113,20 +113,27 @@ public class UserService(
 
     public Task<UserMusicStatusResponse?> GetUserMusicStatusByDisplayNameAsync(string displayName)
     {
-        var user = dbContext.Users.FirstOrDefault(
-            u => u.DisplayName.ToLower() == displayName.ToLower());
+        var user = dbContext.Users
+            .Include(u => u.CurrentlyPlaying)
+            .Include(u => u.LastPlayed)
+            .FirstOrDefault(u => u.DisplayName.ToLower() == displayName.ToLower());
 
         if (user == null) return Task.FromResult<UserMusicStatusResponse?>(null);
 
         return Task.FromResult<UserMusicStatusResponse?>(new UserMusicStatusResponse(
             user.Id,
-            user.IsListening,
-            user.CurrentlyPlayingTitle,
-            user.CurrentlyPlayingArtist,
-            user.CurrentlyPlayingArtistUrl,
-            user.CurrentlyPlayingCoverUrl,
-            user.CurrentlyPlayingUri,
-            user.CurrentlyPlayingProgressMs
+            user.CurrentlyPlaying?.IsListening ?? false,
+            user.CurrentlyPlaying?.Title,
+            user.CurrentlyPlaying?.Artist,
+            user.CurrentlyPlaying?.ArtistUrl,
+            user.CurrentlyPlaying?.CoverUrl,
+            user.CurrentlyPlaying?.Uri,
+            user.CurrentlyPlaying?.ProgressMs ?? 0,
+            user.LastPlayed?.Title,
+            user.LastPlayed?.Artist,
+            user.LastPlayed?.ArtistUrl,
+            user.LastPlayed?.Uri,
+            user.LastPlayed?.CoverUrl
         ));
     }
 

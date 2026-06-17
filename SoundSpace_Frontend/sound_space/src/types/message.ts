@@ -13,6 +13,8 @@ export interface MessageUser {
 export interface Message {
     id: string;
     senderId: string;
+    senderDisplayName?: string;
+    senderProfileImageUrl?: string | null;
     text: string | null;
     timestamp: string;
     isRead: boolean;

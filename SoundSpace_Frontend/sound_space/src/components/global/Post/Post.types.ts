@@ -22,8 +22,11 @@ export interface PostProps {
     spotifyName?: string;
     spotifyCoverUrl?: string;
     spotifySubtitle?: string;
+    spotifySubtitleUrl?: string | null;
     spotifyMediaType?: string;
     previewUrl?: string;
+    previewStartSecond?: number | null;
+    previewDuration?: number | null;
     stats: PostStats;
     isOwner?: boolean;
     onEditPost?: () => void;
@@ -41,8 +44,11 @@ export interface SelectedPostPayload {
     spotifyName?: string;
     spotifyCoverUrl?: string;
     spotifySubtitle?: string;
+    spotifySubtitleUrl?: string | null;
     spotifyMediaType?: string;
     previewUrl?: string;
+    previewStartSecond?: number | null;
+    previewDuration?: number | null;
     stats: PostStats;
     likeCount?: number;
     isLikedByCurrentUser?: boolean;

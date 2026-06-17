@@ -18,6 +18,8 @@ interface CurrentlyListeningProps {
     coverUrl: string | null;
     trackUri: string | null;
     artistUrl: string | null;
+    label?: string;
+    isListening?: boolean;
 }
 
 export const CurrentlyListening = ({
@@ -26,6 +28,8 @@ export const CurrentlyListening = ({
     coverUrl,
     trackUri,
     artistUrl,
+    label = 'Currently Listening',
+    isListening = true,
 }: CurrentlyListeningProps) => {
     if (!trackName) return null;
 
@@ -33,7 +37,7 @@ export const CurrentlyListening = ({
 
     return (
         <div className="currently-listening">
-            <h3 className="currently-listening__label">Currently Listening</h3>
+            <h3 className="currently-listening__label">{label}</h3>
             <div className="currently-listening__content">
                 <div className="currently-listening__art-wrapper">
                     <Image
@@ -43,14 +47,16 @@ export const CurrentlyListening = ({
                         height={48}
                         className="currently-listening__art"
                     />
-                    <div className="currently-listening__equalizer-overlay">
-                        <div className="currently-listening__bar" />
-                        <div className="currently-listening__bar" />
-                        <div className="currently-listening__bar" />
-                        <div className="currently-listening__bar" />
-                        <div className="currently-listening__bar" />
-                        <div className="currently-listening__bar" />
-                    </div>
+                    {isListening && (
+                        <div className="currently-listening__equalizer-overlay">
+                            <div className="currently-listening__bar" />
+                            <div className="currently-listening__bar" />
+                            <div className="currently-listening__bar" />
+                            <div className="currently-listening__bar" />
+                            <div className="currently-listening__bar" />
+                            <div className="currently-listening__bar" />
+                        </div>
+                    )}
                 </div>
 
                 <div className="currently-listening__info">

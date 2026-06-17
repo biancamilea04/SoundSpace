@@ -13,7 +13,11 @@
     }
 }
 
-/* ── Cards ────────────────────────── */
+.eps.eps--no-sticky {
+    position: static;
+    top: auto;
+    align-self: auto;
+}
 
 .eps__card {
     background-color: var(--bg-base);
@@ -22,12 +26,6 @@
     padding: 16px;
     display: flex;
     gap: 14px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.eps__card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .eps__card--friends {
@@ -76,7 +74,6 @@
     margin: 0;
 }
 
-/* Map placeholder */
 .eps__map-placeholder {
     margin-top: 10px;
     height: 80px;
@@ -88,13 +85,20 @@
     justify-content: center;
 }
 
+.eps__map-real {
+    margin-top: 10px;
+    height: 160px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+}
+
 .eps__map-text {
     font-size: 11px;
     color: var(--text-tertiary);
     letter-spacing: 0.5px;
 }
 
-/* Tickets link */
 .eps__tickets-link {
     font-size: 13px;
     font-weight: 600;
@@ -108,7 +112,6 @@
     opacity: 0.8;
 }
 
-/* Friends going */
 .eps__friends {
     display: flex;
     align-items: center;
@@ -136,6 +139,15 @@
     flex-shrink: 0;
 }
 
+.eps__avatar--placeholder {
+    background: var(--bg-highlight);
+}
+
+.eps__avatar--photo {
+    object-fit: cover;
+    display: block;
+}
+
 .eps__avatars .eps__avatar:last-child {
     margin-left: 0;
 }
@@ -152,8 +164,6 @@
     color: var(--text-primary);
     margin: 0;
 }
-
-/* ── Attend CTA ───────────────────── */
 
 .eps__attend-cta {
     width: 100%;
@@ -183,7 +193,6 @@
 
 .eps__attend-cta--off:hover:not(:disabled) {
     background-color: var(--primary-green);
-    transform: translateY(-1px);
 }
 
 .eps__attend-cta--on {

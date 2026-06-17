@@ -38,19 +38,8 @@ public class User : IdentityUser<Guid>
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
 
-    public bool IsListening { get; set; } = false;
-    public string? CurrentlyPlayingTitle { get; set; }
-    public string? CurrentlyPlayingArtist { get; set; }
-    public string? CurrentlyPlayingArtistUrl { get; set; }
-    public string? CurrentlyPlayingCoverUrl { get; set; }
-    public string? CurrentlyPlayingUri { get; set; }
-    public int CurrentlyPlayingProgressMs { get; set; } = 0;
-    public string? LastPlayedTitle { get; set; }
-    public string? LastPlayedArtist { get; set; }
-    public string? LastPlayedArtistUrl { get; set; }
-    public string? LastPlayedUri { get; set; }
-    public string? LastPlayedCoverUrl { get; set; }
-    public DateTime? MusicStatusUpdatedAt { get; set; }
+    public UserCurrentlyPlaying? CurrentlyPlaying { get; set; }
+    public UserLastPlayed? LastPlayed { get; set; }
 
     public ICollection<AppRefreshToken> RefreshTokens { get; set; } = new List<AppRefreshToken>();
 

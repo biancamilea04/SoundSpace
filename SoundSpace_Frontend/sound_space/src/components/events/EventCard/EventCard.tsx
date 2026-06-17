@@ -24,7 +24,7 @@ function formatEventTime(timeStr: string): string {
 }
 
 const EventCard = ({ event, onEventUpdated }: EventCardProps) => {
-    const fallbackImage = `https://eu.ui-avatars.com/api/?name=${encodeURIComponent(event.artistName)}&background=1ed760&color=000&size=300&bold=true`;
+    const fallbackImage = `https://eu.ui-avatars.com/api/?name=${encodeURIComponent(event.artistName ?? event.title)}&background=1ed760&color=000&size=300&bold=true`;
     const imageSrc = event.imageUrl ?? event.artistImageUrl ?? fallbackImage;
 
     return (

@@ -19,16 +19,10 @@ function formatShortDate(dateStr: string): string {
     return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }).toUpperCase();
 }
 
-const PLACEHOLDER_AVATARS = [
-    { initials: "AK", bg: "#e91e63" },
-    { initials: "JM", bg: "#9c27b0" },
-    { initials: "RS", bg: "#2196f3" },
-];
-
 const GridEventCard = ({ event, onEventUpdated, onClick, compact }: GridEventCardProps) => {
     const [isPending, setIsPending] = useState(false);
 
-    const fallbackImage = `https://eu.ui-avatars.com/api/?name=${encodeURIComponent(event.artistName)}&background=1ed760&color=000&size=400&bold=true`;
+    const fallbackImage = `https://eu.ui-avatars.com/api/?name=${encodeURIComponent(event.artistName ?? event.title)}&background=1ed760&color=000&size=400&bold=true`;
     const imageSrc = event.imageUrl ?? event.artistImageUrl ?? fallbackImage;
 
     const handleAttend = async (e: React.MouseEvent) => {
@@ -86,17 +80,6 @@ const GridEventCard = ({ event, onEventUpdated, onClick, compact }: GridEventCar
 
                 <div className="gec__footer">
                     <div className="gec__attendees">
-                        <div className="gec__avatars">
-                            {PLACEHOLDER_AVATARS.map((a) => (
-                                <span
-                                    key={a.initials}
-                                    className="gec__avatar"
-                                    style={{ background: a.bg }}
-                                >
-                                    {a.initials}
-                                </span>
-                            ))}
-                        </div>
                         <Users size={12} className="gec__users-icon" />
                         <span className="gec__count">{displayCount}</span>
                     </div>

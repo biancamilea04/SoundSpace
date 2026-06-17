@@ -5,4 +5,5 @@ export interface TopTrack {
     artistUrl: string | null;
     imageUrl: string | null;
     spotifyUrl: string | null;
+    previewUrl: string | null;
 }

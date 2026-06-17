@@ -11,7 +11,6 @@
     transition: background-color 0.2s ease;
 }
 
-/* Cover art */
 .spotify-album-card__cover-wrap {
     flex-shrink: 0;
     width: 80px;
@@ -29,7 +28,6 @@
     display: block;
 }
 
-/* Right metadata stack */
 .spotify-album-card__meta {
     flex: 1;
     min-width: 0;
@@ -38,7 +36,6 @@
     gap: 3px;
 }
 
-/* Spotify icon + type badge row */
 .spotify-album-card__badge-row {
     display: flex;
     align-items: center;
@@ -54,7 +51,6 @@
     text-transform: uppercase;
 }
 
-/* Title */
 .spotify-album-card__title {
     font-size: 15px;
     font-weight: 700;
@@ -75,7 +71,6 @@
     text-decoration: underline;
 }
 
-/* Artist / subtitle */
 .spotify-album-card__subtitle {
     font-size: 12px;
     color: var(--text-muted);
@@ -94,7 +89,6 @@
     text-decoration: underline;
 }
 
-/* Skeleton loader */
 .spotify-album-card--skeleton {
     pointer-events: none;
 }

@@ -1,4 +1,3 @@
-/* Common Songs Component */
 .common-songs {
     display: flex;
     flex-direction: column;
@@ -65,9 +64,6 @@
     flex-shrink: 0;
 }
 
-/* Responsive Design */
-
-/* Large tablets */
 @media (max-width: 1024px) {
     .common-songs {
         gap: 9px;
@@ -102,7 +98,6 @@
     }
 }
 
-/* Small tablets */
 @media (max-width: 768px) {
     .common-songs {
         gap: 8px;
@@ -138,7 +133,6 @@
     }
 }
 
-/* Mobile phones */
 @media (max-width: 480px) {
     .common-songs {
         gap: 6px;
@@ -174,7 +168,6 @@
     }
 }
 
-/* Very small phones */
 @media (max-width: 375px) {
     .common-songs {
         gap: 5px;
@@ -209,7 +202,6 @@
     }
 }
 
-/* Landscape orientation on mobile */
 @media (max-width: 768px) and (orientation: landscape) {
     .common-songs {
         gap: 4px;
@@ -245,7 +237,6 @@
     }
 }
 
-/* Very short screens */
 @media (max-height: 600px) {
     .common-songs {
         gap: 4px;

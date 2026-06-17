@@ -8,5 +8,10 @@ public record UserMusicStatusResponse(
     string? CurrentlyPlayingArtistUrl,
     string? CurrentlyPlayingCoverUrl,
     string? CurrentlyPlayingUri,
-    int CurrentlyPlayingProgressMs
+    int CurrentlyPlayingProgressMs,
+    string? LastPlayedTitle,
+    string? LastPlayedArtist,
+    string? LastPlayedArtistUrl,
+    string? LastPlayedUri,
+    string? LastPlayedCoverUrl
 );

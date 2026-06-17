@@ -23,6 +23,10 @@ export const PostComposer = ({ avatarUrl, username, eventId, onPostCreated }: Po
     const [selectedMedia, setSelectedMedia] = useState<SpotifyMediaPayload | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const handleRemoveMedia = () => {
+        setSelectedMedia(null);
+    };
+
     const handlePost = async () => {
         if (!text.trim() || isSubmitting) return;
         setIsSubmitting(true);
@@ -33,8 +37,11 @@ export const PostComposer = ({ avatarUrl, username, eventId, onPostCreated }: Po
                 spotifyName: selectedMedia?.name,
                 spotifyCoverUrl: selectedMedia?.coverUrl,
                 spotifySubtitle: selectedMedia?.subtitle,
+                spotifySubtitleUrl: selectedMedia?.subtitleUrl,
                 spotifyMediaType: selectedMedia?.type,
                 previewUrl: selectedMedia?.previewUrl ?? undefined,
+                previewStartSecond: selectedMedia?.previewStartSecond,
+                previewDuration: selectedMedia?.previewDuration,
             };
             const post = eventId
                 ? await createEventPost(eventId, payload)
@@ -85,7 +92,7 @@ export const PostComposer = ({ avatarUrl, username, eventId, onPostCreated }: Po
                 {selectedMedia && (
                     <SpotifyAttachmentPreview
                         item={selectedMedia}
-                        onRemove={() => setSelectedMedia(null)}
+                        onRemove={handleRemoveMedia}
                     />
                 )}
             </div>

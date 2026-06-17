@@ -26,7 +26,6 @@ export const SharePost = ({ onPostCreated }: SharePostProps) => {
             setSpotifyUri("");
             onPostCreated?.();
         } catch {
-            /* silent */
         } finally {
             setIsSubmitting(false);
         }

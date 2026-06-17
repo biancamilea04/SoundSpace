@@ -9,6 +9,8 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
     : IdentityDbContext<User, IdentityRole<Guid>, Guid>(options)
 {
     public new DbSet<User> Users { get; set; }
+    public DbSet<UserCurrentlyPlaying> UserCurrentlyPlayings { get; set; }
+    public DbSet<UserLastPlayed> UserLastPlayeds { get; set; }
     public DbSet<AppRefreshToken> AppRefreshTokens { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Like> Likes { get; set; }
@@ -41,6 +43,24 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
 
             entity.Property(u => u.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+        });
+
+        modelBuilder.Entity<UserCurrentlyPlaying>(entity =>
+        {
+            entity.HasKey(x => x.UserId);
+            entity.HasOne(x => x.User)
+                .WithOne(u => u.CurrentlyPlaying)
+                .HasForeignKey<UserCurrentlyPlaying>(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<UserLastPlayed>(entity =>
+        {
+            entity.HasKey(x => x.UserId);
+            entity.HasOne(x => x.User)
+                .WithOne(u => u.LastPlayed)
+                .HasForeignKey<UserLastPlayed>(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<AppRefreshToken>(entity =>

@@ -3,8 +3,8 @@
 import "./PostsGatePreview.css";
 
 const SKELETON_POSTS = [
-    { bodyLines: 2, likeWidth: 48 },
-    { bodyLines: 1, likeWidth: 36 },
+    { bodyLines: 2, likeClass: "pgp__like--wide" },
+    { bodyLines: 1, likeClass: "pgp__like--narrow" },
 ] as const;
 
 const PostsGatePreview = () => (
@@ -23,7 +23,7 @@ const PostsGatePreview = () => (
                     {post.bodyLines === 2 && <div className="pgp__line pgp__line--partial" />}
                 </div>
                 <div className="pgp__footer">
-                    <div className="pgp__like" style={{ width: post.likeWidth }} />
+                    <div className={`pgp__like ${post.likeClass}`} />
                 </div>
             </div>
         ))}

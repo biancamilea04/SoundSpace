@@ -1,0 +1,82 @@
+.event-list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background-color 0.15s;
+}
+
+.event-list-item:hover {
+    background-color: var(--bg-elevated);
+}
+
+.event-list-item__thumb {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: var(--bg-elevated);
+}
+
+.event-list-item__thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.event-list-item__thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-highlight);
+}
+
+.event-list-item__info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.event-list-item__title-link {
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.event-list-item__title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.15s;
+}
+
+.event-list-item__title-link:hover .event-list-item__title {
+    color: var(--text-primary);
+}
+
+.event-list-item__artist-link {
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.event-list-item__artist-link:hover .event-list-item__artist {
+    color: var(--text-primary);
+    text-decoration: underline;
+}
+
+.event-list-item__artist {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.15s;
+}

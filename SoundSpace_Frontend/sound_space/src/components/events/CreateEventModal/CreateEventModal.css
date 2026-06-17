@@ -175,3 +175,108 @@
     background-color: var(--primary-green-hover);
     transform: scale(1.03);
 }
+
+.cem-img-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.cem-img-header .cem-label {
+    margin: 0;
+}
+
+.cem-img-tabs {
+    display: flex;
+    gap: 2px;
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 2px;
+}
+
+.cem-img-tab {
+    background: none;
+    border: none;
+    border-radius: 4px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.cem-img-tab--active {
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
+}
+
+.cem-img-dropzone {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--border-strong);
+    border-radius: 8px;
+    min-height: 120px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.cem-img-dropzone:hover {
+    border-color: var(--primary-green);
+    background-color: rgba(29, 185, 84, 0.04);
+}
+
+.cem-file-input {
+    display: none;
+}
+
+.cem-img-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-tertiary);
+    font-size: 13px;
+    padding: 16px;
+    text-align: center;
+}
+
+.cem-img-icon {
+    opacity: 0.5;
+}
+
+.cem-img-sub {
+    font-size: 11px;
+    opacity: 0.6;
+}
+
+.cem-img-preview {
+    width: 100%;
+    max-height: 160px;
+    object-fit: cover;
+    display: block;
+    border-radius: 6px;
+}
+
+.cem-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes cem-spin {
+    to { transform: rotate(360deg); }
+}
+
+.cem-img-spinner {
+    color: var(--primary-green);
+    animation: cem-spin 0.8s linear infinite;
+}

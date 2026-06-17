@@ -10,8 +10,6 @@
     object-position: center 30%;
 }
 
-/* Gradient: dark on the left (text area) fading into the photo on the right,
-   plus a gentle bottom-to-dark to blend into the page background */
 .eph__overlay {
     position: absolute;
     inset: 0;
@@ -30,7 +28,30 @@
     z-index: 1;
 }
 
-/* ── Back button ──────────────────── */
+.eph__close-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.eph__close-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+}
 
 .eph__back-btn {
     position: absolute;
@@ -58,8 +79,6 @@
     color: var(--text-primary);
 }
 
-/* ── Content row ──────────────────── */
-
 .eph__content {
     position: absolute;
     inset: 0;
@@ -70,8 +89,6 @@
     z-index: 2;
 }
 
-/* ── Thumbnail ────────────────────── */
-
 .eph__thumb {
     width: 220px;
     height: 220px;
@@ -80,8 +97,6 @@
     flex-shrink: 0;
     box-shadow: 0 16px 56px rgba(0, 0, 0, 0.9);
 }
-
-/* ── Meta text ────────────────────── */
 
 .eph__meta {
     display: flex;
@@ -111,6 +126,32 @@
     text-overflow: ellipsis;
 }
 
+.eph__artist {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.eph__artist--link {
+    transition: color 0.15s;
+}
+
+.eph__artist--link:hover {
+    color: var(--text-primary);
+}
+
+.eph__artist-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
 .eph__sub {
     font-size: 13px;
     color: var(--text-muted);
@@ -118,12 +159,16 @@
     font-weight: 400;
 }
 
-.eph__sub strong {
+.eph__host-link {
     color: var(--text-secondary);
     font-weight: 600;
+    text-decoration: none;
+    transition: color 0.15s;
 }
 
-/* ── Responsive ───────────────────── */
+.eph__host-link:hover {
+    color: var(--text-primary);
+}
 
 @media (max-width: 640px) {
     .eph {
