@@ -67,6 +67,14 @@ export const EditPostModal = ({
             await updatePost(postId, {
                 content: text,
                 spotifyUri: selectedMedia?.uri ?? null,
+                spotifyName: selectedMedia?.name ?? null,
+                spotifyCoverUrl: selectedMedia?.coverUrl ?? null,
+                spotifySubtitle: selectedMedia?.subtitle ?? null,
+                spotifySubtitleUrl: selectedMedia?.subtitleUrl ?? null,
+                spotifyMediaType: selectedMedia?.type ?? null,
+                previewUrl: selectedMedia?.previewUrl ?? null,
+                previewStartSecond: selectedMedia?.previewStartSecond ?? null,
+                previewDuration: selectedMedia?.previewDuration ?? null,
             });
             onSaved();
             onClose();

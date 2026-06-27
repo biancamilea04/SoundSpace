@@ -52,6 +52,16 @@ public static class SpotifyDataSeeder
         ["mock_spotify_008"] = [SleepToken, ArcticMonkeys, TheWeeknd, TameImpala, Coldplay],
         ["mock_spotify_009"] = [IrinaRimes, Adele, LanaDelRey, BrunoMars, Beyonce],
         ["mock_spotify_010"] = [MotionlessInWhite, Coldplay, ImagineDragons, ACDC, Queen],
+        ["mock_spotify_011"] = [DuaLipa, EdSheeran, ArianaGrande, PostMalone, HarryStyles],
+        ["mock_spotify_012"] = [LadyGaga, Beyonce, Rihanna, SZA, Adele],
+        ["mock_spotify_013"] = [LanaDelRey, JuiceWRLD, BrunoMars, OliviaRodrigo, BillieEilish],
+        ["mock_spotify_014"] = [TheMotans, CarlasDreams, Alternosfera, IrinaRimes, LinkinPark],
+        ["mock_spotify_015"] = [ImagineDragons, ACDC, Queen, Drake, KendrickLamar],
+        ["mock_spotify_016"] = [ArcticMonkeys, Radiohead, Coldplay, ImagineDragons, EdSheeran],
+        ["mock_spotify_017"] = [SleepToken, LinkinPark, Queen, ACDC, HarryStyles],
+        ["mock_spotify_018"] = [TheWeeknd, Drake, TravisScott, PostMalone, JuiceWRLD],
+        ["mock_spotify_019"] = [TameImpala, Radiohead, Coldplay, LanaDelRey, BillieEilish],
+        ["mock_spotify_020"] = [MotionlessInWhite, LinkinPark, ImagineDragons, ACDC, Queen],
     };
 
     private static readonly Dictionary<string, string> ArtistNames = new()
@@ -105,15 +115,15 @@ public static class SpotifyDataSeeder
             await db.SaveChangesAsync();
         }
 
-        if (db.TopArtists.Any(a => a.SpotifyArtistId == ArcticMonkeys))
-            return;
-
         var now = DateTime.UtcNow;
+        bool changed = false;
 
         foreach (var (spotifyId, artistIds) in ArtistsByUser)
         {
             var user = db.Users.FirstOrDefault(u => u.SpotifyId == spotifyId);
             if (user == null) continue;
+
+            if (db.TopArtists.Any(a => a.UserId == user.Id)) continue;
 
             for (int i = 0; i < artistIds.Length; i++)
             {
@@ -126,8 +136,10 @@ public static class SpotifyDataSeeder
                     UpdatedAt       = now,
                 });
             }
+            changed = true;
         }
 
-        await db.SaveChangesAsync();
+        if (changed)
+            await db.SaveChangesAsync();
     }
 }

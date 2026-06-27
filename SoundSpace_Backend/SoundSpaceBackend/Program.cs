@@ -34,6 +34,8 @@ using SoundSpaceBackend.Services.Event;
 using SoundSpaceBackend.Services.Event.Abstractions;
 using SoundSpaceBackend.Services.EventChat;
 using SoundSpaceBackend.Services.EventChat.Abstractions;
+using SoundSpaceBackend.Services.AudioVibe;
+using SoundSpaceBackend.Services.AudioVibe.Abstractions;
 using SoundSpaceBackend.Services.Discovery;
 using SoundSpaceBackend.Services.Discovery.Abstractions;
 using SoundSpaceBackend.Services.Photo;
@@ -55,7 +57,7 @@ var allowedOrigins = builder.Configuration["FRONTEND_URL"]?.Split(",") ?? [];
 
 var connectionString = Environment.GetEnvironmentVariable("SOUNDSPACE_DB");
 builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString, o => o.UseVector()));
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
@@ -80,6 +82,7 @@ builder.Services.AddScoped<IPreviewUrlService, PreviewUrlService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IEventChatService, EventChatService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
+builder.Services.AddScoped<IAudioVibeService, AudioVibeService>();
 builder.Services.AddScoped<IDiscoveryService, DiscoveryService>();
 builder.Services.AddSingleton<PresenceTracker>();
 builder.Services.AddSingleton<ChatPresenceTracker>();

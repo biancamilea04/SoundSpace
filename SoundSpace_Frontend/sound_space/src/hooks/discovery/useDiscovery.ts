@@ -1,19 +1,20 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import type { DiscoveryUserProfile, FilterType } from '@/types/discovery';
-import { updateUserLocation, fetchDiscoveryFeed } from '@/services/discovery/discoveryService';
+import { updateUserLocation, fetchDiscoveryBatch } from '@/services/discovery/discoveryService';
 import { sendFriendRequest } from '@/services/friendship/friendshipService';
 
 interface UseDiscoveryReturn {
     activeFilter:          FilterType;
     profiles:              DiscoveryUserProfile[];
     isLoading:             boolean;
+    isExhausted:           boolean;
     locationDenied:        boolean;
     locationRequired:      boolean;
     isFeedCountryFallback: boolean;
     expandedProfile:       DiscoveryUserProfile | null;
+    loadMore:              () => void;
     handleFilterChange:    (filter: FilterType) => void;
     handleConnect:         (profileId: string) => void;
     handleSkip:            (profileId: string) => void;
@@ -27,7 +28,16 @@ export const useDiscovery = (): UseDiscoveryReturn => {
     const [locationDenied,  setLocationDenied]  = useState(false);
     const [expandedProfile, setExpandedProfile] = useState<DiscoveryUserProfile | null>(null);
 
-    const [dismissed, setDismissed] = useState<Set<string>>(new Set());
+    const [discoveryCards, setDiscoveryCards] = useState<DiscoveryUserProfile[]>([]);
+    const [isLoading,      setIsLoading]      = useState(false);
+    const [isExhausted,    setIsExhausted]    = useState(false);
+
+    const isFetchingRef    = useRef(false);
+    const discoveryCardsRef = useRef<DiscoveryUserProfile[]>([]);
+
+    useEffect(() => {
+        discoveryCardsRef.current = discoveryCards;
+    }, [discoveryCards]);
 
     useEffect(() => {
         if (!navigator.geolocation) {
@@ -52,23 +62,46 @@ export const useDiscovery = (): UseDiscoveryReturn => {
         );
     }, []);
 
-    const { data: rawProfiles = [], isLoading, error } = useQuery<DiscoveryUserProfile[], Error>({
-        queryKey: ['discovery'],
-        queryFn:  () => fetchDiscoveryFeed(1, 50),
-        enabled:  locationReady,
-        retry: false,
-    });
+    const loadNextBatch = useCallback(async (seenIds: string[]) => {
+        if (isFetchingRef.current) return;
+        isFetchingRef.current = true;
+        setIsLoading(true);
+        console.log('[Discovery] fetchDiscoveryBatch → seenIds:', seenIds.length, 'ids');
+        try {
+            const newCards = await fetchDiscoveryBatch(seenIds, 10);
+            console.log('[Discovery] batch received:', newCards.length, 'cards');
+            newCards.forEach(c => console.log(`  • ${c.name} | matchType=${c.matchType} | score=${c.matchPercentage}`));
+            if (newCards.length === 0) {
+                setIsExhausted(true);
+            } else {
+                setDiscoveryCards(prev => [...prev, ...newCards]);
+            }
+        } catch (e) {
+            console.error('[Discovery] fetchDiscoveryBatch failed:', e);
+        } finally {
+            isFetchingRef.current = false;
+            setIsLoading(false);
+        }
+    }, []);
 
-    const locationRequired =
-        locationDenied ||
-        (error?.message?.toLowerCase().includes('location') ?? false);
+    useEffect(() => {
+        if (!locationReady) return;
+        loadNextBatch([]);
+    }, [locationReady, loadNextBatch]);
 
-    const isFeedCountryFallback = rawProfiles.some(p => p.isCountryFallback === true);
+    const loadMore = useCallback(() => {
+        if (isFetchingRef.current || isExhausted) return;
+        const seenIds = discoveryCardsRef.current.map(c => c.id);
+        loadNextBatch(seenIds);
+    }, [isExhausted, loadNextBatch]);
 
-    const profiles = rawProfiles.filter((p) => {
-        if (dismissed.has(p.id)) return false;
-        if (activeFilter === 'genres')  return p.genres.length > 0;
-        if (activeFilter === 'songs')   return p.commonSongsCount > 0;
+    const locationRequired = locationDenied;
+
+    const isFeedCountryFallback = discoveryCards.some(p => p.isCountryFallback === true);
+
+    const profiles = discoveryCards.filter((p) => {
+        if (activeFilter === 'genres') return p.genres.length > 0;
+        if (activeFilter === 'songs')  return p.commonSongsCount > 0;
         return true;
     });
 
@@ -80,13 +113,10 @@ export const useDiscovery = (): UseDiscoveryReturn => {
         try {
             await sendFriendRequest(profileId);
         } catch {
-            // already friends or pending — still dismiss the card
         }
-        setDismissed((prev) => new Set(prev).add(profileId));
     }, []);
 
-    const handleSkip = useCallback((profileId: string) => {
-        setDismissed((prev) => new Set(prev).add(profileId));
+    const handleSkip = useCallback((_profileId: string) => {
     }, []);
 
     const handleExpand = useCallback((profile: DiscoveryUserProfile) => {
@@ -101,10 +131,12 @@ export const useDiscovery = (): UseDiscoveryReturn => {
         activeFilter,
         profiles,
         isLoading: isLoading || !locationReady,
+        isExhausted,
         locationDenied,
         locationRequired,
         isFeedCountryFallback,
         expandedProfile,
+        loadMore,
         handleFilterChange,
         handleConnect,
         handleSkip,

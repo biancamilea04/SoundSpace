@@ -166,8 +166,10 @@ const FriendSidebar = () => {
     const [toast, setToast] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!listenAlongError) return;
+        if (!listenAlongError) 
+            return;
         setToast(listenAlongError);
+        
         const t = setTimeout(() => setToast(null), 4000);
         return () => clearTimeout(t);
     }, [listenAlongError]);

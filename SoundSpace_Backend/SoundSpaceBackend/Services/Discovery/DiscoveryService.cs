@@ -2,17 +2,74 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using SoundSpaceBackend.Controllers.Users.Responses;
 using SoundSpaceBackend.Persistence;
+using SoundSpaceBackend.Services.AudioVibe.Abstractions;
 using SoundSpaceBackend.Services.Discovery.Abstractions;
 
 namespace SoundSpaceBackend.Services.Discovery;
 
 public sealed class DiscoveryService(
     ApplicationContext context,
+    IAudioVibeService audioVibeService,
     ILogger<DiscoveryService> logger) : IDiscoveryService
 {
     private const int CandidatePoolSize = 500;
 
     public async Task<List<DiscoveryUserResponse>> GetFeedAsync(Guid userId, int page, int pageSize)
+    {
+        var all = await RunJaccardAsync(userId, [userId]);
+        return all
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+    }
+
+    private const int MinVibeSlots = 3;
+
+    public async Task<List<DiscoveryUserResponse>> GetDiscoveryBatchAsync(
+        Guid userId, IReadOnlyCollection<Guid> seenUserIds, int limit)
+    {
+        logger.LogInformation(
+            "[Waterfall] START userId={UserId} limit={Limit} seenCount={SeenCount}",
+            userId, limit, seenUserIds.Count);
+
+        var excludeIds = seenUserIds.ToHashSet();
+        excludeIds.Add(userId);
+
+        var tier1Limit = Math.Max(limit - MinVibeSlots, 1);
+        var tier1 = (await RunJaccardAsync(userId, excludeIds)).Take(tier1Limit).ToList();
+
+        logger.LogInformation(
+            "[Waterfall] Tier1 (Jaccard) returned {Count} (cap={Cap})",
+            tier1.Count, tier1Limit);
+
+        var tier2Slots = limit - tier1.Count;
+
+        var tier2ExcludeIds = excludeIds
+            .Concat(tier1.Select(r => r.Id))
+            .ToHashSet();
+
+        var userHasVector = await audioVibeService.UserHasVectorAsync(userId);
+        logger.LogInformation("[Waterfall] Current user has audio vector: {HasVector}", userHasVector);
+
+        var tier2 = await audioVibeService.GetVibeMatchesAsync(userId, tier2ExcludeIds, tier2Slots);
+
+        logger.LogInformation("[Waterfall] Tier2 (Vibe) returned {Count} results (slots={Slots})", tier2.Count, tier2Slots);
+
+        if (tier2.Count == 0 && !userHasVector)
+        {
+            logger.LogWarning("[Waterfall] No vector for current user — seeding cold-start vector (fire-and-forget)");
+            _ = Task.Run(() => audioVibeService.SeedUserVibeAsync(userId));
+        }
+
+        var combined = tier1.Concat(tier2).ToList();
+        logger.LogInformation(
+            "[Waterfall] DONE — {T1} artist-match + {T2} vibe-match = {Total} total",
+            tier1.Count, tier2.Count, combined.Count);
+
+        return combined;
+    }
+
+    private async Task<List<DiscoveryUserResponse>> RunJaccardAsync(Guid userId, HashSet<Guid> excludeIds)
     {
         var timer = Stopwatch.StartNew();
 
@@ -23,21 +80,18 @@ public sealed class DiscoveryService(
             .FirstOrDefaultAsync()
             ?? throw new InvalidOperationException($"User {userId} not found.");
 
-        logger.LogInformation(
-            "[Discovery] Request for userId={UserId} ({Name})",
-            userId, targetUser.DisplayName);
+        logger.LogInformation("[Discovery] Jaccard request for userId={UserId} ({Name})", userId, targetUser.DisplayName);
 
         var candidateIds = await context.Users
             .AsNoTracking()
-            .Where(u => u.Id != userId)
+            .Where(u => !excludeIds.Contains(u.Id))
             .Select(u => u.Id)
             .Take(CandidatePoolSize)
             .ToListAsync();
 
         logger.LogInformation("[Discovery] Candidate pool → {Count} users", candidateIds.Count);
 
-        if (candidateIds.Count == 0)
-            return [];
+        if (candidateIds.Count == 0) return [];
 
         var profiles = await context.Users
             .AsNoTracking()
@@ -48,9 +102,9 @@ public sealed class DiscoveryService(
                 u.DisplayName,
                 u.ProfileImageUrl,
                 u.Country,
-                IsListening = u.CurrentlyPlaying != null && u.CurrentlyPlaying.IsListening,
-                CurrentlyPlayingTitle = u.CurrentlyPlaying != null ? u.CurrentlyPlaying.Title : null,
-                CurrentlyPlayingArtist = u.CurrentlyPlaying != null ? u.CurrentlyPlaying.Artist : null,
+                IsListening              = u.CurrentlyPlaying != null && u.CurrentlyPlaying.IsListening,
+                CurrentlyPlayingTitle    = u.CurrentlyPlaying != null ? u.CurrentlyPlaying.Title    : null,
+                CurrentlyPlayingArtist   = u.CurrentlyPlaying != null ? u.CurrentlyPlaying.Artist   : null,
                 CurrentlyPlayingCoverUrl = u.CurrentlyPlaying != null ? u.CurrentlyPlaying.CoverUrl : null,
             })
             .ToDictionaryAsync(u => u.Id);
@@ -81,12 +135,8 @@ public sealed class DiscoveryService(
         foreach (var n in targetTrackArtistNames)  targetArtistSet.Add(n);
         foreach (var n in targetStreamArtistNames) targetArtistSet.Add(n);
 
-        logger.LogInformation(
-            "[Discovery] Current user artist set: {TopArtists} top-artists, {TrackArtists} track-artists, {StreamArtists} stream-artists → {Total} unique",
-            targetTopArtists.Count, targetTrackArtistNames.Count, targetStreamArtistNames.Count, targetArtistSet.Count);
-
         if (targetArtistSet.Count == 0)
-            logger.LogWarning("[Discovery] Current user has NO artist data from any source — all Jaccard scores will be 0, feed will be empty.");
+            logger.LogWarning("[Discovery] User {UserId} has no artist data — all Jaccard scores will be 0", userId);
 
         var allCandidateTopArtists = await context.TopArtists
             .AsNoTracking()
@@ -127,9 +177,6 @@ public sealed class DiscoveryService(
             set.Add(s.ArtistName);
         }
 
-        logger.LogInformation("[Discovery] Loaded artist data for {Users} candidate users (top+tracks+streams)",
-            artistSetByUser.Count);
-
         var results = new List<DiscoveryUserResponse>(candidateIds.Count);
 
         foreach (var candidateId in candidateIds)
@@ -142,12 +189,6 @@ public sealed class DiscoveryService(
             int union        = targetArtistSet.Count + candidateArtistSet.Count - intersection;
             double jaccardScore = union > 0 ? (double)intersection / union * 100.0 : 0.0;
 
-            logger.LogInformation(
-                "[Discovery] {Name} ({Id}) | artistCount={ArtistCount} intersection={Intersection} union={Union} jaccard={Score:F2} → {Result}",
-                profile.DisplayName, candidateId,
-                candidateArtistSet.Count, intersection, union, jaccardScore,
-                jaccardScore > 0 ? "INCLUDED" : "EXCLUDED (no shared artists)");
-
             if (jaccardScore == 0) continue;
 
             var sharedArtists = targetTopArtists
@@ -155,9 +196,6 @@ public sealed class DiscoveryService(
                 .Take(5)
                 .Select(a => new SharedArtistInfo(a.SpotifyArtistId, a.Name, a.ImageUrl))
                 .ToList();
-
-            logger.LogInformation("[Discovery]   shared artists: {Artists}",
-                string.Join(", ", sharedArtists.Select(a => a.Name)));
 
             results.Add(new DiscoveryUserResponse(
                 Id:                       profile.Id,
@@ -171,18 +209,15 @@ public sealed class DiscoveryService(
                 CurrentlyPlayingArtist:   profile.CurrentlyPlayingArtist,
                 CurrentlyPlayingCoverUrl: profile.CurrentlyPlayingCoverUrl,
                 SharedArtists:            sharedArtists,
-                IsCountryFallback:        false
+                IsCountryFallback:        false,
+                MatchType:                "artists"
             ));
         }
 
         logger.LogInformation(
-            "[Discovery] Final: {Count}/{Total} candidates passed for userId={UserId} in {Ms:F1} ms",
+            "[Discovery] Jaccard: {Count}/{Total} candidates matched for userId={UserId} in {Ms:F1} ms",
             results.Count, candidateIds.Count, userId, timer.Elapsed.TotalMilliseconds);
 
-        return results
-            .OrderByDescending(r => r.FinalScore)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
+        return results.OrderByDescending(r => r.FinalScore).ToList();
     }
 }

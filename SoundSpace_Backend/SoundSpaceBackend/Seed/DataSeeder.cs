@@ -8,6 +8,12 @@ public static class DataSeeder
 {
     private static readonly IPasswordHasher<User> Hasher = new PasswordHasher<User>();
 
+    private static readonly Dictionary<string, string> MockProfileImages =
+        Enumerable.Range(1, 20)
+            .ToDictionary(
+                i => $"mock_spotify_{i:D3}",
+                i => $"https://i.pravatar.cc/700?u=mock_spotify_{i:D3}");
+
     private static readonly Dictionary<string, (double Lat, double Lon)> MockLocations = new()
     {
         ["mock_spotify_001"] = (47.17474360453262, 27.549144968755872),
@@ -20,6 +26,16 @@ public static class DataSeeder
         ["mock_spotify_008"] = (47.17474360453262, 27.549144968755872),
         ["mock_spotify_009"] = (47.17474360453262, 27.549144968755872),
         ["mock_spotify_010"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_011"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_012"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_013"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_014"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_015"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_016"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_017"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_018"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_019"] = (47.17474360453262, 27.549144968755872),
+        ["mock_spotify_020"] = (47.17474360453262, 27.549144968755872),
     };
 
     private static readonly Dictionary<string, (string Id, string Name)[]> MockArtists = new()
@@ -94,112 +110,221 @@ public static class DataSeeder
             ("711MCceyCBcFnzjGY4Q7Un", "AC/DC"),
             ("1dfeR4HaWDbWqFHLkxsg1d", "Queen"),
         ],
+        ["mock_spotify_011"] = [
+            ("6M2wZ9GZgrQXHCFfjv46we", "Dua Lipa"),
+            ("6eUKZXaKkcviH0Ku9w2n3V", "Ed Sheeran"),
+            ("66CXWjxzNUsdJxJ2JdwvnR", "Ariana Grande"),
+            ("246dkjvS1zLTtiykXe5h60", "Post Malone"),
+            ("6KImCVD70vtIoJWnq6nGn3", "Harry Styles"),
+        ],
+        ["mock_spotify_012"] = [
+            ("1HY2Jd0NmPuamShAr6KMms", "Lady Gaga"),
+            ("6vWDO969PvNqNYHIOW5v0m", "Beyoncé"),
+            ("5pKCCKE2ajJHZ9KAiaK11H", "Rihanna"),
+            ("7tYKF4w9nC0nq9CsPZTHyP", "SZA"),
+            ("4dpARuHxo51G3z768sgnrY", "Adele"),
+        ],
+        ["mock_spotify_013"] = [
+            ("00FQb4jTyendYWaN8pK0wa", "Lana Del Rey"),
+            ("4MCBfE4596Uoi2O4DtmEMz", "Juice WRLD"),
+            ("0du5cEVh5yTK9QJze8zA0C", "Bruno Mars"),
+            ("1McMsnEElThX1knmY4oliG", "Olivia Rodrigo"),
+            ("6qqNVTkY8uBg9cP3Jd7DAH", "Billie Eilish"),
+        ],
+        ["mock_spotify_014"] = [
+            ("05qpk4JDcLSFNJSsPIZ8Ye", "The Motans"),
+            ("1n5LD9Ar3D6RK2X2ewGvXb", "Carla's Dreams"),
+            ("2Bfpg6VC7SNEQKez2uXyuP", "Alternosfera"),
+            ("1OQa8VMULlbmbFmDcdfBZj", "Irina Rimes"),
+            ("6XyY86QOPPrYVGvF9ch6wz", "Linkin Park"),
+        ],
+        ["mock_spotify_015"] = [
+            ("53XhwfbYqKCa1cC15pYq2q", "Imagine Dragons"),
+            ("711MCceyCBcFnzjGY4Q7Un", "AC/DC"),
+            ("1dfeR4HaWDbWqFHLkxsg1d", "Queen"),
+            ("3TVXtAsR1Inumwj472S9r4", "Drake"),
+            ("2YZyLoL8N0Wb9xBt1NhZWg", "Kendrick Lamar"),
+        ],
+        ["mock_spotify_016"] = [
+            ("7Ln80lUS6He07XvHI8qqHH", "Arctic Monkeys"),
+            ("4Z8W4fKeB5YxbusRsdQVPb", "Radiohead"),
+            ("4gzpq5DPGxSnKTe4SA8HAU", "Coldplay"),
+            ("53XhwfbYqKCa1cC15pYq2q", "Imagine Dragons"),
+            ("6eUKZXaKkcviH0Ku9w2n3V", "Ed Sheeran"),
+        ],
+        ["mock_spotify_017"] = [
+            ("2n2RSaZqBuUUukhbLlpnE6", "Sleep Token"),
+            ("6XyY86QOPPrYVGvF9ch6wz", "Linkin Park"),
+            ("1dfeR4HaWDbWqFHLkxsg1d", "Queen"),
+            ("711MCceyCBcFnzjGY4Q7Un", "AC/DC"),
+            ("6KImCVD70vtIoJWnq6nGn3", "Harry Styles"),
+        ],
+        ["mock_spotify_018"] = [
+            ("1Xyo4u8uXC1ZmMpatF05PJ", "The Weeknd"),
+            ("3TVXtAsR1Inumwj472S9r4", "Drake"),
+            ("0Y5tJX1MQlPlqiwlOH1tJY", "Travis Scott"),
+            ("246dkjvS1zLTtiykXe5h60", "Post Malone"),
+            ("4MCBfE4596Uoi2O4DtmEMz", "Juice WRLD"),
+        ],
+        ["mock_spotify_019"] = [
+            ("5INjqkS1o8h1imAzPqGZBb", "Tame Impala"),
+            ("4Z8W4fKeB5YxbusRsdQVPb", "Radiohead"),
+            ("4gzpq5DPGxSnKTe4SA8HAU", "Coldplay"),
+            ("00FQb4jTyendYWaN8pK0wa", "Lana Del Rey"),
+            ("6qqNVTkY8uBg9cP3Jd7DAH", "Billie Eilish"),
+        ],
+        ["mock_spotify_020"] = [
+            ("6MwPCCR936cYfM1dLsGVnl", "Motionless In White"),
+            ("6XyY86QOPPrYVGvF9ch6wz", "Linkin Park"),
+            ("53XhwfbYqKCa1cC15pYq2q", "Imagine Dragons"),
+            ("711MCceyCBcFnzjGY4Q7Un", "AC/DC"),
+            ("1dfeR4HaWDbWqFHLkxsg1d", "Queen"),
+        ],
     };
 
     public static async Task SeedAsync(ApplicationContext db)
     {
-        if (db.Users.Any(u => u.SpotifyId.StartsWith("mock_")))
+        var now = DateTime.UtcNow;
+        var isMock001Seeded = db.Users.Any(u => u.SpotifyId == "mock_spotify_001");
+
+        if (!isMock001Seeded)
         {
-            await EnsureLocationsAsync(db);
-            await EnsureMockArtistsAsync(db);
-            return;
+            var initialUsers = new[]
+            {
+                MakeUser("mock_spotify_001", "Alex Turner",    "alex.turner@soundspace.dev",    "RO", 1240, "https://i.pravatar.cc/700?u=mock_spotify_001", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_002", "Maya Chen",      "maya.chen@soundspace.dev",      "RO", 843,  "https://i.pravatar.cc/700?u=mock_spotify_002", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_003", "Luca Rossi",     "luca.rossi@soundspace.dev",     "RO", 2105, "https://i.pravatar.cc/700?u=mock_spotify_003", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_004", "Yuki Tanaka",    "yuki.tanaka@soundspace.dev",    "RO", 390,  "https://i.pravatar.cc/700?u=mock_spotify_004", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_005", "Sofia Andrade",  "sofia.andrade@soundspace.dev",  "RO", 678,  "https://i.pravatar.cc/700?u=mock_spotify_005", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_006", "James Okafor",   "james.okafor@soundspace.dev",   "RO", 1502, "https://i.pravatar.cc/700?u=mock_spotify_006", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_007", "Elena Vasquez",  "elena.vasquez@soundspace.dev",  "RO", 921,  "https://i.pravatar.cc/700?u=mock_spotify_007", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_008", "Noah Schmidt",   "noah.schmidt@soundspace.dev",   "RO", 455,  "https://i.pravatar.cc/700?u=mock_spotify_008", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_009", "Priya Sharma",   "priya.sharma@soundspace.dev",   "RO", 317,  "https://i.pravatar.cc/700?u=mock_spotify_009", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_010", "Finn Larsen",    "finn.larsen@soundspace.dev",    "RO", 789,  "https://i.pravatar.cc/700?u=mock_spotify_010", 47.17474360453262, 27.549144968755872),
+            };
+
+            foreach (var u in initialUsers)
+                u.PasswordHash = Hasher.HashPassword(u, "MockPassword123!");
+
+            db.Users.AddRange(initialUsers);
+            await db.SaveChangesAsync();
+
+            var alex  = initialUsers[0];
+            var maya  = initialUsers[1];
+            var luca  = initialUsers[2];
+            var yuki  = initialUsers[3];
+            var sofia = initialUsers[4];
+            var james = initialUsers[5];
+            var elena = initialUsers[6];
+            var noah  = initialUsers[7];
+
+            var conv1 = new Conversation { CreatedAt = now.AddDays(-3) };
+            db.Conversations.Add(conv1);
+
+            db.ConversationParticipants.AddRange(
+                new ConversationParticipant { ConversationId = conv1.Id, UserId = alex.Id, JoinedAt = conv1.CreatedAt },
+                new ConversationParticipant { ConversationId = conv1.Id, UserId = maya.Id, JoinedAt = conv1.CreatedAt }
+            );
+
+            db.Messages.AddRange(
+                Msg(conv1.Id, maya.Id,  "Hey! Did you catch Arctic Monkeys' new track?",               now.AddDays(-3).AddHours(1)),
+                Msg(conv1.Id, alex.Id,  "Yes!! The riff at 1:20 is insane. Classic AM energy.",        now.AddDays(-3).AddHours(1).AddMinutes(3)),
+                Msg(conv1.Id, maya.Id,  "Right?! I've had it on repeat all morning. Peak indie rock.", now.AddDays(-3).AddHours(1).AddMinutes(7)),
+                Msg(conv1.Id, alex.Id,  "Also found this sick lo-fi playlist for late nights.",        now.AddDays(-3).AddHours(1).AddMinutes(15)),
+                Msg(conv1.Id, maya.Id,  "Send it!! I need new study music desperately.",               now.AddDays(-3).AddHours(1).AddMinutes(17)),
+                Msg(conv1.Id, alex.Id,  "Done. It has like 80 tracks, all gold.",                      now.AddDays(-3).AddHours(1).AddMinutes(20)),
+                Msg(conv1.Id, maya.Id,  "You're a legend. See you at the venue Friday?",               now.AddDays(-2).AddHours(9)),
+                Msg(conv1.Id, alex.Id,  "Absolutely. Doors open at 8, I'll grab the tickets.",        now.AddDays(-2).AddHours(9).AddMinutes(5))
+            );
+
+            var conv2 = new Conversation { CreatedAt = now.AddDays(-7) };
+            db.Conversations.Add(conv2);
+
+            db.ConversationParticipants.AddRange(
+                new ConversationParticipant { ConversationId = conv2.Id, UserId = luca.Id, JoinedAt = conv2.CreatedAt },
+                new ConversationParticipant { ConversationId = conv2.Id, UserId = yuki.Id, JoinedAt = conv2.CreatedAt }
+            );
+
+            db.Messages.AddRange(
+                Msg(conv2.Id, luca.Id, "Yuki, ciao! Sai che ho trovato un vinile di Nujabes?",         now.AddDays(-7).AddHours(14)),
+                Msg(conv2.Id, yuki.Id, "No way! Metaphorical Music? That's almost impossible to find.", now.AddDays(-7).AddHours(14).AddMinutes(4)),
+                Msg(conv2.Id, luca.Id, "Exactly that one. Found it in a tiny shop in Bologna.",         now.AddDays(-7).AddHours(14).AddMinutes(8)),
+                Msg(conv2.Id, yuki.Id, "I'm so jealous. His production is on another level.",           now.AddDays(-7).AddHours(14).AddMinutes(12)),
+                Msg(conv2.Id, luca.Id, "Agreed. Listening while making pasta is peak life experience.", now.AddDays(-7).AddHours(14).AddMinutes(16)),
+                Msg(conv2.Id, yuki.Id, "Ha! Perfect pairing. Are you going to the Jazz festival?",      now.AddDays(-6).AddHours(10)),
+                Msg(conv2.Id, luca.Id, "I was thinking about it. Who's playing?",                       now.AddDays(-6).AddHours(10).AddMinutes(6)),
+                Msg(conv2.Id, yuki.Id, "Kamasi Washington is headlining. Don't miss it.",               now.AddDays(-6).AddHours(10).AddMinutes(10)),
+                Msg(conv2.Id, luca.Id, "Sold. Let's meet there. I'll bring the Nujabes vinyl.",        now.AddDays(-6).AddHours(10).AddMinutes(14))
+            );
+
+            var conv3 = new Conversation { IsGroup = true, CreatedAt = now.AddDays(-1) };
+            db.Conversations.Add(conv3);
+
+            db.ConversationParticipants.AddRange(
+                new ConversationParticipant { ConversationId = conv3.Id, UserId = sofia.Id, JoinedAt = conv3.CreatedAt },
+                new ConversationParticipant { ConversationId = conv3.Id, UserId = james.Id, JoinedAt = conv3.CreatedAt },
+                new ConversationParticipant { ConversationId = conv3.Id, UserId = elena.Id, JoinedAt = conv3.CreatedAt },
+                new ConversationParticipant { ConversationId = conv3.Id, UserId = noah.Id,  JoinedAt = conv3.CreatedAt }
+            );
+
+            db.Messages.AddRange(
+                Msg(conv3.Id, sofia.Id, "Ok gang, collab playlist for the road trip. Drop your picks!", now.AddDays(-1).AddHours(8)),
+                Msg(conv3.Id, james.Id, "Burna Boy - Last Last is non-negotiable. Top of the list.",    now.AddDays(-1).AddHours(8).AddMinutes(2)),
+                Msg(conv3.Id, elena.Id, "Natalia Lafourcade - Hasta la Raíz. Vibes for the mountains.", now.AddDays(-1).AddHours(8).AddMinutes(5)),
+                Msg(conv3.Id, noah.Id,  "Rammstein for when we need to wake up at 4am. You're welcome.", now.AddDays(-1).AddHours(8).AddMinutes(8)),
+                Msg(conv3.Id, sofia.Id, "Noah… we are NOT starting the trip with Rammstein.",           now.AddDays(-1).AddHours(8).AddMinutes(10)),
+                Msg(conv3.Id, james.Id, "Lmao. Ok fine, maybe track 5 as a surprise.",                  now.AddDays(-1).AddHours(8).AddMinutes(12)),
+                Msg(conv3.Id, elena.Id, "I'm adding some Khruangbin for the open highway stretches.",   now.AddDays(-1).AddHours(8).AddMinutes(16)),
+                Msg(conv3.Id, noah.Id,  "Khruangbin I can agree on. Smooth choice.",                    now.AddDays(-1).AddHours(8).AddMinutes(19)),
+                Msg(conv3.Id, sofia.Id, "This playlist is going to be perfect. See you all Saturday!",  now.AddDays(-1).AddHours(8).AddMinutes(25)),
+                Msg(conv3.Id, james.Id, "Road trip!!",                                                   now.AddDays(-1).AddHours(8).AddMinutes(26))
+            );
+
+            await db.SaveChangesAsync();
         }
 
-        var now = DateTime.UtcNow;
-
-        var users = new[]
+        if (!db.Users.Any(u => u.SpotifyId == "mock_spotify_020"))
         {
-            MakeUser("mock_spotify_001", "Alex Turner",    "alex.turner@soundspace.dev",    "RO", 1240, null, 47.17474360453262, 27.549144968755872),
-            MakeUser("mock_spotify_002", "Maya Chen",      "maya.chen@soundspace.dev",      "RO", 843,  null, 47.17474360453262, 27.549144968755872),
-            MakeUser("mock_spotify_003", "Luca Rossi",     "luca.rossi@soundspace.dev",     "RO", 2105, null, 47.17474360453262, 27.549144968755872),
-            MakeUser("mock_spotify_004", "Yuki Tanaka",    "yuki.tanaka@soundspace.dev",    "RO", 390,  null, 47.17474360453262, 27.549144968755872),
-            MakeUser("mock_spotify_005", "Sofia Andrade",  "sofia.andrade@soundspace.dev",  "RO", 678,  null, 47.17474360453262, 27.549144968755872),
-            MakeUser("mock_spotify_006", "James Okafor",   "james.okafor@soundspace.dev",   "RO", 1502, null, 47.17474360453262, 27.549144968755872),
-            MakeUser("mock_spotify_007", "Elena Vasquez",  "elena.vasquez@soundspace.dev",  "RO", 921,  null, 47.17474360453262, 27.549144968755872),
-            MakeUser("mock_spotify_008", "Noah Schmidt",   "noah.schmidt@soundspace.dev",   "RO", 455,  null, 47.17474360453262, 27.549144968755872),
-            MakeUser("mock_spotify_009", "Priya Sharma",   "priya.sharma@soundspace.dev",   "RO", 317,  null, 47.17474360453262, 27.549144968755872),
-            MakeUser("mock_spotify_010", "Finn Larsen",    "finn.larsen@soundspace.dev",    "RO", 789,  null, 47.17474360453262, 27.549144968755872),
-        };
+            var extendedIds = new[]
+            {
+                "mock_spotify_011", "mock_spotify_012", "mock_spotify_013", "mock_spotify_014",
+                "mock_spotify_015", "mock_spotify_016", "mock_spotify_017", "mock_spotify_018",
+                "mock_spotify_019", "mock_spotify_020",
+            };
 
-        foreach (var u in users)
-            u.PasswordHash = Hasher.HashPassword(u, "MockPassword123!");
+            var existing = db.Users
+                .Where(u => extendedIds.Contains(u.SpotifyId))
+                .Select(u => u.SpotifyId)
+                .ToHashSet();
 
-        db.Users.AddRange(users);
-        await db.SaveChangesAsync();
+            var extendedUsers = new[]
+            {
+                MakeUser("mock_spotify_011", "Aria Chen",         "aria.chen@soundspace.dev",         "RO", 512,  "https://i.pravatar.cc/700?u=mock_spotify_011", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_012", "Rafael Santos",     "rafael.santos@soundspace.dev",     "RO", 734,  "https://i.pravatar.cc/700?u=mock_spotify_012", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_013", "Ingrid Johansson",  "ingrid.johansson@soundspace.dev",  "RO", 298,  "https://i.pravatar.cc/700?u=mock_spotify_013", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_014", "Kenji Mori",        "kenji.mori@soundspace.dev",        "RO", 1103, "https://i.pravatar.cc/700?u=mock_spotify_014", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_015", "Amara Nwosu",       "amara.nwosu@soundspace.dev",       "RO", 867,  "https://i.pravatar.cc/700?u=mock_spotify_015", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_016", "Sebastian Wolf",    "sebastian.wolf@soundspace.dev",    "RO", 445,  "https://i.pravatar.cc/700?u=mock_spotify_016", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_017", "Mia Laurent",       "mia.laurent@soundspace.dev",       "RO", 1620, "https://i.pravatar.cc/700?u=mock_spotify_017", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_018", "Carlos Mendez",     "carlos.mendez@soundspace.dev",     "RO", 953,  "https://i.pravatar.cc/700?u=mock_spotify_018", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_019", "Zoe Fischer",       "zoe.fischer@soundspace.dev",       "RO", 381,  "https://i.pravatar.cc/700?u=mock_spotify_019", 47.17474360453262, 27.549144968755872),
+                MakeUser("mock_spotify_020", "Ryo Nakamura",      "ryo.nakamura@soundspace.dev",      "RO", 714,  "https://i.pravatar.cc/700?u=mock_spotify_020", 47.17474360453262, 27.549144968755872),
+            }
+            .Where(u => !existing.Contains(u.SpotifyId))
+            .ToArray();
 
-        var alex  = users[0];
-        var maya  = users[1];
-        var luca  = users[2];
-        var yuki  = users[3];
-        var sofia = users[4];
-        var james = users[5];
-        var elena = users[6];
-        var noah  = users[7];
+            if (extendedUsers.Length > 0)
+            {
+                foreach (var u in extendedUsers)
+                    u.PasswordHash = Hasher.HashPassword(u, "MockPassword123!");
 
-        var conv1 = new Conversation { CreatedAt = now.AddDays(-3) };
-        db.Conversations.Add(conv1);
+                db.Users.AddRange(extendedUsers);
+                await db.SaveChangesAsync();
+            }
+        }
 
-        db.ConversationParticipants.AddRange(
-            new ConversationParticipant { ConversationId = conv1.Id, UserId = alex.Id, JoinedAt = conv1.CreatedAt },
-            new ConversationParticipant { ConversationId = conv1.Id, UserId = maya.Id, JoinedAt = conv1.CreatedAt }
-        );
-
-        db.Messages.AddRange(
-            Msg(conv1.Id, maya.Id,  "Hey! Did you catch Arctic Monkeys' new track?",               now.AddDays(-3).AddHours(1)),
-            Msg(conv1.Id, alex.Id,  "Yes!! The riff at 1:20 is insane. Classic AM energy.",        now.AddDays(-3).AddHours(1).AddMinutes(3)),
-            Msg(conv1.Id, maya.Id,  "Right?! I've had it on repeat all morning. Peak indie rock.", now.AddDays(-3).AddHours(1).AddMinutes(7)),
-            Msg(conv1.Id, alex.Id,  "Also found this sick lo-fi playlist for late nights.",        now.AddDays(-3).AddHours(1).AddMinutes(15)),
-            Msg(conv1.Id, maya.Id,  "Send it!! I need new study music desperately.",               now.AddDays(-3).AddHours(1).AddMinutes(17)),
-            Msg(conv1.Id, alex.Id,  "Done. It has like 80 tracks, all gold.",                      now.AddDays(-3).AddHours(1).AddMinutes(20)),
-            Msg(conv1.Id, maya.Id,  "You're a legend. See you at the venue Friday?",               now.AddDays(-2).AddHours(9)),
-            Msg(conv1.Id, alex.Id,  "Absolutely. Doors open at 8, I'll grab the tickets.",        now.AddDays(-2).AddHours(9).AddMinutes(5))
-        );
-
-        var conv2 = new Conversation { CreatedAt = now.AddDays(-7) };
-        db.Conversations.Add(conv2);
-
-        db.ConversationParticipants.AddRange(
-            new ConversationParticipant { ConversationId = conv2.Id, UserId = luca.Id, JoinedAt = conv2.CreatedAt },
-            new ConversationParticipant { ConversationId = conv2.Id, UserId = yuki.Id, JoinedAt = conv2.CreatedAt }
-        );
-
-        db.Messages.AddRange(
-            Msg(conv2.Id, luca.Id, "Yuki, ciao! Sai che ho trovato un vinile di Nujabes?",         now.AddDays(-7).AddHours(14)),
-            Msg(conv2.Id, yuki.Id, "No way! Metaphorical Music? That's almost impossible to find.", now.AddDays(-7).AddHours(14).AddMinutes(4)),
-            Msg(conv2.Id, luca.Id, "Exactly that one. Found it in a tiny shop in Bologna.",         now.AddDays(-7).AddHours(14).AddMinutes(8)),
-            Msg(conv2.Id, yuki.Id, "I'm so jealous. His production is on another level.",           now.AddDays(-7).AddHours(14).AddMinutes(12)),
-            Msg(conv2.Id, luca.Id, "Agreed. Listening while making pasta is peak life experience.", now.AddDays(-7).AddHours(14).AddMinutes(16)),
-            Msg(conv2.Id, yuki.Id, "Ha! Perfect pairing. Are you going to the Jazz festival?",      now.AddDays(-6).AddHours(10)),
-            Msg(conv2.Id, luca.Id, "I was thinking about it. Who's playing?",                       now.AddDays(-6).AddHours(10).AddMinutes(6)),
-            Msg(conv2.Id, yuki.Id, "Kamasi Washington is headlining. Don't miss it.",               now.AddDays(-6).AddHours(10).AddMinutes(10)),
-            Msg(conv2.Id, luca.Id, "Sold. Let's meet there. I'll bring the Nujabes vinyl.",        now.AddDays(-6).AddHours(10).AddMinutes(14))
-        );
-
-        var conv3 = new Conversation { IsGroup = true, CreatedAt = now.AddDays(-1) };
-        db.Conversations.Add(conv3);
-
-        db.ConversationParticipants.AddRange(
-            new ConversationParticipant { ConversationId = conv3.Id, UserId = sofia.Id, JoinedAt = conv3.CreatedAt },
-            new ConversationParticipant { ConversationId = conv3.Id, UserId = james.Id, JoinedAt = conv3.CreatedAt },
-            new ConversationParticipant { ConversationId = conv3.Id, UserId = elena.Id, JoinedAt = conv3.CreatedAt },
-            new ConversationParticipant { ConversationId = conv3.Id, UserId = noah.Id,  JoinedAt = conv3.CreatedAt }
-        );
-
-        db.Messages.AddRange(
-            Msg(conv3.Id, sofia.Id, "Ok gang, collab playlist for the road trip. Drop your picks!", now.AddDays(-1).AddHours(8)),
-            Msg(conv3.Id, james.Id, "Burna Boy - Last Last is non-negotiable. Top of the list.",    now.AddDays(-1).AddHours(8).AddMinutes(2)),
-            Msg(conv3.Id, elena.Id, "Natalia Lafourcade - Hasta la Raíz. Vibes for the mountains.", now.AddDays(-1).AddHours(8).AddMinutes(5)),
-            Msg(conv3.Id, noah.Id,  "Rammstein for when we need to wake up at 4am. You're welcome.", now.AddDays(-1).AddHours(8).AddMinutes(8)),
-            Msg(conv3.Id, sofia.Id, "Noah… we are NOT starting the trip with Rammstein.",           now.AddDays(-1).AddHours(8).AddMinutes(10)),
-            Msg(conv3.Id, james.Id, "Lmao. Ok fine, maybe track 5 as a surprise.",                  now.AddDays(-1).AddHours(8).AddMinutes(12)),
-            Msg(conv3.Id, elena.Id, "I'm adding some Khruangbin for the open highway stretches.",   now.AddDays(-1).AddHours(8).AddMinutes(16)),
-            Msg(conv3.Id, noah.Id,  "Khruangbin I can agree on. Smooth choice.",                    now.AddDays(-1).AddHours(8).AddMinutes(19)),
-            Msg(conv3.Id, sofia.Id, "This playlist is going to be perfect. See you all Saturday!",  now.AddDays(-1).AddHours(8).AddMinutes(25)),
-            Msg(conv3.Id, james.Id, "Road trip!!",                                                   now.AddDays(-1).AddHours(8).AddMinutes(26))
-        );
-
-        await db.SaveChangesAsync();
-
+        await EnsureLocationsAsync(db);
+        await EnsureProfileImagesAsync(db);
         await EnsureMockArtistsAsync(db);
     }
 
@@ -227,6 +352,24 @@ public static class DataSeeder
                 });
             }
             changed = true;
+        }
+
+        if (changed)
+            await db.SaveChangesAsync();
+    }
+
+    private static async Task EnsureProfileImagesAsync(ApplicationContext db)
+    {
+        var mockUsers = db.Users.Where(u => u.SpotifyId.StartsWith("mock_")).ToList();
+        bool changed = false;
+
+        foreach (var user in mockUsers)
+        {
+            if (user.ProfileImageUrl is null && MockProfileImages.TryGetValue(user.SpotifyId, out var url))
+            {
+                user.ProfileImageUrl = url;
+                changed = true;
+            }
         }
 
         if (changed)

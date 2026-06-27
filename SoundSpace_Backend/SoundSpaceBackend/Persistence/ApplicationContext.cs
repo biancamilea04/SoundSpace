@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Pgvector.EntityFrameworkCore;
 using SoundSpaceBackend.Models.Entities;
 
 namespace SoundSpaceBackend.Persistence;
@@ -27,10 +28,13 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
     public DbSet<EventAttendee> EventAttendees { get; set; }
     public DbSet<EventPhoto> EventPhotos { get; set; }
     public DbSet<Notification> Notifications { get; set; }
+    public DbSet<UserAudioProfile> UserAudioProfiles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.HasPostgresExtension("vector");
 
         modelBuilder.Entity<User>(entity =>
         {
@@ -269,6 +273,19 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasIndex(n => new { n.UserId, n.IsRead, n.CreatedAt });
+        });
+
+        modelBuilder.Entity<UserAudioProfile>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.AudioVector).HasColumnType("vector(5)");
+            entity.HasIndex(e => e.UserId).IsUnique();
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.HasOne(e => e.User)
+                  .WithOne()
+                  .HasForeignKey<UserAudioProfile>(e => e.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

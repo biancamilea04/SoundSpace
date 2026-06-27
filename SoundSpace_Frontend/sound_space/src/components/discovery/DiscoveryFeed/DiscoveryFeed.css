@@ -169,6 +169,30 @@
     }
 }
 
+.discovery-feed__load-more-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+    flex-shrink: 0;
+}
+
+.discovery-feed__load-more-spinner .discovery-feed__loading-spinner {
+    width: 28px;
+    height: 28px;
+    border-width: 2px;
+}
+
+.discovery-feed__exhausted {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 32px 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
 @media (max-width: 768px) and (orientation: landscape) {
     .discovery-feed__scroll-container {
         padding: 8px 0;

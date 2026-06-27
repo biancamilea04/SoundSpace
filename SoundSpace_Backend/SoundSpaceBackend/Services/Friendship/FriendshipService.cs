@@ -21,31 +21,40 @@ public class FriendshipService(
         if (senderId == receiverId)
             throw new InvalidOperationException("Cannot send a friend request to yourself");
 
-        var exists = await dbContext.Friendships.AnyAsync(f =>
-            ((f.SenderId == senderId && f.ReceiverId == receiverId) ||
-             (f.SenderId == receiverId && f.ReceiverId == senderId)) &&
-            f.Status != FriendshipStatus.Removed);
+        var existing = await dbContext.Friendships.FirstOrDefaultAsync(f =>
+            (f.SenderId == senderId && f.ReceiverId == receiverId) ||
+            (f.SenderId == receiverId && f.ReceiverId == senderId));
 
-        if (exists)
-            throw new InvalidOperationException("A friendship or request already exists between these users");
+        if (existing is not null)
+        {
+            if (existing.Status != FriendshipStatus.Removed)
+                throw new InvalidOperationException("A friendship or request already exists between these users");
+
+            // Reuse the removed row to satisfy the unique constraint on (SenderId, ReceiverId)
+            existing.SenderId = senderId;
+            existing.ReceiverId = receiverId;
+            existing.Status = FriendshipStatus.Pending;
+            existing.UpdatedAt = DateTime.UtcNow;
+            await dbContext.SaveChangesAsync();
+        }
+        else
+        {
+            existing = new Models.Entities.Friendship
+            {
+                SenderId = senderId,
+                ReceiverId = receiverId,
+                Status = FriendshipStatus.Pending
+            };
+            dbContext.Friendships.Add(existing);
+            await dbContext.SaveChangesAsync();
+        }
 
         var sender = await dbContext.Users.FindAsync(senderId)
             ?? throw new KeyNotFoundException($"User {senderId} not found");
-
         var receiver = await dbContext.Users.FindAsync(receiverId)
             ?? throw new KeyNotFoundException($"User {receiverId} not found");
 
-        var friendship = new Models.Entities.Friendship
-        {
-            SenderId = senderId,
-            ReceiverId = receiverId,
-            Status = FriendshipStatus.Pending
-        };
-
-        dbContext.Friendships.Add(friendship);
-        await dbContext.SaveChangesAsync();
-
-        var dto = MapToDto(friendship, sender, receiver);
+        var dto = MapToDto(existing, sender, receiver);
 
         await hubContext.Clients
             .Group($"user-{receiverId}")

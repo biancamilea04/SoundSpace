@@ -72,12 +72,14 @@ public class SpotifyPlayerService(
             return [];
         }
 
-        var result = spotifyData.Items.Select(a => new TopArtistResponse(
+        var result = spotifyData.Items.Select(a => 
+            new TopArtistResponse(
             a.Name,
             a.Images?.FirstOrDefault()?.Url,
             a.ExternalUrls?.Spotify,
             a.Id
-        )).ToList();
+            )
+        ).ToList();
 
         return result;
     }

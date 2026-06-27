@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Pgvector;
 using SoundSpaceBackend.Persistence;
 
 #nullable disable
@@ -20,6 +21,7 @@ namespace SoundSpaceBackend.Migrations
                 .HasAnnotation("ProductVersion", "10.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "vector");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -892,6 +894,37 @@ namespace SoundSpaceBackend.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.UserAudioProfile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Vector>("AudioVector")
+                        .IsRequired()
+                        .HasColumnType("vector(5)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserAudioProfiles");
+                });
+
             modelBuilder.Entity("SoundSpaceBackend.Models.Entities.UserCurrentlyPlaying", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -1249,6 +1282,17 @@ namespace SoundSpaceBackend.Migrations
                     b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SoundSpaceBackend.Models.Entities.UserAudioProfile", b =>
+                {
+                    b.HasOne("SoundSpaceBackend.Models.Entities.User", "User")
+                        .WithOne()
+                        .HasForeignKey("SoundSpaceBackend.Models.Entities.UserAudioProfile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

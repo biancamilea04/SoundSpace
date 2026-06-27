@@ -36,4 +36,12 @@ export interface CreatePostPayload {
 export interface UpdatePostPayload {
     content: string;
     spotifyUri?: string | null;
+    spotifyName?: string | null;
+    spotifyCoverUrl?: string | null;
+    spotifySubtitle?: string | null;
+    spotifySubtitleUrl?: string | null;
+    spotifyMediaType?: string | null;
+    previewUrl?: string | null;
+    previewStartSecond?: number | null;
+    previewDuration?: number | null;
 }

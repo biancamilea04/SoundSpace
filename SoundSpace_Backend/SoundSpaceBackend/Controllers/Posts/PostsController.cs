@@ -22,27 +22,6 @@ public class PostsController(
 {
     private readonly ILogger<PostsController> _logger = logger;
 
-    private async Task<(Guid? DbUserId, string? SpotifyId)> GetCallerAsync()
-    {
-        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (spotifyId == null)
-        {
-            _logger.LogWarning("[Posts] Spotify ID claim missing in token");
-            return (null, null);
-        }
-
-        var entity = await userService.GetUserEntityBySpotifyIdAsync(spotifyId);
-        return (entity?.Id, spotifyId);
-    }
-
-    private static PostResponse ToResponse(GetPostDto post, LikeStatusDto likes) =>
-        new(post.Id, post.UserId, post.DisplayName, post.ProfileImageUrl,
-            post.Content, post.SpotifyUri, post.SpotifyName, post.SpotifyCoverUrl,
-            post.SpotifySubtitle, post.SpotifySubtitleUrl, post.SpotifyMediaType, post.PreviewUrl,
-            post.PreviewStartSecond, post.PreviewDuration,
-            post.CreatedAt, likes.LikeCount, likes.IsLikedByCurrentUser,
-            post.EventId, post.EventTitle);
-
     [HttpPost]
     public async Task<IActionResult> CreatePost([FromBody] CreatePostRequest request)
     {
@@ -83,7 +62,17 @@ public class PostsController(
 
         try
         {
-            var post = await postService.UpdatePostAsync(id, userId.Value, new UpdatePostDto(request.Content, request.SpotifyUri));
+            var post = await postService.UpdatePostAsync(id, userId.Value, new UpdatePostDto(
+            request.Content,
+            request.SpotifyUri,
+            request.SpotifyName,
+            request.SpotifyCoverUrl,
+            request.SpotifySubtitle,
+            request.SpotifySubtitleUrl,
+            request.SpotifyMediaType,
+            request.PreviewUrl,
+            request.PreviewStartSecond,
+            request.PreviewDuration));
             var likes = await likeService.GetLikeStatusAsync(post.Id, userId.Value);
             return Ok(ToResponse(post, likes));
         }
@@ -202,4 +191,25 @@ public class PostsController(
 
         return Ok(posts.Select(p => ToResponse(p, likeMap[p.Id])));
     }
+
+        private async Task<(Guid? DbUserId, string? SpotifyId)> GetCallerAsync()
+    {
+        var spotifyId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (spotifyId == null)
+        {
+            _logger.LogWarning("[Posts] Spotify ID claim missing in token");
+            return (null, null);
+        }
+
+        var entity = await userService.GetUserEntityBySpotifyIdAsync(spotifyId);
+        return (entity?.Id, spotifyId);
+    }
+
+    private static PostResponse ToResponse(GetPostDto post, LikeStatusDto likes) =>
+        new(post.Id, post.UserId, post.DisplayName, post.ProfileImageUrl,
+            post.Content, post.SpotifyUri, post.SpotifyName, post.SpotifyCoverUrl,
+            post.SpotifySubtitle, post.SpotifySubtitleUrl, post.SpotifyMediaType, post.PreviewUrl,
+            post.PreviewStartSecond, post.PreviewDuration,
+            post.CreatedAt, likes.LikeCount, likes.IsLikedByCurrentUser,
+            post.EventId, post.EventTitle);
 }

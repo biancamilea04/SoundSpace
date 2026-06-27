@@ -8,7 +8,7 @@ import RecentlyBumping from '../RecentlyBumping/RecentlyBumping';
 import ActionButtons from '../ActionButtons/ActionButtons';
 import './DiscoveryCard.css';
 
-export const DiscoveryCard = ({ profile, onConnect, onSkip }: DiscoveryCardProps) => {
+export const DiscoveryCard = ({ profile, onConnect, onSkip, onExpand }: DiscoveryCardProps) => {
     const {
         id,
         name,
@@ -19,6 +19,7 @@ export const DiscoveryCard = ({ profile, onConnect, onSkip }: DiscoveryCardProps
         commonSongsCount,
         commonSongs,
         recentlyBumping,
+        matchType,
     } = profile;
 
     const handleConnect = () => {
@@ -30,7 +31,7 @@ export const DiscoveryCard = ({ profile, onConnect, onSkip }: DiscoveryCardProps
     };
 
     return (
-        <article className="discovery-card">
+        <article className="discovery-card" onClick={() => onExpand?.(profile)}>
             {/* Background Image with Neon Effect */}
             <div className="discovery-card__background">
                 {imageUrl && (
@@ -38,6 +39,7 @@ export const DiscoveryCard = ({ profile, onConnect, onSkip }: DiscoveryCardProps
                         src={imageUrl}
                         alt={`${name}'s profile`}
                         fill
+                        sizes="(max-width: 768px) 100vw, 420px"
                         className="discovery-card__background-image"
                         priority
                     />
@@ -46,14 +48,12 @@ export const DiscoveryCard = ({ profile, onConnect, onSkip }: DiscoveryCardProps
                 <div className="discovery-card__gradient-overlay" />
             </div>
 
-            {/* Content Overlay */}
             <div className="discovery-card__content">
                 <UserInfo
                     name={name}
                     handle={handle}
                     tagline={tagline}
                 />
-
                 <GenrePills genres={genres} />
 
                 <CommonSongs

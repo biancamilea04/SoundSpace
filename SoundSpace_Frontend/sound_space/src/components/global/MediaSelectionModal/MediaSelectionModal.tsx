@@ -152,7 +152,7 @@ const ConfirmView = ({
                         <span className="media-modal__preview-toggle-title">Include audio preview</span>
                         <span className="media-modal__preview-toggle-desc">
                             {hasPreviewUrl
-                                ? 'Add a playable clip to your post'
+                                ? 'Add a playable song to your post'
                                 : 'No preview available for this item'}
                         </span>
                     </div>
@@ -166,15 +166,6 @@ const ConfirmView = ({
                     >
                         <span className="media-modal__toggle-thumb" />
                     </button>
-                </div>
-            )}
-
-            {canShowPreviewSection && previewEnabled && hasPreviewUrl && (
-                <div className="media-modal__snippet-wrap">
-                    <PreviewSnippetSelector
-                        previewUrl={resolvedPreviewUrl!}
-                        onSnippetChange={handleSnippetChange}
-                    />
                 </div>
             )}
 

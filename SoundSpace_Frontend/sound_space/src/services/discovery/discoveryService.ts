@@ -22,6 +22,7 @@ interface DiscoveryApiResponse {
     currentlyPlayingCoverUrl: string | null;
     sharedArtists: SharedArtistDto[];
     isCountryFallback: boolean;
+    matchType: string;
 }
 
 const mapToDiscoveryProfile = (r: DiscoveryApiResponse): DiscoveryUserProfile => ({
@@ -49,6 +50,7 @@ const mapToDiscoveryProfile = (r: DiscoveryApiResponse): DiscoveryUserProfile =>
                             }
                           : undefined,
     isCountryFallback: r.isCountryFallback,
+    matchType: (r.matchType === 'vibe' ? 'vibe' : 'artists') as 'artists' | 'vibe',
 });
 
 export interface DiscoveryPanelArtist {
@@ -154,6 +156,23 @@ export const fetchDiscoveryFeed = async (
     if (!res.ok) {
         const body = await res.json().catch(() => ({})) as { message?: string };
         throw new Error(body.message ?? `discovery_error_${res.status}`);
+    }
+    const data: unknown = await res.json();
+    if (!Array.isArray(data)) return [];
+    return (data as DiscoveryApiResponse[]).map(mapToDiscoveryProfile);
+};
+
+export const fetchDiscoveryBatch = async (
+    seenUserIds: string[],
+    limit = 10,
+): Promise<DiscoveryUserProfile[]> => {
+    const res = await apiFetch(`${BACKEND_URL}/api/discovery/users`, {
+        method: 'POST',
+        body: JSON.stringify({ limit, seenUserIds }),
+    });
+    if (!res.ok) {
+        const body = await res.json().catch(() => ({})) as { message?: string };
+        throw new Error(body.message ?? `discovery_batch_error_${res.status}`);
     }
     const data: unknown = await res.json();
     if (!Array.isArray(data)) return [];

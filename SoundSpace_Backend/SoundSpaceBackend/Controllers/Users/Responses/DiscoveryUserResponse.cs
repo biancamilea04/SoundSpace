@@ -14,5 +14,6 @@ public record DiscoveryUserResponse(
     string? CurrentlyPlayingArtist,
     string? CurrentlyPlayingCoverUrl,
     List<SharedArtistInfo> SharedArtists,
-    bool    IsCountryFallback
+    bool    IsCountryFallback,
+    string  MatchType
 );

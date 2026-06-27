@@ -21,7 +21,7 @@ var host = Host.CreateDefaultBuilder(args)
             ?? throw new InvalidOperationException("SOUNDSPACE_DB environment variable is not set.");
 
         services.AddDbContext<ApplicationContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseNpgsql(connectionString, o => o.UseVector()));
 
         services.AddHttpClient();
 
@@ -37,6 +37,7 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddHostedService<PollingWorker>();
         services.AddHostedService<CurrentlyPlayingWorker>();
         services.AddHostedService<LikedSongsSyncWorker>();
+        services.AddHostedService<AudioProfileWorker>();
     })
     .Build();
 

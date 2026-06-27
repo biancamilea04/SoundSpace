@@ -54,12 +54,14 @@ public class PostService(
             .Include(p => p.User)
             .Where(p => p.EventId == null)
             .OrderByDescending(p => p.CreatedAt)
-            .Select(p => new GetPostDto(
+            .Select(p => 
+                new GetPostDto(
                 p.Id, p.UserId, p.User.DisplayName, p.User.ProfileImageUrl,
                 p.Content, p.SpotifyUri, p.SpotifyName, p.SpotifyCoverUrl,
                 p.SpotifySubtitle, p.SpotifySubtitleUrl, p.SpotifyMediaType, p.PreviewUrl,
                 p.PreviewStartSecond, p.PreviewDuration, p.CreatedAt,
-                null, null))
+                null, null)
+                )
             .ToListAsync();
     }
 
@@ -82,15 +84,14 @@ public class PostService(
 
         post.Content = dto.Content;
         post.SpotifyUri = dto.SpotifyUri;
-
-        if (dto.SpotifyUri == null)
-        {
-            post.SpotifyName = null;
-            post.SpotifyCoverUrl = null;
-            post.SpotifySubtitle = null;
-            post.SpotifyMediaType = null;
-            post.PreviewUrl = null;
-        }
+        post.SpotifyName = dto.SpotifyName;
+        post.SpotifyCoverUrl = dto.SpotifyCoverUrl;
+        post.SpotifySubtitle = dto.SpotifySubtitle;
+        post.SpotifySubtitleUrl = dto.SpotifySubtitleUrl;
+        post.SpotifyMediaType = dto.SpotifyMediaType;
+        post.PreviewUrl = dto.PreviewUrl;
+        post.PreviewStartSecond = dto.PreviewStartSecond;
+        post.PreviewDuration = dto.PreviewDuration;
 
         await dbContext.SaveChangesAsync();
 

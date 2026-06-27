@@ -25,6 +25,7 @@ export interface DiscoveryUserProfile {
     commonSongs: CommonSong[];
     recentlyBumping?: RecentlyBumping;
     isCountryFallback?: boolean;
+    matchType?: 'artists' | 'vibe';
 }
 
 export type FilterType = 'all' | 'genres' | 'songs';
@@ -70,6 +71,8 @@ export interface DiscoveryFeedProps {
     onConnect?: (profileId: string) => void;
     onSkip?: (profileId: string) => void;
     onExpand?: (profile: DiscoveryUserProfile) => void;
+    onLoadMore?: () => void;
     isLoading?: boolean;
     isCountryFallback?: boolean;
+    isExhausted?: boolean;
 }
