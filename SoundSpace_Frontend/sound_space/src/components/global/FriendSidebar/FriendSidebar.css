@@ -228,7 +228,6 @@ a.sidebar__friend-track-text.listening:hover {
 }
 
 .sidebar__friend-track-artist {
-    color: var(--text-muted);
     cursor: pointer;
 }
 

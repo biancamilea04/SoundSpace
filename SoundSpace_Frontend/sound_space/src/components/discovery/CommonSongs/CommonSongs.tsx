@@ -5,12 +5,14 @@ import type { CommonSongsProps } from '@/types/discovery';
 import './CommonSongs.css';
 
 export const CommonSongs = ({ commonSongsCount, commonSongs }: CommonSongsProps) => {
+    if (commonSongsCount <= 0) return null;
+
     return (
         <div className="common-songs">
             <div className="common-songs__header">
                 <Music size={16} className="common-songs__icon" />
                 <span className="common-songs__count">
-                    {commonSongsCount} COMMON SONGS
+                    {commonSongsCount} COMMON ARTISTS
                 </span>
             </div>
             <div className="common-songs__list">

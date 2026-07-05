@@ -17,7 +17,7 @@ public class CurrentlyPlayingWorker(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        logger.LogInformation("[CurrentlyPlayingWorker] Started. Interval: 60s");
+        logger.LogInformation("[CurrentlyPlayingWorker] Started. Interval: 30s");
         while (!stoppingToken.IsCancellationRequested)
         {
             await PollAsync(stoppingToken);

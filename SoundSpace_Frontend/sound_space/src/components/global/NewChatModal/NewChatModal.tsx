@@ -5,10 +5,8 @@ import { useRouter } from "next/navigation";
 import { useRecentContacts } from "@/hooks/Conversations/useConversationsApi";
 import { useSearchUsers } from "@/hooks/Users/useSearchUsers";
 import { useNewChatModal } from "@/stores/newChatModalStore";
-import { useMessageStore } from "@/stores/messageStore";
 import { useDebounce } from "@/hooks/useDebounce";
 import type { UserSearchResultDto } from "@/types/user";
-import type { Conversation } from "@/types/message";
 import "./NewChatModal.css";
 
 export default function NewChatModal() {
@@ -27,9 +25,6 @@ export default function NewChatModal() {
     const { data: recentContacts, isLoading: loadingRecent } = useRecentContacts();
     const { data: searchResults, isLoading: loadingSearch, isError: searchError } = useSearchUsers(debouncedQuery);
 
-    const conversations = useMessageStore((s) => s.conversations);
-    const addConversationIfMissing = useMessageStore((s) => s.addConversationIfMissing);
-    const setActiveConversation = useMessageStore((s) => s.setActiveConversation);
 
     const panelRef = useRef<HTMLDivElement>(null);
 
@@ -43,37 +38,7 @@ export default function NewChatModal() {
     }, [isOpen, closeModal]);
 
     const handleUserSelect = (user: UserSearchResultDto) => {
-        const existing = conversations.find(
-            (c) => !c.isPending && c.user.id === user.id
-        );
-
-        if (existing) {
-            setActiveConversation(existing.id);
-            router.push("/messages");
-            closeModal();
-            return;
-        }
-
-        const tempId = `pending-${user.id}`;
-        const pendingConversation: Conversation = {
-            id: tempId,
-            user: {
-                id: user.id,
-                name: user.displayName,
-                avatarUrl: user.profileImageUrl ?? "",
-                isOnline: false,
-            },
-            lastMessage: null,
-            lastMessageTime: "",
-            unreadCount: 0,
-            messages: [],
-            isPending: true,
-            targetUserId: user.id,
-        };
-
-        addConversationIfMissing(pendingConversation);
-        setActiveConversation(tempId);
-        router.push("/messages");
+        router.push(`/messages/${user.id}`);
         closeModal();
     };
 

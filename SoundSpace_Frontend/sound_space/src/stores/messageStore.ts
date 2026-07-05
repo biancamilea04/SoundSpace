@@ -78,14 +78,17 @@ export const useMessageStore = create<MessageState>((set) => ({
         }),
 
     incrementUnread: (conversationId) =>
-        set((state) => ({
-            totalUnread: state.totalUnread + 1,
-            conversations: state.conversations.map((c) =>
-                c.id === conversationId
-                    ? { ...c, unreadCount: c.unreadCount + 1 }
-                    : c
-            ),
-        })),
+        set((state) => {
+            if (!state.conversations.some((c) => c.id === conversationId)) return state;
+            return {
+                totalUnread: state.totalUnread + 1,
+                conversations: state.conversations.map((c) =>
+                    c.id === conversationId
+                        ? { ...c, unreadCount: c.unreadCount + 1 }
+                        : c
+                ),
+            };
+        }),
 
     setConversationMessages: (conversationId, messages) =>
         set((state) => ({

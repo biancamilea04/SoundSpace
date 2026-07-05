@@ -13,7 +13,7 @@ const ConversationItem = ({ conversation, isActive, onSelect }: ConversationItem
     return (
         <button
             className={`conversation-item ${isActive ? "conversation-item--active" : ""}`}
-            onClick={() => onSelect(conversation.id)}
+            onClick={() => onSelect(conversation.user.id)}
         >
             <div className="conversation-item__avatar">
                 <Image

@@ -46,6 +46,15 @@
     flex-direction: column;
 }
 
+.chat-header__name-link {
+    text-decoration: none;
+    width: fit-content;
+}
+
+.chat-header__name-link:hover .chat-header__name {
+    text-decoration: underline;
+}
+
 .chat-header__name {
     font-size: 0.9375rem;
     font-weight: 700;

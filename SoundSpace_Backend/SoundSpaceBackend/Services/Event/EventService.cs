@@ -46,7 +46,14 @@ public class EventService(
         dbContext.Events.Add(ev);
         await dbContext.SaveChangesAsync();
 
-        return ToDto(ev, user.DisplayName, 0, false);
+        dbContext.EventAttendees.Add(new Models.Entities.EventAttendee
+        {
+            EventId = ev.Id,
+            UserId = userId
+        });
+        await dbContext.SaveChangesAsync();
+
+        return ToDto(ev, user.DisplayName, 1, true);
     }
 
     public async Task<EventDto?> GetByIdAsync(Guid eventId, Guid currentUserId)

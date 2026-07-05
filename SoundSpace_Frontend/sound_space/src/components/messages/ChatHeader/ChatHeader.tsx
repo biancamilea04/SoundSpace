@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { MoreVertical, Music, Headphones, Flag, AlertTriangle, ArrowLeft } from "lucide-react";
 import type { MessageUser } from "@/types/message";
 import "./ChatHeader.css";
@@ -48,7 +49,9 @@ const ChatHeader = ({ user, onBack }: ChatHeaderProps) => {
                     )}
                 </div>
                 <div className="chat-header__info">
-                    <h3 className="chat-header__name">{user.name}</h3>
+                    <Link href={`/profile/${encodeURIComponent(user.name)}`} className="chat-header__name-link">
+                        <h3 className="chat-header__name">{user.name}</h3>
+                    </Link>
                     <span className="chat-header__status">
                         {user.isOnline ? "Online" : `Last seen ${user.lastSeen}`}
                     </span>

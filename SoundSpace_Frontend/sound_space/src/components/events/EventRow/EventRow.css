@@ -10,17 +10,50 @@
     margin: 0 0 16px;
 }
 
+.event-row__carousel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .event-row__scroll {
+    flex: 1;
+    min-width: 0;
     display: flex;
     gap: 16px;
     overflow-x: auto;
     padding-bottom: 8px;
+    scroll-behavior: smooth;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
 
 .event-row__scroll::-webkit-scrollbar {
     display: none;
+}
+
+.event-row__btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--primary-green);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    flex-shrink: 0;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.event-row__btn:hover {
+    background-color: var(--primary-green-hover);
+    transform: scale(1.08);
+}
+
+.event-row__btn:active {
+    transform: scale(0.95);
 }
 
 .event-row__skeleton {

@@ -2,12 +2,15 @@
     display: flex;
     flex-direction: column;
     padding-top: 8px;
+    align-items: center;
 }
 
 .epp__feed {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
+    max-width: 680px;
 }
 
 .epp__empty {

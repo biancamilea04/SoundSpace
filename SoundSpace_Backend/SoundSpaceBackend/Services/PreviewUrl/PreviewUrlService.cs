@@ -6,6 +6,7 @@ using SoundSpaceBackend.Services.SpotifyToken.Abstractions;
 
 namespace SoundSpaceBackend.Services.PreviewUrl;
 
+
 public class PreviewUrlService(
     ISpotifyTokenService spotifyTokenService,
     IHttpClientFactory httpClientFactory,

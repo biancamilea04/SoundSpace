@@ -1,0 +1,67 @@
+.auth-error-banner {
+    position: fixed;
+    top: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.6875rem 1rem;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: 0.5rem;
+    color: #fbbf24;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 9999;
+    max-width: calc(100vw - 2rem);
+    animation: auth-banner-in 0.25s ease;
+}
+
+@keyframes auth-banner-in {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-0.5rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.auth-error-banner__icon {
+    flex-shrink: 0;
+    opacity: 0.9;
+}
+
+.auth-error-banner__message {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.auth-error-banner__close {
+    background: none;
+    border: none;
+    color: #fbbf24;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0.6;
+    transition: opacity 0.15s;
+    margin-left: 0.25rem;
+    flex-shrink: 0;
+}
+
+.auth-error-banner__close:hover {
+    opacity: 1;
+}
+
+@media (max-width: 480px) {
+    .auth-error-banner {
+        white-space: normal;
+        text-align: center;
+    }
+}

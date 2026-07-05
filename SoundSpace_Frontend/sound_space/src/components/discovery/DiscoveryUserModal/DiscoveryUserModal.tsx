@@ -8,7 +8,6 @@ import { UserPlus, Check, MessageSquare, Music2, MapPin } from 'lucide-react';
 import type { DiscoveryUserProfile } from '@/types/discovery';
 import { sendFriendRequest, getFriendshipStatus } from '@/services/friendship/friendshipService';
 import { createDirectChat } from '@/services/messages/messageService';
-import { useMessageStore } from '@/stores/messageStore';
 import { ProfileStatsView } from '@/components/profile/ProfileStatsView/ProfileStatsView';
 import './DiscoveryUserModal.css';
 
@@ -21,7 +20,6 @@ type FriendState = 'idle' | 'loading' | 'sent' | 'error';
 
 export const DiscoveryUserModal = ({ profile, onClose }: DiscoveryUserModalProps) => {
     const router = useRouter();
-    const setActiveConversation = useMessageStore((s) => s.setActiveConversation);
     const [friendState, setFriendState] = useState<FriendState>('idle');
     const [msgLoading, setMsgLoading] = useState(false);
 
@@ -63,9 +61,8 @@ export const DiscoveryUserModal = ({ profile, onClose }: DiscoveryUserModalProps
         if (msgLoading) return;
         setMsgLoading(true);
         try {
-            const { conversationId } = await createDirectChat(profile.id);
-            setActiveConversation(conversationId);
-            router.push('/messages');
+            await createDirectChat(profile.id);
+            router.push(`/messages/${profile.id}`);
             onClose();
         } catch {
             setMsgLoading(false);
@@ -110,7 +107,6 @@ export const DiscoveryUserModal = ({ profile, onClose }: DiscoveryUserModalProps
                                 {profile.tagline}
                             </span>
                         )}
-                        <span className="du-modal__match-badge">{profile.matchPercentage}% match</span>
                     </div>
 
                     <div className="du-modal__actions">

@@ -151,6 +151,7 @@ public class ConversationService(ApplicationContext db) : IConversationService
     public Task<int> GetUnreadConversationCountAsync(Guid userId) =>
         db.ConversationParticipants
             .Where(cp => cp.UserId == userId &&
+                         !cp.Conversation.IsGroup &&
                          cp.Conversation.Messages.Any(m => !m.IsRead && !m.IsDeleted && m.SenderId != userId))
             .CountAsync();
 

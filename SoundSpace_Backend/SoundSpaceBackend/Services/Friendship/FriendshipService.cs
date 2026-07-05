@@ -30,7 +30,6 @@ public class FriendshipService(
             if (existing.Status != FriendshipStatus.Removed)
                 throw new InvalidOperationException("A friendship or request already exists between these users");
 
-            // Reuse the removed row to satisfy the unique constraint on (SenderId, ReceiverId)
             existing.SenderId = senderId;
             existing.ReceiverId = receiverId;
             existing.Status = FriendshipStatus.Pending;
