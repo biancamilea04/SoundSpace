@@ -101,3 +101,4 @@ publish/
 secrets.json
 
 *.sln.iml
+.claude

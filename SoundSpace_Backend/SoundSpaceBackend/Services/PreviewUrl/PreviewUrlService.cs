@@ -6,7 +6,7 @@ using SoundSpaceBackend.Services.SpotifyToken.Abstractions;
 
 namespace SoundSpaceBackend.Services.PreviewUrl;
 
-
+// [PREVIEW] This service is responsible for resolving a preview URL for a given Spotify track URI. It first attempts to retrieve the preview URL from Spotify's API. If that fails, it falls back to searching for the track on iTunes and retrieving the preview URL from there.
 public class PreviewUrlService(
     ISpotifyTokenService spotifyTokenService,
     IHttpClientFactory httpClientFactory,
